@@ -21,6 +21,8 @@ module.exports = {
     var category = req.body.category;
     var label = req.body.label;
     var target_class = req.body.target_class;
+    let targetClass = `('${target_class.join("','")}')`;
+    console.log("bsd", targetClass);
     var gender = req.body.user_gender;
 
     // var sql = "INSERT INTO user_message (title,message,expDate,schDate,category) VALUES ?";
@@ -58,7 +60,7 @@ module.exports = {
 
       if (1) {
         conditions.push(
-          `t2.user_id = t1.user_id and t2.ay_id=2 and t2.bsd_id ="${target_class}" and t2.isDisabled=0 and t2.isDelete=0;`
+          `t2.user_id = t1.user_id and t2.ay_id=2 and t2.bsd_id IN ${targetClass} and t2.isDisabled=0 and t2.isDelete=0;`
         );
         // values.push(parseInt(params.target_gender));
       }
@@ -79,7 +81,8 @@ module.exports = {
       if (err) res.send(err);
 
       // res.send("notif sent");
-      console.log("om", result);
+      var token = JSON.parse(JSON.stringify(result))
+      console.log(token);
     });
 
     var getFcmTokensSql = [
@@ -112,11 +115,11 @@ module.exports = {
     req.flash("message1", "Notification Sent ");
 
     //query for notification_message_targetlist
-    qry = `INSERT INTO notification_message_targetlist (nm_id,bsd_id,nm_gender) values ((SELECT nm_id from notification_message WHERE nm_title = "${notif_title}" ),"${target_class}","${gender}")`;
-    pool.query(qry,(err,result)=>{
-      if (err) throw err;
-      log("inserted into notif target table")
-    });
+    // qry = `INSERT INTO notification_message_targetlist (nm_id,bsd_id,nm_gender) values ((SELECT nm_id from notification_message WHERE nm_title = "${notif_title}" ),"${target_class}","${gender}")`;
+    // pool.query(qry,(err,result)=>{
+    //   if (err) throw err;
+    //   log("inserted into notif target table")
+    // });
     res.redirect("/dashboard");
   },
 };
