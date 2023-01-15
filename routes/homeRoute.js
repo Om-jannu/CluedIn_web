@@ -78,6 +78,16 @@ router.post("/upload", upload.single("file"), async (req, res) => {
 //dashboard
 router.get("/dashboard", dashboard.get);
 
+//profile page
+router.get("/profile", (req, res) => {
+  var session = req.session;
+
+  if (session.userid != null) {
+    var Path = path.join(__dirname, "..", "views", "profile");
+    res.render(Path)
+  }
+  else res.redirect('/');
+});
 //destroying session
 router.get("/logout", logoutController.get);
 
@@ -100,7 +110,11 @@ router.get("/createuser", function (request, response) {
       var bsd = data[1];
       // console.log(ay);
       //rendering createuser page
-      response.render("createUser", { message: request.flash("message"),ay:ay ,bsd_data : bsd});      
+      response.render("createUser", {
+        message: request.flash("message"),
+        ay: ay,
+        bsd_data: bsd,
+      });
     });
   } else {
     var Path = path.join(__dirname, "..", "views", "login");

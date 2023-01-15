@@ -65,7 +65,8 @@ app.use("/", homeRoute);
 app.use("/dashboard", homeRoute);
 app.use("/logout", homeRoute);
 app.use(express.static(__dirname + "/views"));
-
+//profile
+app.use('/profile',homeRoute);
 app.use("/sendNotif", homeRoute);
 app.use("/action", homeRoute);
 // app.use("/listNotif", homeRoute);
