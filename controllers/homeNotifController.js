@@ -36,7 +36,10 @@ module.exports = {
       // res.send("notif sent");
       console.log("data inserted finally!!!");
     });
-
+    //fcm token array
+    var getFcmTokensSql = [
+      
+    ];
     //logic for getting selected fcm tokens
 
     var target_gender = gender;
@@ -81,15 +84,15 @@ module.exports = {
       if (err) res.send(err);
 
       // res.send("notif sent");
-      var token = JSON.parse(JSON.stringify(result))
-      console.log(token);
+      var token = JSON.parse(JSON.stringify(result));
+      console.log(token[1].firebase_token);     
+      //to push the fb token in array
+      for (let i = 0; i < token.length; i++) {        
+        getFcmTokensSql.push(token[i].firebase_token);           
+      }
+      console.log("---------------------\nfbtoken:",getFcmTokensSql);
     });
-
-    var getFcmTokensSql = [
-      "cghubDBUQVixer-83NkN9n:APA91bFQyrRyUNsDCR3_V1wMUViHZO3Tgst7lVTeWez6CT5J7-hekMEGgvdI26tptTu1UQUvagP-ovYd2ObpXyH0QXpOHWk4D-oUjRPPFK2jWkUO8xq0ye8y8C0Pnbm9DGmyaYIbp1gb",
-      "f4AXXfzaQ_6_7LsOaD7DtC:APA91bF80tU46SGXZB1rmqdpki5Agxsv-d4a047KYNI0lOYFHc7kjqVcCRYgkprEqPG-u82WKGduMvwu_xi3HLD_USA079E7CHKV67pjN3isu7mAUI6BR-_LBpzmttJHTrZI-0r-iBWw",
-      "cGg34Ul2RYeHkAI4qYOWLX:APA91bFnkiHQniXzaDTCGevv_3bmyZQ8yDBMQudGqn5LwcVqfYS_yxfjoerUaTryTbrES282pVLu79WKeA9Nh-PATsNoZv-D96gcv8VNYUozR37_mhrhQc08K3TlxoYJFmGC2t6dk49b",
-    ];
+    
 
     const payload = {
       notification: {
@@ -110,8 +113,10 @@ module.exports = {
       timeToLive: 60 * 60,
     };
 
-    firebaseAdmin.messaging().sendToDevice(getFcmTokensSql, payload, options);
-
+    //below to be uncommented once the actual fcm tokens are generated and inserted into db 
+    // firebaseAdmin.messaging().sendToDevice(getFcmTokensSql, payload, options);
+    getFcmTokensSql = [];
+    // console.log("---------------------\nfbtoken after :",getFcmTokensSql);
     req.flash("message1", "Notification Sent ");
 
     //query for notification_message_targetlist
