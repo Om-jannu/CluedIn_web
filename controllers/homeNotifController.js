@@ -20,7 +20,8 @@ module.exports = {
     var scheduled_date = req.body.scheduled_date;
     var category = req.body.category;
     var label = req.body.label;
-    var target_class = req.body.target_class;
+    var target_class = [];
+    target_class.push(req.body.target_class);
     let targetClass = `('${target_class.join("','")}')`;
     console.log("bsd", targetClass);
     var gender = req.body.user_gender;
@@ -37,9 +38,7 @@ module.exports = {
       console.log("data inserted finally!!!");
     });
     //fcm token array
-    var getFcmTokensSql = [
-      
-    ];
+    var getFcmTokensSql = [];
     //logic for getting selected fcm tokens
 
     var target_gender = gender;
@@ -81,50 +80,50 @@ module.exports = {
 
     console.log(sql_1);
     pool.query(sql_1, conditions.values, (err, result) => {
-      if (err) res.send(err);
+      if (err) console.log(err);
 
       // res.send("notif sent");
       var token = JSON.parse(JSON.stringify(result));
-      console.log(token[1].firebase_token);     
+      // console.log(token[1].firebase_token);
       //to push the fb token in array
-      for (let i = 0; i < token.length; i++) {        
-        getFcmTokensSql.push(token[i].firebase_token);           
+      for (let i = 0; i < token.length; i++) {
+        getFcmTokensSql.push(token[i].firebase_token);
+        // console.log("---------------------\nfbtoken:", getFcmTokensSql);
       }
-      console.log("---------------------\nfbtoken:",getFcmTokensSql);
+
+      console.log("---------------------\nfinaltoken:", getFcmTokensSql);
+      const payload = {
+        notification: {
+          title: req.body.notif_title,
+          body: req.body.notif_desc,
+          sound: "default",
+          imageUrl:
+            "https://techcommunity.microsoft.com/t5/image/serverpage/image-id/366577i4F851B60F8347ED4",
+          click_action: "FLUTTER_NOTIFICATION_CLICK",
+        },
+        data: {
+          data1: "data1",
+          data2: "data2",
+        },
+      };
+      const options = {
+        priority: "high",
+        timeToLive: 60 * 60,
+      };
+
+      //below to be uncommented once the actual fcm tokens are generated and inserted into db
+      firebaseAdmin.messaging().sendToDevice(getFcmTokensSql, payload, options);
+      getFcmTokensSql = [];
+      console.log("---------------------\nfbtoken after :",getFcmTokensSql);
+      req.flash("message1", "Notification Sent ");
+
+      //query for notification_message_targetlist
+      // qry = `INSERT INTO notification_message_targetlist (nm_id,bsd_id,nm_gender) values ((SELECT nm_id from notification_message WHERE nm_title = "${notif_title}" ),"${target_class}","${gender}")`;
+      // pool.query(qry,(err,result)=>{
+      //   if (err) throw err;
+      //   log("inserted into notif target table")
+      // });
+      res.redirect("/dashboard");
     });
-    
-
-    const payload = {
-      notification: {
-        title: req.body.notif_title,
-        body: req.body.notif_desc,
-        sound: "default",
-        imageUrl:
-          "https://techcommunity.microsoft.com/t5/image/serverpage/image-id/366577i4F851B60F8347ED4",
-        click_action: "FLUTTER_NOTIFICATION_CLICK",
-      },
-      data: {
-        data1: "data1",
-        data2: "data2",
-      },
-    };
-    const options = {
-      priority: "high",
-      timeToLive: 60 * 60,
-    };
-
-    //below to be uncommented once the actual fcm tokens are generated and inserted into db 
-    // firebaseAdmin.messaging().sendToDevice(getFcmTokensSql, payload, options);
-    getFcmTokensSql = [];
-    // console.log("---------------------\nfbtoken after :",getFcmTokensSql);
-    req.flash("message1", "Notification Sent ");
-
-    //query for notification_message_targetlist
-    // qry = `INSERT INTO notification_message_targetlist (nm_id,bsd_id,nm_gender) values ((SELECT nm_id from notification_message WHERE nm_title = "${notif_title}" ),"${target_class}","${gender}")`;
-    // pool.query(qry,(err,result)=>{
-    //   if (err) throw err;
-    //   log("inserted into notif target table")
-    // });
-    res.redirect("/dashboard");
   },
 };
