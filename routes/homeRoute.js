@@ -45,35 +45,35 @@ router.get("/", homeController.get);
 //login validation
 router.post("/auth", authUser.post);
 
-const storage = multer.memoryStorage();
+// const storage = multer.memoryStorage();
 
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype.split("/")[0] === "image") {
-    cb(null, true);
-  } else {
-    cb(new multer.MulterError("LIMIT_UNEXPECTED_FILE"), false);
-  }
-};
+// const fileFilter = (req, file, cb) => {
+//   if (file.mimetype.split("/")[0] === "image") {
+//     cb(null, true);
+//   } else {
+//     cb(new multer.MulterError("LIMIT_UNEXPECTED_FILE"), false);
+//   }
+// };
 
-const upload = multer({
-  storage,
-  fileFilter,
-  limits: { fileSize: 10000000, files: 1 },
-});
-// size limit - 10 mb
+// const upload = multer({
+//   storage,
+//   fileFilter,
+//   limits: { fileSize: 10000000, files: 1 },
+// });
+// // size limit - 10 mb
 
-router.post("/upload", upload.single("file"), async (req, res) => {
-  try {
-    const result = await s3Uploadv2(req.file);
-    console.log(
-      "-------------------------------------------------------upload-------------------------------------------------\n",
-      result.Location
-    );
-    return res.json({ status: "success" });
-  } catch (err) {
-    console.log(err);
-  }
-});
+// router.post("/upload", upload.single("file"), async (req, res) => {
+//   try {
+//     const result = await s3Uploadv2(req.file);
+//     console.log(
+//       "-------------------------------------------------------upload-------------------------------------------------\n",
+//       result.Location
+//     );
+//     return res.json({ status: "success" });
+//   } catch (err) {
+//     console.log(err);
+//   }
+// });
 
 //dashboard
 router.get("/dashboard", dashboard.get);
@@ -84,9 +84,8 @@ router.get("/profile", (req, res) => {
 
   if (session.userid != null) {
     var Path = path.join(__dirname, "..", "views", "profile");
-    res.render(Path)
-  }
-  else res.redirect('/');
+    res.render(Path);
+  } else res.redirect("/");
 });
 //destroying session
 router.get("/logout", logoutController.get);
@@ -133,7 +132,19 @@ router.post("/listuser", listuser.list);
 //for delete
 router.get("/listuser", deleteuser.delete);
 
-router.post("/sendNotif", notifController.post);
+var Path = path.join(__dirname, "..", "uploads", "notifImg");
+const storage1 = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null,Path);
+  },
+  filename: (req, file, cb) => {
+    cb(null, "nm" + "-" + Date.now() + "-" + file.originalname);
+  },
+});
+const uploadImg = multer({
+  storage: storage1,
+});
+router.post("/sendNotif",uploadImg.single('notif-img'), notifController.post);
 
 router.post("/api/signup", cluedinAppSignupController.post);
 router.post("/api/signin", cluedinAppSigninController.post);

@@ -3,7 +3,8 @@ const firebaseAdmin = require("firebase-admin");
 const { credential } = require("firebase-admin");
 const serviceAccount = require("../cluedin-db185-firebase-adminsdk-g30hi-5e023ee3ab.json");
 var flash = require("connect-flash");
-
+const { patch } = require("./importExcelController");
+const path = require("path");
 module.exports = {
   post: async (req, res) => {
     // fetching details
@@ -11,6 +12,7 @@ module.exports = {
     // firebaseAdmin.initializeApp({
     //   credential: firebaseAdmin.credential.cert(serviceAccount),
     // });
+    // console.log(req);
     var session = req.session;
 
     var notif_title = req.body.notif_title;
@@ -25,7 +27,9 @@ module.exports = {
     let targetClass = `(${target_class.join(" ',' ")})`;
     console.log("bsd", targetClass);
     var gender = req.body.user_gender;
-
+    var imgurl = path.join(__dirname, "..", "uploads", "notifImg",req.file.filename);
+    console.log("imgUrl:",imgurl);
+    //insert img url into database is on hold as it is an absolute path. 
     // var sql = "INSERT INTO user_message (title,message,expDate,schDate,category) VALUES ?";
     console.log("sessionid", session.userid);
     var sql =
