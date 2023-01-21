@@ -27,7 +27,7 @@ module.exports = {
     let targetClass = `(${target_class.join(" ',' ")})`;
     console.log("bsd", targetClass);
     var gender = req.body.user_gender;
-    var imgurl = path.join(__dirname, "..", "uploads", "notifImg",req.file.filename);
+    var imgurl = path.join("http://128.199.23.207/images/"+req.file.filename);
     console.log("imgUrl:",imgurl);
     //insert img url into database is on hold as it is an absolute path. 
     // var sql = "INSERT INTO user_message (title,message,expDate,schDate,category) VALUES ?";
@@ -105,6 +105,7 @@ module.exports = {
           imageUrl:
             "https://techcommunity.microsoft.com/t5/image/serverpage/image-id/366577i4F851B60F8347ED4",
           click_action: "FLUTTER_NOTIFICATION_CLICK",
+          screen: "HomePage"
         },
         data: {
           data1: "data1",

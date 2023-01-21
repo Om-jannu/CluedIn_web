@@ -17,6 +17,12 @@ const readXlsxFile = require("read-excel-file/node");
 const path = require("path");
 const pool = require("./models/dbConnect");
 
+//tp
+app.get('/images/:file', function(req, res) {
+  var file = req.params.file;
+  var fileLocation = path.join(__dirname, 'uploads','notifImg', file);
+  res.sendFile(fileLocation);
+});
 //flash
 var flash = require("connect-flash");
 app.use(flash());
@@ -231,6 +237,7 @@ function getDateTime() {
 }
 console.log("date:", getDateTime());
 
+console.log("dirname:",__dirname);
 //creating server
 var port = process.env.PORT || 5000;
 app.listen(port, (err) => {
