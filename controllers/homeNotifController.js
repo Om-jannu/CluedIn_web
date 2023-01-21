@@ -119,7 +119,7 @@ module.exports = {
       //below to be uncommented once the actual fcm tokens are generated and inserted into db
       firebaseAdmin.messaging().sendToDevice(getFcmTokensSql, payload, options);
       getFcmTokensSql = [];
-      console.log("---------------------\nfbtoken after :",getFcmTokensSql);
+      // console.log("---------------------\nfbtoken after :",getFcmTokensSql);
       req.flash("message1", "Notification Sent ");
 
       //query for notification_message_targetlist
