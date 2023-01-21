@@ -31,7 +31,7 @@ module.exports = {
     console.log("imgUrl:",imgurl);
     //insert img url into database is on hold as it is an absolute path. 
     // var sql = "INSERT INTO user_message (title,message,expDate,schDate,category) VALUES ?";
-    console.log("sessionid", session.userid);
+    // console.log("sessionid", session.userid);
     var sql =
       "INSERT INTO notification_message (nm_title,sender_id,nm_message,nm_label_id) VALUES ?";
     var values = [[notif_title, session.senderid, notif_desc, label]];
@@ -52,7 +52,7 @@ module.exports = {
       params.target_gender = target_gender;
     }
 
-    console.log(params);
+    // console.log(params);
 
     function buildConditions(params) {
       var conditions = [];
@@ -82,7 +82,7 @@ module.exports = {
       "select t1.firebase_token from user_details t1, Student_branch_standard_div_ay_rollno_sem_mapping t2 WHERE " +
       conditions.where;
 
-    console.log(sql_1);
+    // console.log(sql_1);
     pool.query(sql_1, conditions.values, (err, result) => {
       if (err) console.log(err);
 
