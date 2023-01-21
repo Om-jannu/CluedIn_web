@@ -85,7 +85,8 @@
 
                                                         <!-- creating form -->
                                                         <form id="quickform" name="notif-form" method="post"
-                                                            action="/sendNotif" onsubmit="return Notifvalidate()">
+                                                            action="/sendNotif" enctype="multipart/form-data"
+                                                            onsubmit="return Notifvalidate()">
                                                             <!--action looks for index.html -->
                                                             <div class="card-body">
                                                                 <div class="form-group">
@@ -293,7 +294,8 @@
                                                             </div>
 
                                                             <div class="card-footer">
-                                                                <button type="submit" class="btn btn-primary">SendNotification</button>
+                                                                <button type="submit"
+                                                                    class="btn btn-primary">SendNotification</button>
                                                             </div>
                                                         </form>
                                             </div>
@@ -313,8 +315,10 @@
                                                         </div>
                                                     </div> -->
 
-                                                    <div class="card-body table-responsive p-0 container-fluid" style="height: 100%;">
-                                                        <table style="width: 100%;" class="table table-head-fixed" id="notif_table">
+                                                    <div class="card-body table-responsive p-0 container-fluid"
+                                                        style="height: 100%;">
+                                                        <table style="width: 100%;" class="table table-head-fixed"
+                                                            id="notif_table">
                                                             <thead>
                                                                 <tr>
                                                                     <th>Title</th>

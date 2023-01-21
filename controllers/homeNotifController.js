@@ -22,7 +22,7 @@ module.exports = {
     var label = req.body.label;
     var target_class = [];
     target_class.push(req.body.target_class);
-    let targetClass = `('${target_class.join("','")}')`;
+    let targetClass = `(${target_class.join(" ',' ")})`;
     console.log("bsd", targetClass);
     var gender = req.body.user_gender;
 
@@ -92,6 +92,7 @@ module.exports = {
       }
 
       console.log("---------------------\nfinaltoken:", getFcmTokensSql);
+      //firebase notif logic
       const payload = {
         notification: {
           title: req.body.notif_title,
