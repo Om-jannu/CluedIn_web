@@ -17,10 +17,16 @@ const readXlsxFile = require("read-excel-file/node");
 const path = require("path");
 const pool = require("./models/dbConnect");
 
-//tp
+//routes to generate img link 
 app.get('/images/:file', function(req, res) {
   var file = req.params.file;
   var fileLocation = path.join(__dirname, 'uploads','notifImg', file);
+  res.sendFile(fileLocation);
+});
+
+app.get('/profile/:file', function(req, res) {
+  var file = req.params.file;
+  var fileLocation = path.join(__dirname, 'uploads','profilePic', file);
   res.sendFile(fileLocation);
 });
 //flash
