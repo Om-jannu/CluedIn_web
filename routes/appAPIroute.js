@@ -8,6 +8,7 @@ const { abort } = require("process");
 //import controller files 
 let authAppUser = require("../controllers/appControllers/authAppUser");
 let firebase_token = require("../controllers/appControllers/firebaseTokenAPI");
+const pool = require("../models/dbConnect");
 
 
 const app = express();
@@ -51,9 +52,20 @@ router.post('/firebaseToken',firebase_token.post)  //http://localhost:5000/api/a
 }
 ]
 }
+http://128.199.23.207:5000/profile/people.png   profile url 
 */
 router.post('/appNotif',(req,res)=>{
     qry = `SELECT nm_id,userName,userRole,message_title,message_label,user_message,image_url,dateOfcreation from cluedin.user_message where isDelete = 0 ORDER BY dateOfcreation DESC`
 })
 
+router.get('/profile',(req,res)=>{
+    let mobno = req.query.mobno;
+    qry = `SELECT t1.user_fname,t1.user_lname,t1.user_mobno,t1.user_email,t2.branch_name from user_details t1 , branch t2 where t1.user_mobno="${mobno}" and t1.user_department=t2.branch_id;`
+    pool.query(qry,(err,result)=>{
+        if (err) console.log(err);
+        let profileData = JSON.parse(JSON.stringify(result[0]))
+        console.log(profileData);
+        res.json({data:profileData});
+    });
+})//http://128.199.23.207:5000/api/app/profile   --get req 
 module.exports = router;
