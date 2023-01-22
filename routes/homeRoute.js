@@ -29,7 +29,7 @@ const listuser = require("../controllers/listusercontroller");
 const listNotif = require("../controllers/listNotifController");
 const updateuser = require("../controllers/updateuserController");
 const deleteuser = require("../controllers/deleteuserController");
-
+const webUserProfile = require("../controllers/web-profile_edit");
 let authAppUser = require("../controllers/appControllers/authAppUser");
 
 // firebaseAdmin.initializeApp({
@@ -79,14 +79,8 @@ router.post("/auth", authUser.post);
 router.get("/dashboard", dashboard.get);
 
 //profile page
-router.get("/profile", (req, res) => {
-  var session = req.session;
-
-  if (session.userid != null) {
-    var Path = path.join(__dirname, "..", "views", "profile");
-    res.render(Path);
-  } else res.redirect("/");
-});
+router.get("/profile",webUserProfile.get);
+router.post("/profile",webUserProfile.edit);
 //destroying session
 router.get("/logout", logoutController.get);
 
