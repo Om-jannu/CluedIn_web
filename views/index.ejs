@@ -85,7 +85,8 @@
 
                                                         <!-- creating form -->
                                                         <form id="quickform" name="notif-form" method="post"
-                                                            action="/sendNotif" enctype="multipart/form-data" onsubmit="return Notifvalidate()">
+                                                            action="/sendNotif" enctype="multipart/form-data"
+                                                            onsubmit="return Notifvalidate()">
                                                             <!--action looks for index.html -->
                                                             <div class="card-body">
                                                                 <div class="form-group">
@@ -181,9 +182,7 @@
                                                                                 style="width: 15rem;" tabindex="-1"
                                                                                 aria-hidden="true" name="label"
                                                                                 placeholder="select label type"
-                                                                                id="notifLabel"
-                                                                                onchange="notifLabelHandler();"
-                                                                                required>
+                                                                                id="notifLabel" required>
                                                                                 <% for (let count=0; count <
                                                                                     label_data.length; count++) { %>
                                                                                     <option

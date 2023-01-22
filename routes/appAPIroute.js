@@ -20,7 +20,7 @@ router.post('/authAppUser',authAppUser.post);  // http://localhost:5000/api/app/
 
 //store firebase token from app into database
 router.post('/firebaseToken',firebase_token.post)  //http://localhost:5000/api/app/firebaseToken
-  
+
 
 /* 
 {
@@ -55,7 +55,36 @@ router.post('/firebaseToken',firebase_token.post)  //http://localhost:5000/api/a
 http://128.199.23.207:5000/profile/people.png   profile url 
 */
 router.post('/appNotif',(req,res)=>{
-    qry = `SELECT nm_id,userName,userRole,message_title,message_label,user_message,image_url,dateOfcreation from cluedin.user_message where isDelete = 0 ORDER BY dateOfcreation DESC`
+    //queries 
+    qry1 = `SELECT t1.nm_id,t2.user_fname,t2.user_lname,t3.role_name,t2.user_profilePic,t1.nm_title,t4.label_name,t1.nm_message,t1.nm_image_url,t1.dateOfcreation from cluedin.notification_message t1 ,user_details t2 , role_master t3 , label_master t4 Where t1.sender_id = t2.user_id and t2.user_role_id = t3.role_id and t1.nm_label_id = t4.label_id ORDER BY t1.dateOfCreation DESC;Select label_name from label_master;Select role_name from role_master`
+
+    qry2 = `Select label_name from label_master`;
+    qry3 = `Select role_name from role_master`;
+    pool.query(qry1,(err,result)=>{
+        if (err) console.log(err);
+        let Data = JSON.parse(JSON.stringify(result))
+        console.log(Data);
+
+        let labelData = []
+        let roleData = []
+        let notifData = Data[0]
+        for (let index = 0; index < Data[1].length; index++) {
+            labelData.push(Data[1][index].label_name)            
+        }
+        for (let j = 0; j < Data[2].length; j++) {
+            roleData.push(Data[2][j].role_name)            
+        }
+        console.log(labelData);
+        console.log("role data\n",roleData);
+        // let roleData = JSON.parse(JSON.stringify(result[2]))
+        // console.log("result\n",notifData,labelData,roleData);
+        res.json(
+            {
+                labels:labelData,
+                senderRoles:roleData,
+                notifications:notifData
+            });
+    })
 })
 
 router.get('/profile',(req,res)=>{
@@ -67,5 +96,5 @@ router.get('/profile',(req,res)=>{
         console.log(profileData);
         res.json({data:profileData});
     });
-})//http://128.199.23.207:5000/api/app/profile   --get req 
+}) //http://128.199.23.207:5000/api/app/profile   --get req 
 module.exports = router;
