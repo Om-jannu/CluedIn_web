@@ -1,5 +1,6 @@
 const pool = require("../models/dbConnect");
 const path = require("path");
+const session = require("express-session");
 
 module.exports = {
   get: (req, res) => {
@@ -32,5 +33,16 @@ module.exports = {
       console.log("profile updated successfully");
       res.redirect("/profile");
     });
+  },
+
+  updateProfile:(req,res)=>{
+    var session = req.session;
+    profileUrl = path.join("http://128.199.23.207:5000/profile/"+req.file.filename);
+    console.log("imgUrl:",profileUrl);
+    qry = `Update user_details SET user_profilePic = "${profileUrl}" where user_mobno = "${session.userid}"`
+    pool.query(qry,(err,result)=>{
+      if (err) throw err;
+      res.redirect('/profile');
+    })
   }
 };

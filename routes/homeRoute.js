@@ -81,6 +81,20 @@ router.get("/dashboard", dashboard.get);
 //profile page
 router.get("/profile",webUserProfile.get);
 router.post("/profile",webUserProfile.edit);
+
+var Path1 = path.join(__dirname, "..", "uploads", "profilePic");
+const storage2 = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null,Path1);
+  },
+  filename: (req, file, cb) => {
+    cb(null, "profile" + "-" + Date.now() + "-" + file.originalname);
+  },
+});
+const uploadProfileImg = multer({
+  storage: storage2,
+});
+router.post("/uploadProfile",uploadProfileImg.single('UserprofileImg'),webUserProfile.updateProfile);
 //destroying session
 router.get("/logout", logoutController.get);
 
