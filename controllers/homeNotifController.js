@@ -27,20 +27,14 @@ module.exports = {
     let targetClass = `(${target_class.join(" ',' ")})`;
     console.log("bsd", targetClass);
     var gender = req.body.user_gender;
-    var imgurl = path.join("http://128.199.23.207:5000/images/"+req.file.filename);
-    console.log("imgUrl:",imgurl);
-    //insert img url into database is on hold as it is an absolute path. 
+    var imgurl = path.join(
+      "http://128.199.23.207:5000/images/" + req.file.filename
+    );
+    console.log("imgUrl:", imgurl);
+    //insert img url into database is on hold as it is an absolute path.
     // var sql = "INSERT INTO user_message (title,message,expDate,schDate,category) VALUES ?";
     // console.log("sessionid", session.userid);
-    var sql =
-      "INSERT INTO notification_message (nm_title,sender_id,nm_message,nm_image_url,nm_label_id) VALUES ?";
-    var values = [[notif_title, session.senderid, notif_desc,imgurl,label]];
-    pool.query(sql, [values], (err, result) => {
-      if (err) throw err;
 
-      // res.send("notif sent");
-      console.log("data inserted finally!!!");
-    });
     //fcm token array
     var getFcmTokensSql = [];
     //logic for getting selected fcm tokens
@@ -105,7 +99,7 @@ module.exports = {
           imageUrl:
             "https://techcommunity.microsoft.com/t5/image/serverpage/image-id/366577i4F851B60F8347ED4",
           click_action: "FLUTTER_NOTIFICATION_CLICK",
-          screen:"HomePage"
+          screen: "HomePage",
         },
         data: {
           data1: "data1",
@@ -121,9 +115,19 @@ module.exports = {
       firebaseAdmin.messaging().sendToDevice(getFcmTokensSql, payload, options);
       getFcmTokensSql = [];
       // console.log("---------------------\nfbtoken after :",getFcmTokensSql);
+
+      var sql =
+        "INSERT INTO notification_message (nm_title,sender_id,nm_message,nm_image_url,nm_label_id) VALUES ?";
+      var values = [[notif_title, session.senderid, notif_desc, imgurl, label]];
+      pool.query(sql, [values], (err, result) => {
+        if (err) throw err;
+
+        // res.send("notif sent");
+        console.log("data inserted finally!!!");
+      });
       req.flash("message1", "Notification Sent ");
 
-      //query for notification_message_targetlist
+      // query for notification_message_targetlist
       // qry = `INSERT INTO notification_message_targetlist (nm_id,bsd_id,nm_gender) values ((SELECT nm_id from notification_message WHERE nm_title = "${notif_title}" ),"${target_class}","${gender}")`;
       // pool.query(qry,(err,result)=>{
       //   if (err) throw err;

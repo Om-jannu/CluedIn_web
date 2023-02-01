@@ -60,7 +60,7 @@ app.use(
 // const { initializeApp } = require('firebase-admin/app');
 const firebaseAdmin = require("firebase-admin");
 const { credential } = require("firebase-admin");
-const serviceAccount = require("./cluedin-79346-firebase-adminsdk-94sut-ab59f886cd.json");
+const serviceAccount = require("./latest_cluedin-e47b2-46a230e63bad.json");
 firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.cert(serviceAccount),
 });
