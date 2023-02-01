@@ -61,7 +61,7 @@ router.post('/appNotif',(req,res)=>{
     /* for all gender is doubt 
     qry for user specific notif (get the bsd id and shayad gender of the user )
     qry2 = `SELECT t5.nm_id,t2.user_fname,t2.user_lname,t3.role_name,t2.user_profilePic,t1.nm_title,t4.label_name,t1.nm_message,t1.nm_image_url,t1.dateOfcreation from cluedin.notification_message t1 ,user_details t2 , role_master t3 , label_master t4, notification_message_targetlist t5  Where t5.nm_id = t1.nm_id and t5.bsd_id = 13 and t5.nm_gender = 1  and t1.sender_id = t2.user_id and t2.user_role_id = t3.role_id and t1.nm_label_id = t4.label_id ORDER BY t1.dateOfCreation DESC`
-
+    hi sir 
 
     */
     qry2 = `Select label_name from label_master`;
