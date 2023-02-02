@@ -27,9 +27,12 @@ module.exports = {
     let targetClass = `(${target_class.join(" ',' ")})`;
     console.log("bsd", targetClass);
     var gender = req.body.user_gender;
+    
     var imgurl = path.join(
       "http://128.199.23.207:5000/images/" + req.file.filename
     );
+    // TODO send only file name 
+
     console.log("imgUrl:", imgurl);
     //insert img url into database is on hold as it is an absolute path.
     // var sql = "INSERT INTO user_message (title,message,expDate,schDate,category) VALUES ?";
