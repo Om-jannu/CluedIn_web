@@ -37,7 +37,7 @@ module.exports = {
 
   updateProfile:(req,res)=>{
     var session = req.session;
-    var server_url = "http://128.199.23.207:5000/profile/"
+    var server_url = "profile/"
     profileUrl = path.join(server_url,req.file.filename);
     console.log("imgUrl:",profileUrl);
     qry = `Update user_details SET user_profilePic = "${profileUrl}" where user_mobno = "${session.userid}"`

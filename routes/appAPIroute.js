@@ -89,13 +89,13 @@ router.get("/profile", (req, res) => {
 }); //http://128.199.23.207:5000/api/app/profile   --get req
 
 
-var Path = path.join(__dirname, "..", "uploads", "studentProfilePic");
+var Path = path.join(__dirname, "..", "uploads", "profilePic");
 const storage2 = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null,Path);
   },
   filename: (req, file, cb) => {
-    cb(null, "stud" + "-" + Date.now() + "-" + file.originalname);
+    cb(null, "studProfile" + "-" + Date.now() + "-" + file.originalname);
   },
 });
 const uploadStudImg = multer({

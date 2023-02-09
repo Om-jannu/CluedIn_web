@@ -88,7 +88,7 @@ const storage2 = multer.diskStorage({
     cb(null,Path1);
   },
   filename: (req, file, cb) => {
-    cb(null, "profile" + "-" + Date.now() + "-" + file.originalname);
+    cb(null, "Userprofile" + "-" + Date.now() + "-" + file.originalname);
   },
 });
 const uploadProfileImg = multer({

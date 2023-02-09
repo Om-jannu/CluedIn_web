@@ -27,7 +27,7 @@ app.get('/images/:file', function(req, res) {
 //routes to generate profile pic img link
 app.get('/profile/:file', function(req, res) {
   var file = req.params.file;
-  var fileLocation = path.join(__dirname, 'uploads','studentProfilePic', file);
+  var fileLocation = path.join(__dirname, 'uploads','profilePic', file);
   res.sendFile(fileLocation);
 });
 //flash
