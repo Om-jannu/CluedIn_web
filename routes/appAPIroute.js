@@ -4,6 +4,7 @@ const express = require("express");
 const router = express.Router();
 const path = require("path");
 const { abort } = require("process");
+const multer = require("multer");
 
 //import controller files
 let authAppUser = require("../controllers/appControllers/authAppUser");
@@ -20,39 +21,10 @@ router.post("/authAppUser", authAppUser.post); // http://localhost:5000/api/app/
 //store firebase token from app into database
 router.post("/firebaseToken", firebase_token.post); //http://localhost:5000/api/app/firebaseToken
 
-/* 
-{
-"labels": [
-"Academics",
-"Exam Cell",
-"T&P Cell"
-],
-"senderRoles": [
-"Principal",
-"Class Teacher",
-"HOD",
-"Admission Admin",
-"Management",
-"Faculty"
-],
-"notifications": [
-{
-"notification_id": 1,
-"senderName": "Nilesh sir",
-"senderRole": "Class Teacher",
-"senderProfilePic": "https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
-"notification_title": "Mini Project demonstration on 15th Sep! ",
-"notification_label": "Academics",
-"notification_message": "Tomorrow we'll be meeting at 11.15 to see what's the progress on the Dbit App.",
-"image_url": "https://images.unsplash.com/photo-1590402494682-cd3fb53b1f70?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
-"attachment_url": "https://drive.google.com/file/d/1ZWAwmTozuTU_Zm3HBZ9jdTse25ryMEIV/view?usp=share_link",
-"dateOfCreation": "2022-09-11T12:46:31.165Z"
-}
-]
-}
-http://128.199.23.207:5000/profile/people.png   profile url 
-*/
-router.post("/appNotif", (req, res) => {    //http://128.199.23.207:5000/api/app/appNotif
+
+router.post("/appNotif", (req, res) => { 
+  var bsd_id = req.body.bsd_id;  
+  var gender = req.body.gender; 
   //queries
   qry1 = 
   `SELECT  t1.nm_id, t1.nm_title,t1.nm_message,t1.nm_image_url,t1.dateOfcreation,
@@ -66,23 +38,19 @@ router.post("/appNotif", (req, res) => {    //http://128.199.23.207:5000/api/app
     label_master t4,
     notification_message_targetlist t5 
    WHERE  t5.nm_id = t1.nm_id 
-    and t5.bsd_id = "13" 
-    and (t5.nm_gender = 1 or t5.nm_gender = 0)
+    and t5.bsd_id = "${bsd_id}" 
+    and (t5.nm_gender = ${gender} or t5.nm_gender = 0)
     and t1.sender_id = t2.user_id 
     and t3.role_id = t2.user_role_id 
     and t4.label_id = t1.nm_label_id
    ORDER BY t1.dateOfCreation DESC ;
-Select label_name from label_master;
-Select role_name from role_master`;
+   Select label_name from label_master;
+   Select role_name from role_master`;
 
-  /* for all gender is doubt 
-    qry for user specific notif (get the bsd id and shayad gender of the user )
-    qry2 = `SELECT t5.nm_id,t2.user_fname,t2.user_lname,t3.role_name,t2.user_profilePic,t1.nm_title,t4.label_name,t1.nm_message,t1.nm_image_url,t1.dateOfcreation from cluedin.notification_message t1 ,user_details t2 , role_master t3 , label_master t4, notification_message_targetlist t5  Where t5.nm_id = t1.nm_id and t5.bsd_id = 13 and t5.nm_gender = 1  and t1.sender_id = t2.user_id and t2.user_role_id = t3.role_id and t1.nm_label_id = t4.label_id ORDER BY t1.dateOfCreation DESC`
-    hi sir 
 
-    */
-  qry2 = `Select label_name from label_master`;
-  qry3 = `Select role_name from role_master`;
+  // qry2 = `Select label_name from label_master`;
+  // qry3 = `Select role_name from role_master`;
+
   pool.query(qry1, (err, result) => {
     if (err) console.log(err);
     let Data = JSON.parse(JSON.stringify(result));
@@ -107,7 +75,7 @@ Select role_name from role_master`;
       notifications: notifData,
     });
   });
-});
+});     //http://128.199.23.207:5000/api/app/appNotif
 
 router.get("/profile", (req, res) => {
   let mobno = req.query.mobno;
@@ -115,8 +83,36 @@ router.get("/profile", (req, res) => {
   pool.query(qry, (err, result) => {
     if (err) console.log(err);
     let profileData = JSON.parse(JSON.stringify(result[0]));
-    console.log(profileData);
+    // console.log(profileData);
     res.json({ data: profileData });
   });
 }); //http://128.199.23.207:5000/api/app/profile   --get req
+
+
+var Path = path.join(__dirname, "..", "uploads", "studentProfilePic");
+const storage2 = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null,Path);
+  },
+  filename: (req, file, cb) => {
+    cb(null, "stud" + "-" + Date.now() + "-" + file.originalname);
+  },
+});
+const uploadStudImg = multer({
+  storage: storage2,
+});
+
+router.post('/updateProfile',uploadStudImg.single('image'),(req,res)=>{
+  var mobno = req.body.mobno;
+  console.log("mobno:",mobno);
+  var server_url = "profile/"
+  profileUrl = path.join(server_url,req.file.filename);
+  console.log("imgUrl:",profileUrl);
+  qry = `Update user_details SET user_profilePic = "${profileUrl}" where user_mobno = "${mobno}"`
+  pool.query(qry,(err,result)=>{
+    if (err) throw err;
+    console.log("success");
+  })
+  res.json({img_url:profileUrl})
+}); // http://128.199.23.207:5000/api/app/updateProfile
 module.exports = router;
