@@ -31,6 +31,8 @@ const updateuser = require("../controllers/updateuserController");
 const deleteuser = require("../controllers/deleteuserController");
 const webUserProfile = require("../controllers/web-profile_edit");
 let authAppUser = require("../controllers/appControllers/authAppUser");
+const sharp = require("sharp"); //to compress web profile pic
+const session = require("express-session");
 
 // firebaseAdmin.initializeApp({
 //   credential: firebaseAdmin.credential.cert(require("../cluedInOfficialAndroid.json")),
@@ -79,22 +81,32 @@ router.post("/auth", authUser.post);
 router.get("/dashboard", dashboard.get);
 
 //profile page
-router.get("/profile",webUserProfile.get);
-router.post("/profile",webUserProfile.edit);
+router.get("/profile", webUserProfile.get);
+router.post("/profile", webUserProfile.edit);
 
-var Path1 = path.join(__dirname, "..", "uploads", "profilePic");
+
+var Path1 = path.join(__dirname, "..", "uploads", "tempProfile");
 const storage2 = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null,Path1);
+    cb(null, Path1);
   },
   filename: (req, file, cb) => {
-    cb(null, "Userprofile" + "-" + Date.now() + "-" + file.originalname);
+    // cb(null, "Jasmit-Userprofile" + "-" + Date.now() + "-" + file.originalname);
+    var session = req.session;
+    const ext = path.extname(file.originalname);
+    cb(null, "Userprofile" + "-" + session.userid + ".jpg");
   },
 });
 const uploadProfileImg = multer({
   storage: storage2,
 });
-router.post("/uploadProfile",uploadProfileImg.single('UserprofileImg'),webUserProfile.updateProfile);
+
+router.post(
+  "/uploadProfile",
+  uploadProfileImg.single("UserprofileImg"),
+  webUserProfile.updateProfile
+);
+
 //destroying session
 router.get("/logout", logoutController.get);
 
@@ -143,7 +155,7 @@ router.get("/listuser", deleteuser.delete);
 var Path = path.join(__dirname, "..", "uploads", "notifImg");
 const storage1 = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null,Path);
+    cb(null, Path);
   },
   filename: (req, file, cb) => {
     cb(null, "nm" + "-" + Date.now() + "-" + file.originalname);
@@ -152,7 +164,8 @@ const storage1 = multer.diskStorage({
 const uploadImg = multer({
   storage: storage1,
 });
-router.post("/sendNotif",uploadImg.single('notif-img'), notifController.post);
+
+router.post("/sendNotif", uploadImg.single("notif-img"), notifController.post);
 
 router.post("/api/signup", cluedinAppSignupController.post);
 router.post("/api/signin", cluedinAppSigninController.post);

@@ -40,7 +40,7 @@ router.post("/appNotif", (req, res) => {
    WHERE  t5.nm_id = t1.nm_id 
     and t5.bsd_id = "${bsd_id}" 
     and (t5.nm_gender = ${gender} or t5.nm_gender = 0)
-    and t1.sender_id = t2.user_id 
+    and t1.sender_id = t2.user_id   
     and t3.role_id = t2.user_role_id 
     and t4.label_id = t1.nm_label_id
    ORDER BY t1.dateOfCreation DESC ;
@@ -50,7 +50,7 @@ router.post("/appNotif", (req, res) => {
 
   // qry2 = `Select label_name from label_master`;
   // qry3 = `Select role_name from role_master`;
-
+  
   pool.query(qry1, (err, result) => {
     if (err) console.log(err);
     let Data = JSON.parse(JSON.stringify(result));
