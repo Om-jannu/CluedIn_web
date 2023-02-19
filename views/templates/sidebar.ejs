@@ -11,10 +11,10 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <a href="/profile"><img src="dist/img/tushar.jpeg" class="img-circle elevation-2" alt="User Image"></a>
+                <a href="/profile"><img src="http://cluedin.creast.in:5000/<%= ProfileUrl %>" class="img-circle elevation-2" alt="User Image"></a>
             </div>
             <div class="info">
-                <a href="/profile" class="d-block">Tushar Padhy</a>
+                <a href="/profile" class="d-block"><%= userName %></a>
             </div>
         </div>
 
@@ -43,6 +43,14 @@
                         <i class="nav-icon fas fa-solid fa-bell"></i>
                         <p>
                             Notification Manager
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/event" class="nav-link">
+                        <i class="nav-icon fas fa-solid fa-calendar"></i>
+                        <p>
+                            Events
                         </p>
                     </a>
                 </li>

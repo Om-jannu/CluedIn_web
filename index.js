@@ -84,6 +84,9 @@ app.use("/sendNotif", homeRoute);
 app.use("/action", homeRoute);
 // app.use("/listNotif", homeRoute);
 
+//events routes 
+app.use("/event",homeRoute);
+
 app.use("/createUser", homeRoute);
 app.use("/listuser", homeRoute);
 // app.use("/import-excel", importExcel);
