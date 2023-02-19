@@ -63,6 +63,268 @@
 
 
                         <!-- Main content -->
+                        <section class="content">
+                            <div class="container-fluid">
+                                <div class="card card-primary card-tabs">
+                                    <div class="card-header p-0 pt-1">
+                                        <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" id="custom-tabs-two-home-tab"
+                                                    data-toggle="pill" href="#create-notification" role="tab"
+                                                    aria-controls="custom-tabs-two-home" aria-selected="true">Create</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="custom-tabs-two-profile-tab" data-toggle="pill"
+                                                    href="#listNotif" role="tab" aria-controls="custom-tabs-two-profile"
+                                                    aria-selected="false">List
+                                                    Notification</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="custom-tabs-two-messages-tab" data-toggle="pill"
+                                                    href="#custom-tabs-two-messages" role="tab"
+                                                    aria-controls="custom-tabs-two-messages"
+                                                    aria-selected="false">Scheduled</a>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="tab-content" id="custom-tabs-two-tabContent">
+                                            <div class="tab-pane fade active show" id="create-notification"
+                                                role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
+
+                        
+                                                        <!-- creating form -->
+                                                        <form id="quickform" name="event-form" method="post"
+                                                            action="" enctype="multipart/form-data"
+                                                            onsubmit="return Notifvalidate()">
+                                                            <!--action looks for index.html -->
+                                                            <div class="card-body">
+                                                                <div class="form-group">
+                                                                    <label for="notificationTitle">Notification Title
+                                                                        *</label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="notificationTitle" placeholder="Enter title"
+                                                                        name="notif_title" maxlength="30" required>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Description *</label>
+                                                                    <textarea class="form-control" rows="3"
+                                                                        name="notif_desc" placeholder="Enter ..."
+                                                                        required></textarea>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Schedule:</label>
+                                                                    <div class="input-group date" id="reservationdate"
+                                                                        data-target-input="nearest" style="width: 40%;">
+                                                                        <input type="date"
+                                                                            class="form-control datetimepicker-input"
+                                                                            data-target="#reservationdate"
+                                                                            name="scheduled_date"
+                                                                            id="notifMsgScheduleDate"
+                                                                            onclick="notifMsgScheduleHandler();">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Expiry Date:</label>
+                                                                    <div class="input-group date" id="reservationdate"
+                                                                        data-target-input="nearest" style="width: 40%;">
+                                                                        <input type="date"
+                                                                            class="form-control datetimepicker-input"
+                                                                            data-target="#reservationdate"
+                                                                            name="scheduled_date"
+                                                                            id="notifMsgExpiryDate"
+                                                                            onclick="notifMsgExpiryHandler();">
+                                                                    </div>
+                                                                </div>
+
+
+                                                                <div class="form-group">
+
+
+                                                                    <label>Target Class (*press ctrl key to select
+                                                                        multiple
+                                                                        fields)</label>
+                                                                    <select style="height: 15rem;width:15rem ;"
+                                                                        class="form-control" tabindex="-1" id="slct1"
+                                                                        aria-hidden="true" name="target_class"
+                                                                        placeholder="select category"
+                                                                        onchange="populate('slct1','slct2')" multiple
+                                                                        required>
+
+                                                                        <option selected="selected" value="0">
+                                                                            ALL
+                                                                        </option>
+                                                                        
+                                                                    </select>
+
+                                                                </div>
+
+
+                                                                <div class="form-group">
+                                                                    <label>Gender</label>
+                                                                    <select class="form-control " style="width: 15rem;"
+                                                                        tabindex="-1" id="slct3" aria-hidden="true"
+                                                                        name="user_gender" placeholder="select Gender"
+                                                                        required>
+                                                                        <option selected="selected" value="0">
+                                                                            All
+                                                                        </option>
+                                                                        <option value="1">
+                                                                            Male
+                                                                        </option>
+                                                                        <option value="2">Female</option>
+                                                                        <option value="3">Other</option>
+                                                                    </select>
+
+                                                                </div>
+
+                                                                <div class="row">
+                                                                    <div class="col-lg-4">
+                                                                        <div class="form-group">
+                                                                            <label>Label</label>
+                                                                            <select class="form-control "
+                                                                                style="width: 15rem;" tabindex="-1"
+                                                                                aria-hidden="true" name="label"
+                                                                                placeholder="select label type"
+                                                                                id="notifLabel" required>
+                                                                                
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-4">
+                                                                        <div id="notifEventSchedule"
+                                                                            style="visibility:hidden;"
+                                                                            class="form-group">
+                                                                            <label>Event Schedule:</label>
+                                                                            <div class="input-group date"
+                                                                                data-target-input="nearest"
+                                                                                style="width: 40%;">
+                                                                                <input type="date"
+                                                                                    class="form-control datetimepicker-input"
+                                                                                    data-target="#reservationdate"
+                                                                                    name="event_scheduled_date">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-lg-4">
+                                                                        <div class="form-group">
+                                                                            <label>Image URL:</label>
+                                                                            <div class="input-group "
+                                                                                style="width: 100%; ">
+                                                                                <input type="file" name="notif-img"
+                                                                                    class="form-control"
+                                                                                    accept=".jpep,.png,.jpg"
+                                                                                    id="notifImgUrl"
+                                                                                    onchange="preview_notifImg_handler(event)">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-4">
+                                                                        <div class="form-group">
+                                                                            <label>Attachement URL:</label>
+                                                                            <div class="input-group "
+                                                                                style="width: 100%; ">
+                                                                                <input type="file"
+                                                                                    name="notif-attachment"
+                                                                                    class="form-control"
+                                                                                    accept=".doc,.pdf"
+                                                                                    id="notifAttachmentUrl">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-4">
+                                                                        <div class="form-group">
+                                                                            <label>Registration Link:</label>
+                                                                            <div class="input-group "
+                                                                                style="width: 100%; ">
+                                                                                <input type="url" class="form-control"
+                                                                                    id="notifRegistrationUrl"
+                                                                                    placeholder="registration url"
+                                                                                    name="notif_reg_url" required>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                   
+
+                                                                </div>
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                                               
+                                                            </div>
+
+                                                            <div class="card-footer">
+                                                                <button type="submit"
+                                                                    class="btn btn-primary">Create Event</button>
+                                                            </div>
+                                                        </form>
+                                            </div>
+
+                                            <!-- OM YAHA  DAAL FORM  -->
+                                            <div class="tab-pane fade" id="listNotif" role="tabpanel"
+                                                aria-labelledby="custom-tabs-two-profile-tab">
+
+                                                <!-- inside list notif div  -->
+                                                <div class="card">
+                                                    <!-- <div class="card-header">
+
+                                                        <div class="card-tools">
+                                                            <div class="input-group input-group-sm"
+                                                                style="width: 150px;">
+                                                            </div>
+                                                        </div>
+                                                    </div> -->
+
+                                                    <div class="card-body table-responsive p-0 container-fluid"
+                                                        style="height: 100%;">
+                                                        <table style="width: 100%;" class="table table-head-fixed"
+                                                            id="notif_table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Title</th>
+                                                                    <th>Message</th>
+                                                                    <!-- <th>Expiry Date</th>
+                                                        <th>Scheduled Date</th> -->
+                                                                    <th>Category</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+
+                                            <div class="tab-pane fade" id="custom-tabs-two-messages" role="tabpanel"
+                                                aria-labelledby="custom-tabs-two-messages-tab">
+
+                                                <h3>Work Under Construction!!!</h3>
+                                            </div>
+                                            <!-- <div class="tab-pane fade" id="custom-tabs-two-settings" role="tabpanel"
+                                aria-labelledby="custom-tabs-two-settings-tab">
+                                Pellentesque vestibulum commodo nibh nec blandit. Maecenas neque magna, iaculis
+                                tempus
+                                turpis ac, ornare sodales tellus. Mauris eget blandit dolor. Quisque tincidunt
+                                venenatis
+                                vulputate. Morbi euismod molestie tristique. Vestibulum consectetur dolor a
+                                vestibulum
+                                pharetra. Donec interdum placerat urna nec pharetra. Etiam eget dapibus orci, eget
+                                aliquet
+                                urna. Nunc at consequat diam. Nunc et felis ut nisl commodo dignissim. In hac
+                                habitasse
+                                platea dictumst. Praesent imperdiet accumsan ex sit amet facilisis.
+                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
                         
     </body>
 
