@@ -16,8 +16,13 @@ module.exports = {
       console.log(profileData[0]);
 
       if (session.userid != null) {
+        console.log("userUrlSession: " + session.userProfileUrl);
         var Path = path.join(__dirname, "..", "views", "profile");
-        res.render(Path, { profileData: profileData[0] });
+        res.render(Path, {
+          profileData: profileData[0],
+          userName: session.user_name,
+          ProfileUrl: session.userProfileUrl,
+        });
       } else res.redirect("/");
     });
   },
@@ -38,28 +43,30 @@ module.exports = {
 
   updateProfile: (req, res) => {
     //resize
-    const originalName = req.file.filename;
-    const resizedFilePath = path.join("uploads", "profilePic", originalName);
-    sharp(req.file.path)
-      .resize(512, 512)
-      .toFile(resizedFilePath, (err, info) => {
-        if (err) console.log(err);
-
-        // Delete the original uploaded file using fs.unlink
-        fs.unlink(req.file.path, (err) => {
-          if (err) return res.status(500).send(err);
-        });
-        console.log("image resized ");
-      });
-
     var session = req.session;
-    var server_url = "profile/";
-    profileUrl = path.join(server_url, req.file.filename);
-    console.log("imgUrl:", profileUrl);
-    qry = `Update user_details SET user_profilePic = "${profileUrl}" where user_mobno = "${session.userid}"`;
-    pool.query(qry, (err, result) => {
-      if (err) throw err;
-      res.redirect("/profile");
-    });
+    if (session.userid != null) {
+      const originalName = req.file.filename;
+      const resizedFilePath = path.join("uploads", "profilePic", originalName);
+      sharp(req.file.path)
+        .resize(512, 512)
+        .toFile(resizedFilePath, (err, info) => {
+          if (err) console.log(err);
+
+          // Delete the original uploaded file using fs.unlink
+          fs.unlink(req.file.path, (err) => {
+            if (err) return res.status(500).send(err);
+          });
+          console.log("image resized ");
+        });
+
+      var server_url = "profile/";
+      profileUrl = path.join(server_url, req.file.filename);
+      console.log("imgUrl:", profileUrl);
+      qry = `Update user_details SET user_profilePic = "${profileUrl}" where user_mobno = "${session.userid}"`;
+      pool.query(qry, (err, result) => {
+        if (err) throw err;
+        res.redirect("/profile");
+      });
+    } else res.redirect("/");
   },
 };

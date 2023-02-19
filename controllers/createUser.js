@@ -1,5 +1,6 @@
 const pool = require("../models/dbConnect");
 var flash = require("connect-flash");
+const session = require("express-session");
 
 module.exports = {
   post: (req, res) => {
@@ -41,7 +42,7 @@ module.exports = {
       // res.sendfile("createUser.html");
       console.log("data inserted into user_details finally!!!");
       req.flash("message", "User created Successfully");
-      res.redirect("/createuser");
+      res.redirect("/createuser",{userName:session.user_name,ProfileUrl : session.userProfileUrl});
     });
   },
   // get: (req, res) => {

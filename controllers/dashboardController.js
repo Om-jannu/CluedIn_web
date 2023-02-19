@@ -24,7 +24,7 @@ module.exports = {
         // console.log(label);
         var bsd = data[1];
         // res.render(Path,{branch_data:data});
-        res.render(Path,{message1 : req.flash('message1'),label_data : label,bsd_data : bsd});
+        res.render(Path,{message1 : req.flash('message1'),label_data : label,bsd_data : bsd,userName : session.user_name,ProfileUrl : session.userProfileUrl});
       })
 
       // res.render();
