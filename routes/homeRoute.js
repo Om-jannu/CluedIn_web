@@ -6,6 +6,9 @@ const notifData = require("../controllers/notifDatatableController");
 // const listNotif = require('../controllers/listNotifController');
 
 const multer = require("multer");
+const sharp = require("sharp"); //to compress web profile pic
+const session = require("express-session");
+
 const { s3Uploadv2, s3Uploadv3 } = require("../models/s3Service");
 const router = express.Router();
 const firebaseAdmin = require("firebase-admin");
@@ -31,9 +34,7 @@ const updateuser = require("../controllers/updateuserController");
 const deleteuser = require("../controllers/deleteuserController");
 const webUserProfile = require("../controllers/web-profile_edit");
 let authAppUser = require("../controllers/appControllers/authAppUser");
-const sharp = require("sharp"); //to compress web profile pic
-const session = require("express-session");
-
+let event = require("../controllers/eventController");
 // firebaseAdmin.initializeApp({
 //   credential: firebaseAdmin.credential.cert(require("../cluedInOfficialAndroid.json")),
 // });
@@ -84,7 +85,6 @@ router.get("/dashboard", dashboard.get);
 router.get("/profile", webUserProfile.get);
 router.post("/profile", webUserProfile.edit);
 
-
 var Path1 = path.join(__dirname, "..", "uploads", "tempProfile");
 const storage2 = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -110,6 +110,11 @@ router.post(
 //destroying session
 router.get("/logout", logoutController.get);
 
+//event page route
+router.get("/event",event.get);
+
+
+
 //post req to insert data into user table
 router.post("/submitUser", createUser.post);
 
@@ -133,6 +138,8 @@ router.get("/createuser", function (request, response) {
         message: request.flash("message"),
         ay: ay,
         bsd_data: bsd,
+        userName: session.user_name,
+        ProfileUrl: session.userProfileUrl,
       });
     });
   } else {
