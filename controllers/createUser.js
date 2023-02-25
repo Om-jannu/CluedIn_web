@@ -5,7 +5,7 @@ const session = require("express-session");
 module.exports = {
   post: (req, res) => {
     // fetching details
-    res.render("views/createUser");
+    // res.render("views/createUser");
     console.log(req.body);
 
     var user_fname = req.body.user_fname;
@@ -42,7 +42,7 @@ module.exports = {
       // res.sendfile("createUser.html");
       console.log("data inserted into user_details finally!!!");
       req.flash("message", "User created Successfully");
-      res.redirect("/createuser",{userName:session.user_name,ProfileUrl : session.userProfileUrl});
+      res.redirect("/createuser");
     });
   },
   // get: (req, res) => {
