@@ -16,6 +16,8 @@ module.exports = {
       console.log(profileData[0]);
 
       if (session.userid != null) {
+        session.userProfileUrl = profileData[0].user_profilePic;
+        session.user_name = profileData[0].user_fname+" "+profileData[0].user_lname
         console.log("userUrlSession: " + session.userProfileUrl);
         var Path = path.join(__dirname, "..", "views", "profile");
         res.render(Path, {

@@ -19,8 +19,8 @@ module.exports = {
         session.userid = req.body.userName;
         session.senderid = result[0].user_id; //this is for senderId of the user who sends the notification
         var userRoleId = result[0].user_role_id;
-        session.user_name = result[0].user_fname+""+result[0].user_lname
-        session.userProfileUrl = result[0].user_profilePic;
+        session.user_name = result[0].user_fname+" "+result[0].user_lname  //updating the session stored values after the changes made in profile page 
+        session.userProfileUrl = result[0].user_profilePic;//updating the session stored values after the changes made in profile page
         // console.log("username:"+user_name);
         pool.query(sql1, [userRoleId], (err, result) => {
           if (err) throw err;
