@@ -91,7 +91,7 @@
                                         <div class="tab-content" id="custom-tabs-two-tabContent">
                                             <div class="tab-pane fade active show" id="create-notification" role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">                        
                                                         <!-- creating form -->
-                                                <form id="quickform" name="event-form" method="post" action="" enctype="multipart/form-data" onsubmit="return Notifvalidate()">
+                                                <form id="quickform" name="event-form" method="post" action="/postevent" enctype="multipart/form-data" onsubmit="return Notifvalidate()">
                                                     <!--action looks for index.html -->
                                                     <div class="card-body">
                                                         <div class="form-group">
@@ -196,7 +196,7 @@
                                                                 <div class="form-group">
                                                                     <label>Image URL:</label>
                                                                     <div class="input-group " style="width: 100%; ">
-                                                                        <input type="file" name="event-img" class="form-control" accept=".jpep,.png,.jpg" id="notifImgUrl" onchange="preview_notifImg_handler(event)">
+                                                                        <input type="file" name="event_img" class="form-control" accept=".jpep,.png,.jpg" id="notifImgUrl" onchange="preview_notifImg_handler(event)">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -204,7 +204,7 @@
                                                                 <div class="form-group">
                                                                     <label>Attachement URL:</label>
                                                                     <div class="input-group " style="width: 100%; ">
-                                                                        <input type="file" name="event-attachment" class="form-control" accept=".doc,.pdf" id="notifAttachmentUrl">
+                                                                        <input type="file" name="event_attachment" class="form-control" accept=".doc,.pdf" id="notifAttachmentUrl">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -212,7 +212,7 @@
                                                                 <div class="form-group">
                                                                     <label>Registration Link:</label>
                                                                     <div class="input-group " style="width: 100%; ">
-                                                                        <input type="url" class="form-control" id="notifRegistrationUrl" placeholder="registration url" name="event_reg_url" required>
+                                                                        <input type="url" class="form-control" id="notifRegistrationUrl" placeholder="registration url" name="event_reg_url">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -226,19 +226,13 @@
                                             </div>
                                             <!-- OM YAHA  DAAL FORM  -->
                                             <div class="tab-pane fade" id="listEvents" role="tabpanel" aria-labelledby="custom-tabs-two-profile-tab">
-
-                                                <!-- inside list notif div  -->
-                                                <div class="card">                                                   
+                                                <!-- inside list notif div  -->                                                                                               
                                                     <div class="card-body table-responsive p-0 container-fluid"
                                                         style="height: 100%;">
                                                         <h1>List Events</h1>
                                                     </div>
-
-                                                </div>
                                             </div>
-                                            <div class="tab-pane fade" id="custom-tabs-two-messages" role="tabpanel"
-                                                aria-labelledby="custom-tabs-two-messages-tab">
-
+                                            <div class="tab-pane fade" id="custom-tabs-two-messages" role="tabpanel" aria-labelledby="custom-tabs-two-messages-tab">
                                                 <h3>Work Under Construction!!!</h3>
                                             </div>
                                         </div>                                                                
@@ -256,35 +250,35 @@
                         </section>
                         
                             <!-- REQUIRED SCRIPTS -->
-                            <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+                        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
                                 integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
                                 crossorigin="anonymous"></script>
-                            <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-                            <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
-                            <!-- jQuery -->
-                            <!-- <script src="plugins/jquery/jquery.min.js"></script> -->
-                            <!-- Bootstrap -->
-                            <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-                            <!-- overlayScrollbars -->
-                            <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-                            <!-- AdminLTE App -->
-                            <script src="dist/js/adminlte.js"></script>
+                        <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+                        <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+                        <!-- jQuery -->
+                        <!-- <script src="plugins/jquery/jquery.min.js"></script> -->
+                        <!-- Bootstrap -->
+                        <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+                        <!-- overlayScrollbars -->
+                        <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+                        <!-- AdminLTE App -->
+                        <script src="dist/js/adminlte.js"></script>
 
-                            <!-- PAGE PLUGINS -->
-                            <!-- jQuery Mapael -->
-                            <script src="plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
-                            <script src="plugins/raphael/raphael.min.js"></script>
-                            <script src="plugins/jquery-mapael/jquery.mapael.min.js"></script>
-                            <script src="plugins/jquery-mapael/maps/usa_states.min.js"></script>
-                            <!-- ChartJS -->
-                            <script src="plugins/chart.js/Chart.min.js"></script>
+                        <!-- PAGE PLUGINS -->
+                        <!-- jQuery Mapael -->
+                        <script src="plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
+                        <script src="plugins/raphael/raphael.min.js"></script>
+                        <script src="plugins/jquery-mapael/jquery.mapael.min.js"></script>
+                        <script src="plugins/jquery-mapael/maps/usa_states.min.js"></script>
+                        <!-- ChartJS -->
+                        <script src="plugins/chart.js/Chart.min.js"></script>
 
-                            <!-- AdminLTE for demo purposes -->
-                            <script src="dist/js/demo.js"></script>
-                            <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-                            <script src="dist/js/pages/dashboard2.js"></script>
-                            <!-- <script src="./plugins/jquery/jquery.min.js"></script> -->
+                        <!-- AdminLTE for demo purposes -->
+                        <script src="dist/js/demo.js"></script>
+                        <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+                        <script src="dist/js/pages/dashboard2.js"></script>
+                        <!-- <script src="./plugins/jquery/jquery.min.js"></script> -->
     </body>
 
-    </html>
+</html>

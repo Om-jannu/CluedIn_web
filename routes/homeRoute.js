@@ -110,6 +110,20 @@ router.post(
 //event page route
 router.get("/event",event.get);
 
+var PATH = path.join(__dirname, "..", "uploads", "eventImg");
+const storage3 = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, PATH);
+  },
+  filename: (req, file, cb) => {
+    cb(null, "event" + "-" + Date.now() + "-" + file.originalname);
+  },
+});
+const uploadEventImg = multer({
+  storage: storage3,
+});
+router.post("/postevent",uploadEventImg.single('event_img'),event.post)
+
 
 //destroying session
 router.get("/logout", logoutController.get);

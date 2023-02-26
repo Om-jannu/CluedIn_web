@@ -72,6 +72,7 @@ app.set("view engine", "ejs");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json()); // to support JSON-encoded bodies
+app.use(express.json());
 
 //using Routes for web
 app.use("/", homeRoute);
@@ -86,6 +87,7 @@ app.use("/action", homeRoute);
 
 //events routes 
 app.use("/event",homeRoute);
+app.use("/postevent",homeRoute);
 
 app.use("/createUser", homeRoute);
 app.use("/listuser", homeRoute);
