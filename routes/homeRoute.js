@@ -107,13 +107,12 @@ router.post(
   webUserProfile.updateProfile
 );
 
-//destroying session
-router.get("/logout", logoutController.get);
-
 //event page route
 router.get("/event",event.get);
 
 
+//destroying session
+router.get("/logout", logoutController.get);
 
 //post req to insert data into user table
 router.post("/submitUser", createUser.post);
