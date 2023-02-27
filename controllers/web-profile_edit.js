@@ -6,6 +6,7 @@ const fs = require("fs");
 
 module.exports = {
   get: (req, res) => {
+    console.log("=======================Inside Profile page ==================");
     var session = req.session;
 
     let sql = `select t1.user_fname ,t1.user_lname, t1.user_gender ,t1.user_email, t1.user_mobno ,t1.user_addr, t1.user_pincode ,t2.role_name, t3.branch_name , t1.user_profilePic from user_details t1 ,role_master t2 , branch t3 where t1.user_role_id = t2.role_id and t1.user_department = t3.branch_id and t1.user_mobno = "${session.userid}"`;
@@ -30,6 +31,7 @@ module.exports = {
   },
 
   edit: (req, res) => {
+    console.log("=================Profile Edit ==========================");
     var session = req.session;
     var user_fname = req.body.user_fname;
     var user_lname = req.body.user_lname;
@@ -45,6 +47,7 @@ module.exports = {
 
   updateProfile: (req, res) => {
     //resize
+    console.log("=======================Update Profile Pic=============================");
     var session = req.session;
     if (session.userid != null) {
       const originalName = req.file.filename;

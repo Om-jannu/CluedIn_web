@@ -3,6 +3,7 @@ const path = require("path");
 
 module.exports = {
   get: (req, res) => {
+    console.log("=============Login Page====================");
     // console.log(res.sendFile('views/Index.html', { root: '.' }));
     let session = req.session;
     if (session.userid) {

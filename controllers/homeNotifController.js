@@ -7,6 +7,7 @@ const { patch } = require("./importExcelController");
 const path = require("path");
 module.exports = {
   post: async (req, res) => {
+    console.log("--------------------------Inside post method of send notif form(/sendNotif)------------------------------");
     // fetching details
     // console.log(req.body);
     // firebaseAdmin.initializeApp({

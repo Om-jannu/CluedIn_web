@@ -2,6 +2,7 @@ const pool = require("../models/dbConnect");
 
 module.exports = {
   update: (req, res) => {
+    console.log("========================Update created Users======================");
     //storing data retrieved from the modal into local variables
 
     var id = req.query.id; //hidden field data

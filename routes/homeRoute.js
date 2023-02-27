@@ -133,6 +133,7 @@ router.post("/submitUser", createUser.post);
 
 router.get("/createuser", function (request, response) {
   // console.log('create user')
+  console.log("================Create user page========================");
   let session = request.session;
 
   if (session.userid) {

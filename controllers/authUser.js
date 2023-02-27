@@ -4,7 +4,7 @@ const path = require("path");
 
 module.exports = {
   post: (req, res) => {
-
+    console.log("================================Login Authentication (post req)=================================");
     var usermobno = req.body.userName;
     var pwd = req.body.user_pwd;
    
@@ -31,11 +31,11 @@ module.exports = {
           }
         });
 
-        console.log(req.session);
+        console.log("===================Session===========================\n",req.session);
         res.redirect("/dashboard");
       } else {
         req.flash("Emsg", "Invalid Credentials");
-        res.redirect("/");
+        res.redirect("/");  
       }
     });
   },
