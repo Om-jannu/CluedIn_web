@@ -77,6 +77,60 @@ router.post("/appNotif", (req, res) => {
   });
 });     //http://128.199.23.207:5000/api/app/appNotif
 
+//appEvent api 
+router.post("/appEvent", (req, res) => { 
+  // var bsd_id = req.body.bsd_id;  
+  // var gender = req.body.gender; 
+  //queries
+  qry1 = 
+  `SELECT el_name FROM events_label_master;
+  SELECT sb_name FROM student_bodies_master;
+  SELECT  t1.event_id,t2.user_fname,t2.user_lname,t5.role_name,t3.sb_name, t2.user_profilePic,
+          t1.event_title,t4.el_name,t1.event_desc,t1.event_image_url,t1.event_attachment_url,
+          t1.event_registration_url,t1.event_fees,t1.dateOfCreation,t1.dateOfExpiration   
+  FROM
+          events t1,   
+          user_details t2,    
+          student_bodies_master t3, 
+          events_label_master t4,
+          role_master t5 
+  WHERE
+          t1.sender_id = t2.user_id 
+          and t1.organiser_id = t3.sb_id 
+          and t1.event_label_id = t4.el_id 
+          and t2.user_role_id = t5.role_id
+  ORDER BY t1.event_id DESC`;
+
+
+  // qry2 = `Select label_name from label_master`;
+  // qry3 = `Select role_name from role_master`;
+  
+  pool.query(qry1, (err, result) => {
+    if (err) console.log(err);
+    let Data = JSON.parse(JSON.stringify(result));
+    console.log(Data);
+
+    let labelData = [];
+    let organiserData = [];
+    let eventData = Data[2];
+    for (let index = 0; index < Data[0].length; index++) {
+      labelData.push(Data[0][index].el_name);
+    }
+    for (let j = 0; j < Data[1].length; j++) {
+      organiserData.push(Data[1][j].sb_name);
+    }
+    console.log("labels\n",labelData);
+    console.log("organisers data\n", organiserData);
+    // let roleData = JSON.parse(JSON.stringify(result[2]))
+    // console.log("result\n",notifData,labelData,roleData);
+    res.json({
+      labels: labelData,
+      organizers: organiserData,
+      events: eventData,
+    });
+  });
+});     //http://128.199.23.207:5000/api/app/appEvent
+
 router.get("/profile", (req, res) => {
   let mobno = req.query.mobno;
   qry = `SELECT t1.user_fname,t1.user_lname,t1.user_mobno,t1.user_email,t2.branch_name , t1.user_profilePic from user_details t1 , branch t2 where t1.user_mobno="${mobno}" and t1.user_department=t2.branch_id;`;
