@@ -131,16 +131,16 @@ router.post("/appEvent", (req, res) => {
   });
 });     //http://128.199.23.207:5000/api/app/appEvent
 
-router.get("/profile", (req, res) => {
-  let mobno = req.query.mobno;
-  qry = `SELECT t1.user_fname,t1.user_lname,t1.user_mobno,t1.user_email,t2.branch_name , t1.user_profilePic from user_details t1 , branch t2 where t1.user_mobno="${mobno}" and t1.user_department=t2.branch_id;`;
-  pool.query(qry, (err, result) => {
-    if (err) console.log(err);
-    let profileData = JSON.parse(JSON.stringify(result[0]));
-    // console.log(profileData);
-    res.json({ data: profileData });
-  });
-}); //http://128.199.23.207:5000/api/app/profile   --get req
+// router.get("/profile", (req, res) => {
+//   let mobno = req.query.mobno;
+//   qry = `SELECT t1.user_fname,t1.user_lname,t1.user_mobno,t1.user_email,t2.branch_name , t1.user_profilePic from user_details t1 , branch t2 where t1.user_mobno="${mobno}" and t1.user_department=t2.branch_id;`;
+//   pool.query(qry, (err, result) => {
+//     if (err) console.log(err);
+//     let profileData = JSON.parse(JSON.stringify(result[0]));
+//     // console.log(profileData);
+//     res.json({ data: profileData });
+//   });
+// }); //http://128.199.23.207:5000/api/app/profile   --get req
 
 
 var Path = path.join(__dirname, "..", "uploads", "profilePic");
