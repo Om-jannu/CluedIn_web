@@ -14,7 +14,7 @@ module.exports = {
 
     // Check if username and password are provided
     if (!usermobno || !password) {
-      console.log("idhar");
+      // console.log("idhar");
       return res.status(400).json({ data: null, success: "false", message: 'Username and password are required.' });
     }
 
@@ -26,7 +26,7 @@ module.exports = {
       // console.log(result);
       if (err) res.send(err);
       if (result.length === 0) {
-        console.log("idhar 2");
+        // console.log("idhar 2");
         return res.status(401).json({ data: null, success: "false", msg: 'Invalid username or password.' });
       }
 
@@ -35,7 +35,7 @@ module.exports = {
       const user = result[0];
       console.log(user);
       if (user.user_pwd !== password) {
-        console.log("idhar 3");
+        // console.log("idhar 3");
         return res.status(401).json({ data: null, success: "false", msg: 'Invalid username or password.' });
       }
       const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);

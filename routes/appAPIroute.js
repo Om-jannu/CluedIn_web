@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json);
 
 //app authentication
-router.post("/authAppUser", authAppUser.post); // http://localhost:5000/api/app/authAppUser
+router.post("/authAppUser", authAppUser.post); // http://128.199.23.207:5000/api/app/authAppUser
 
 //store firebase token from app into database
 router.post("/firebaseToken", firebase_token.post); //http://localhost:5000/api/app/firebaseToken

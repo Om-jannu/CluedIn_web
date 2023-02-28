@@ -41,6 +41,7 @@ module.exports = {
     var session = req.session;
     let event_title = req.body.event_title;
     let event_desc  = req.body.event_desc;
+    let event_notif_desc = req.body.event_notif_desc;
     let scheduled_date = req.body.scheduled_date;
     let expiry_date = req.body.expiry_date;
     let organiser = req.body.oraganiser;
@@ -60,6 +61,7 @@ module.exports = {
       event_label_id,
       event_title,
       event_desc,
+      event_notif_desc,
       event_image_url,
       event_attachment_url,
       event_registration_url,
@@ -68,7 +70,7 @@ module.exports = {
       dateOfExpiration
     )
     VALUES ?`
-    let values = [[session.senderid,organiser,event_label,event_title,event_desc,event_img,event_attachment,event_reg_url,event_fees,scheduled_date,expiry_date]]
+    let values = [[session.senderid,organiser,event_label,event_title,event_desc,event_notif_desc,event_img,event_attachment,event_reg_url,event_fees,scheduled_date,expiry_date]]
     pool.query(qry,[values],(err,result)=>{
       if (err) throw err;
       console.log("Data inserted into events table");

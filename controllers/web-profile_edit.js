@@ -14,7 +14,7 @@ module.exports = {
     pool.query(sql, (err, data) => {
       if (err) throw err;
       let profileData = JSON.parse(JSON.stringify(data));
-      console.log(profileData[0]);
+      // console.log(profileData[0]);
 
       if (session.userid != null) {
         session.userProfileUrl = profileData[0].user_profilePic;

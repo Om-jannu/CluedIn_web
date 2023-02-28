@@ -14,7 +14,7 @@
                 <!-- /.navbar -->
 
                 <!-- Main Sidebar Container -->
-                <%- include('templates/sidebar'); %>
+                <%- include('templates/sidebar'); %>    
                     <style>
                        /* input[type="file"]{
                         display: none;
@@ -105,7 +105,11 @@
                                                             <input type="text" class="form-control" id="eventTitle" placeholder="Enter title" name="event_title" maxlength="30" required>
                                                         </div>
                                                         <div class="form-group">
-                                                            <label>Description *</label>
+                                                            <label>Notification Message (personalised message- to be shown in the Notification)*</label>
+                                                            <textarea class="form-control" rows="3" name="event_notif_desc" placeholder="Enter ..." required></textarea>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Event Description *</label>
                                                             <textarea class="form-control" rows="3" name="event_desc" placeholder="Enter ..." required></textarea>
                                                         </div>
                                                         <div class="form-group">
@@ -193,7 +197,7 @@
                                                             <div class="col-lg-4">
                                                                 <div class="form-group">
                                                                     <label for="eventTitle">Event Fees</label>
-                                                                    <input type="text" class="form-control" placeholder="Enter Fees" name="event_fees" maxlength="30" required>
+                                                                    <input type="number" class="form-control" placeholder="Enter Fees" name="event_fees" maxlength="30" required>
                                                                 </div>
                                                             </div>                                                                 
                                                         </div>
