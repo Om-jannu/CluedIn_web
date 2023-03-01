@@ -11,7 +11,7 @@ module.exports = {
         var order_data = request.query.order;
 
         if (typeof order_data == 'undefined') {
-            // var column_name = 't1.nm_id';
+            var column_name = 't1.nm_id';
 
             var column_sort_order = 'desc';
         }
