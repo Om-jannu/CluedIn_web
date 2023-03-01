@@ -43,10 +43,10 @@ module.exports = {
         pool.query(`SELECT COUNT(*) AS Total FROM notification_message where sender_id = ${sender_id}`, function (error, data) {
 
             var total_records = data[0].Total;
-            // console.log(total_records);
+            console.log(total_records);
 
             //Total number of records with filtering
-            var qry1 = `SELECT COUNT(*) AS Total FROM notification_message t1 , label_master t2 WHERE  t1.sender_id = ${sender_id} ${search_query}`
+            var qry1 = `SELECT COUNT(*) AS Total FROM notification_message t1 , label_master t2 WHERE  t1.sender_id = ${sender_id} and t1.nm_label_id = t2.label_id ${search_query}`
             // console.log("qry1",qry1);
             pool.query(qry1, function (error, data) {
 

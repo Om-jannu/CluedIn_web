@@ -5,6 +5,7 @@ const router = express.Router();
 const path = require("path");
 const { abort } = require("process");
 const multer = require("multer");
+const authToken = require("../middleware/auth")
 
 //import controller files
 let authAppUser = require("../controllers/appControllers/authAppUser");
