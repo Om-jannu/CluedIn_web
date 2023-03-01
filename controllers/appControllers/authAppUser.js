@@ -9,7 +9,7 @@ const { use } = require("../importExcelController");
 module.exports = {
   post: (req, res) => {
     console.log("================= Login route from app =======================");
-
+    // console.log(req.body);
     var usermobno = req.body.usermobno;
     var password = req.body.password;
 
@@ -23,7 +23,7 @@ module.exports = {
     const qry = `SELECT t1.* , t2.branch_name FROM cluedin.user_details t1 , branch t2 WHERE user_mobno = "${usermobno}" and t1.user_department=t2.branch_id`;
     // const qry1 = `SELECT t1.user_fname,t1.user_lname,t1.user_mobno,t1.user_pwd,t1.user_email,t2.branch_name , t1.user_profilePic from user_details t1 , branch t2 where t1.user_mobno="${mobno}" and t1.user_department=t2.branch_id;`
     pool.query(qry, (err, result) => {
-      console.log(qry);
+      // console.log(qry);
       if (err) {
         console.log(err);
         return res.status(500).json({ data: null, success: false, message: 'Internal server error.' });
@@ -35,7 +35,7 @@ module.exports = {
       // Check if the password is correct
 
       const user = result[0];
-      console.log(user);
+      // console.log(user);
       if (user.user_pwd !== password) {
         return res.status(401).json({ data: null, success: "false", msg: 'Invalid username or password.' });
       }
@@ -48,7 +48,7 @@ module.exports = {
           console.log(err);
           return res.status(500).json({ data: null, success: false, message: 'Internal server error.' });
         }
-        console.log(`Token has been stored in the database for user ${usermobno}`);
+        // console.log(`Token has been stored in the database for user ${usermobno}`);
       });
       //local variables to store profile data 
       let user_fname = user.user_fname;
@@ -59,8 +59,9 @@ module.exports = {
       let user_profilePic = user.user_profilePic;
       // console.log(user_email);
       return res.status(200).json(
-        { data: 
-          { 
+        {
+          data:
+          {
             user_fname,
             user_lname,
             user_mobno,
@@ -68,9 +69,9 @@ module.exports = {
             user_branch,
             user_profilePic,
             token
-           }, 
-           success: "true",
-            msg: 'User has been authenticated successfully.' 
+          },
+          success: "true",
+          msg: 'User has been authenticated successfully.'
         });
 
     });
