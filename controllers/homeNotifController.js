@@ -124,8 +124,8 @@ module.exports = {
       // console.log("---------------------\nfbtoken after :",getFcmTokensSql);
 
       var sql =
-        "INSERT INTO notification_message (nm_title,sender_id,nm_message,nm_image_url,nm_label_id) VALUES ?";
-      var values = [[notif_title, session.senderid, notif_desc, imgurl, label]];
+        "INSERT INTO notification_message (nm_title,sender_id,nm_message,nm_image_url,nm_label_id, targetClass) VALUES ?";
+      var values = [[notif_title, session.senderid, notif_desc, imgurl, label, targetClass]];
       pool.query(sql, [values], (err, result) => {
         if (err) throw err;
 
