@@ -5,7 +5,7 @@ const router = express.Router();
 const path = require("path");
 const { abort } = require("process");
 const multer = require("multer");
-const authToken = require("../middleware/auth")
+const authenticateToken = require("../middleware/auth")
 
 //import controller files
 let authAppUser = require("../controllers/appControllers/authAppUser");
@@ -23,12 +23,12 @@ router.post("/authAppUser", authAppUser.post); // http://128.199.23.207:5000/api
 router.post("/firebaseToken", firebase_token.post); //http://localhost:5000/api/app/firebaseToken
 
 
-router.post("/appNotif", (req, res) => { 
-  var bsd_id = req.body.bsd_id;  
-  var gender = req.body.gender; 
+router.post("/appNotif", (req, res) => {
+  var bsd_id = req.body.bsd_id;
+  var gender = req.body.gender;
   //queries
-  qry1 = 
-  `SELECT  t1.nm_id, t1.nm_title,t1.nm_message,t1.nm_image_url,t1.dateOfcreation,
+  qry1 =
+    `SELECT  t1.nm_id, t1.nm_title,t1.nm_message,t1.nm_image_url,t1.dateOfcreation,
     t2.user_id, t2.user_fname,t2.user_lname,t2.user_profilePic,
     t3.role_name,
     t4.label_name,
@@ -51,7 +51,7 @@ router.post("/appNotif", (req, res) => {
 
   // qry2 = `Select label_name from label_master`;
   // qry3 = `Select role_name from role_master`;
-  
+
   pool.query(qry1, (err, result) => {
     if (err) console.log(err);
     let Data = JSON.parse(JSON.stringify(result));
@@ -79,12 +79,12 @@ router.post("/appNotif", (req, res) => {
 });     //http://128.199.23.207:5000/api/app/appNotif
 
 //appEvent api 
-router.post("/appEvent", (req, res) => { 
+router.post("/appEvent", (req, res) => {
   // var bsd_id = req.body.bsd_id;  
   // var gender = req.body.gender; 
   //queries
-  qry1 = 
-  `SELECT el_name FROM events_label_master;
+  qry1 =
+    `SELECT el_name FROM events_label_master;
   SELECT sb_name FROM student_bodies_master;
   SELECT  t1.event_id,t2.user_fname,t2.user_lname,t5.role_name,t3.sb_name, t2.user_profilePic,
           t1.event_title,t4.el_name,t1.event_desc,t1.event_image_url,t1.event_attachment_url,
@@ -105,7 +105,7 @@ router.post("/appEvent", (req, res) => {
 
   // qry2 = `Select label_name from label_master`;
   // qry3 = `Select role_name from role_master`;
-  
+
   pool.query(qry1, (err, result) => {
     if (err) console.log(err);
     let Data = JSON.parse(JSON.stringify(result));
@@ -120,7 +120,7 @@ router.post("/appEvent", (req, res) => {
     for (let j = 0; j < Data[1].length; j++) {
       organiserData.push(Data[1][j].sb_name);
     }
-    console.log("labels\n",labelData);
+    console.log("labels\n", labelData);
     console.log("organisers data\n", organiserData);
     // let roleData = JSON.parse(JSON.stringify(result[2]))
     // console.log("result\n",notifData,labelData,roleData);
@@ -147,7 +147,7 @@ router.post("/appEvent", (req, res) => {
 var Path = path.join(__dirname, "..", "uploads", "profilePic");
 const storage2 = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null,Path);
+    cb(null, Path);
   },
   filename: (req, file, cb) => {
     cb(null, "studProfile" + "-" + Date.now() + "-" + file.originalname);
@@ -157,17 +157,17 @@ const uploadStudImg = multer({
   storage: storage2,
 });
 
-router.post('/updateProfile',uploadStudImg.single('image'),(req,res)=>{
+router.post('/updateProfile', authenticateToken, uploadStudImg.single('image'), (req, res) => {
   var mobno = req.body.mobno;
-  console.log("mobno:",mobno);
+  console.log("mobno:", mobno);
   var server_url = "profile/"
-  profileUrl = path.join(server_url,req.file.filename);
-  console.log("imgUrl:",profileUrl);
+  profileUrl = path.join(server_url, req.file.filename);
+  console.log("imgUrl:", profileUrl);
   qry = `Update user_details SET user_profilePic = "${profileUrl}" where user_mobno = "${mobno}"`
-  pool.query(qry,(err,result)=>{
+  pool.query(qry, (err, result) => {
     if (err) throw err;
     console.log("success");
   })
-  res.json({img_url:profileUrl})
+  res.json({ img_url: profileUrl })
 }); // http://128.199.23.207:5000/api/app/updateProfile
 module.exports = router;
