@@ -41,106 +41,153 @@ module.exports = {
     //insert img url into database is on hold as it is an absolute path.
     // var sql = "INSERT INTO user_message (title,message,expDate,schDate,category) VALUES ?";
     // console.log("sessionid", session.userid);
-
-    //fcm token array
-    var getFcmTokensSql = [];
-    //logic for getting selected fcm tokens
-
-    var target_gender = gender;
-    var params = {};
-
-    if (target_gender != 0) {
-      params.target_gender = target_gender;
-    }
-
-    // console.log(params);
-
-    function buildConditions(params) {
-      var conditions = [];
-      var values = [];
-      var conditionsStr;
-
-      if (typeof params.target_gender !== "undefined") {
-        conditions.push("t1.user_gender = ?");
-        values.push(parseInt(params.target_gender));
-      }
-
-      if (1) {
-        conditions.push(
-          `t2.user_id = t1.user_id and t2.ay_id=2 and t2.bsd_id IN ${targetClass} and t2.isDisabled=0 and t2.isDelete=0;`
-        );
-        // values.push(parseInt(params.target_gender));
-      }
-
-      return {
-        where: conditions.length ? conditions.join(" AND ") : "1",
-        values: values,
-      };
-    }
-
-    var conditions = buildConditions(params);
-    var sql_1 =
-      "select t1.firebase_token from user_details t1, Student_branch_standard_div_ay_rollno_sem_mapping t2 WHERE " +
-      conditions.where;
-
-    // console.log(sql_1);
-    pool.query(sql_1, conditions.values, (err, result) => {
-      if (err) console.log(err);
+    var sql =
+      "INSERT INTO notification_message (nm_title,sender_id,nm_message,nm_image_url,nm_label_id, targetClass) VALUES ?";
+    var values = [[notif_title, session.senderid, notif_desc, imgurl, label, targetClass]];
+    pool.query(sql, [values], (err, result) => {
+      if (err) throw err;
 
       // res.send("notif sent");
-      var token = JSON.parse(JSON.stringify(result));
-      // console.log(token[1].firebase_token);
-      //to push the fb token in array
-      for (let i = 0; i < token.length; i++) {
-        getFcmTokensSql.push(token[i].firebase_token);
-        // console.log("---------------------\nfbtoken:", getFcmTokensSql);
+      // console.log(result.insertId);
+      let nm_id = result.insertId;
+      console.log("data inserted into notification table finally!!!");
+
+
+      //fcm token array 
+      var getFcmTokensSql = [];
+      //logic for getting selected fcm tokens
+
+      var target_gender = gender;
+      var params = {};
+
+      if (target_gender != 0) {
+        params.target_gender = target_gender;
       }
 
-      console.log("---------------------\nfinaltoken:", getFcmTokensSql);
-      //firebase notif logic
-      const payload = {
-        notification: {
-          title: req.body.notif_title,
-          body: req.body.notif_desc,
-          sound: "default",
-          imageUrl:
-            "https://techcommunity.microsoft.com/t5/image/serverpage/image-id/366577i4F851B60F8347ED4",
-          click_action: "FLUTTER_NOTIFICATION_CLICK",
-          screen: "HomePage",
-        },
-        data: {
-          data1: "data1",
-          data2: "data2",
-        },
-      };
-      const options = {
-        priority: "high",
-        timeToLive: 60 * 60,
-      };
+      // console.log(params);
 
-      //below to be uncommented once the actual fcm tokens are generated and inserted into db
-      firebaseAdmin.messaging().sendToDevice(getFcmTokensSql, payload, options);
-      getFcmTokensSql = [];
-      // console.log("---------------------\nfbtoken after :",getFcmTokensSql);
+      function buildConditions(params) {
+        var conditions = [];
+        var values = [];
+        var conditionsStr;
 
-      var sql =
-        "INSERT INTO notification_message (nm_title,sender_id,nm_message,nm_image_url,nm_label_id, targetClass) VALUES ?";
-      var values = [[notif_title, session.senderid, notif_desc, imgurl, label, targetClass]];
-      pool.query(sql, [values], (err, result) => {
-        if (err) throw err;
+        if (typeof params.target_gender !== "undefined") {
+          conditions.push("t1.user_gender = ?");
+          values.push(parseInt(params.target_gender));
+        }
+
+        if (1) {
+          conditions.push(
+            `t2.user_id = t1.user_id and t2.ay_id=2 and t2.bsd_id IN ${targetClass} and t2.isDisabled=0 and t2.isDelete=0;`
+          );
+          // values.push(parseInt(params.target_gender));
+        }
+
+        return {
+          where: conditions.length ? conditions.join(" AND ") : "1",
+          values: values,
+        };
+      }
+
+      var conditions = buildConditions(params);
+      var sql_1 =
+        "select t1.firebase_token from user_details t1, Student_branch_standard_div_ay_rollno_sem_mapping t2 WHERE " +
+        conditions.where;
+
+      // console.log(sql_1);
+      pool.query(sql_1, conditions.values, (err, result) => {
+        if (err) console.log(err);
 
         // res.send("notif sent");
-        console.log("data inserted finally!!!");
-      });
-      req.flash("message1", "Notification Sent ");
+        var token = JSON.parse(JSON.stringify(result));
+        // console.log(token[1].firebase_token);
+        //to push the fb token in array
+        for (let i = 0; i < token.length; i++) {
+          getFcmTokensSql.push(token[i].firebase_token);
+          // console.log("---------------------\nfbtoken:", getFcmTokensSql);
+        }
 
-      // query for notification_message_targetlist
-      // qry = `INSERT INTO notification_message_targetlist (nm_id,bsd_id,nm_gender) values ((SELECT nm_id from notification_message WHERE nm_title = "${notif_title}" ),"${target_class}","${gender}")`;
-      // pool.query(qry,(err,result)=>{
-      //   if (err) throw err;
-      //   log("inserted into notif target table")
-      // });
-      res.redirect("/dashboard");
+        console.log("---------------------\nfinaltoken:", getFcmTokensSql);
+        //firebase notif logic
+        const payload = {
+          notification: {
+            title: req.body.notif_title,
+            body: req.body.notif_desc,
+            sound: "default",
+            imageUrl:
+              "https://techcommunity.microsoft.com/t5/image/serverpage/image-id/366577i4F851B60F8347ED4",
+            click_action: "FLUTTER_NOTIFICATION_CLICK",
+            screen: "HomePage",
+          },
+          data: {
+            data1: "data1",
+            data2: "data2",
+          },
+        };
+        const options = {
+          priority: "high",
+          timeToLive: 60 * 60,
+        };
+
+        //below to be uncommented once the actual fcm tokens are generated and inserted into db
+        // firebaseAdmin.messaging().sendToDevice(getFcmTokensSql, payload, options);
+        getFcmTokensSql = [];
+        // console.log("---------------------\nfbtoken after :",getFcmTokensSql);
+
+
+        //-----------------------------------------logic for inserting into targetlist table ------------------------------------------
+
+
+        function generateValuesArray(value1, value2Array, value3) {
+          const valuesArray = [];
+          value2Array.forEach(function (value2) {
+            const rowArray = [value1, value2, value3];
+            valuesArray.push(rowArray);
+          });
+          return valuesArray;
+        }
+        // query for notification_message_targetlist
+        let bsd_arr = req.body.target_class
+        qry = `INSERT INTO notification_message_targetlist (nm_id,bsd_id,nm_gender) values ?`;
+        const valuesArray = generateValuesArray(nm_id, bsd_arr, gender);
+
+
+        // console.log(bsd_arr);
+
+        // console.log("val:", valuesArray);
+
+        pool.query(qry, [valuesArray], (err, result) => {
+          if (err) throw err;
+          console.log("inserted into notif target table")
+
+          let qry1 = `select user_id from Student_branch_standard_div_ay_rollno_sem_mapping where bsd_id in ${targetClass} `
+          pool.query(qry1,(err,result)=>{
+            if (err) throw err;
+            let data = JSON.parse(JSON.stringify(result))
+            
+
+            //to append user_id into array 
+            let targetUserId = [];
+            for (let index = 0; index < data.length; index++) {
+              targetUserId.push(data[index].user_id);              
+            }
+            console.log("target users",targetUserId);
+
+            //logic to insert data into target users table 
+            const values = generateValuesArray(nm_id, targetUserId, 0); //0 is for isRead i.e notif is not read by user 
+            console.log("status table:",values);
+            qry2 = `Insert into cluedin.user_notification_status (nm_id,user_id,isRead) values ? ;`
+            pool.query(qry2,[values],(err,result)=>{
+              if (err) throw err;
+              console.log("Data inserted into notification status table");
+            })
+          })
+          
+          // generateValuesArray
+        });
+        req.flash("message1", "Notification Sent ");
+        res.redirect("/dashboard");
+      });
     });
   },
 };

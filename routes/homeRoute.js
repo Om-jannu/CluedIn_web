@@ -173,6 +173,7 @@ router.post("/listuser", listuser.list);
 //for delete
 router.get("/listuser", deleteuser.delete);
 
+//storage for image url
 var Path = path.join(__dirname, "..", "uploads", "notifImg");
 const storage1 = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -186,7 +187,21 @@ const uploadImg = multer({
   storage: storage1,
 });
 
-router.post("/sendNotif", uploadImg.single("notif-img"), notifController.post);
+//storage for attachment url 
+var attachPath = path.join(__dirname, "..", "uploads", "notifAttachment");
+const storage4 = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, attachPath);
+  },
+  filename: (req, file, cb) => {
+    cb(null, "nm" + "-" + Date.now() + "-" + file.originalname);
+  },
+});
+const uploadAttachment = multer({
+  storage: storage4,
+});
+
+router.post("/sendNotif", uploadImg.single("notif-img"),notifController.post);
 
 router.post("/api/signup", cluedinAppSignupController.post);
 router.post("/api/signin", cluedinAppSigninController.post);
