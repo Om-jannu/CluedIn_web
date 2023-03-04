@@ -24,35 +24,66 @@ router.post("/firebaseToken", firebase_token.post); //http://localhost:5000/api/
 
 
 router.post("/appNotif", (req, res) => {
+  let user_mobno = req.body.user_mobno
   var bsd_id = req.body.bsd_id;
   var gender = req.body.gender;
   //queries
-  qry1 =
-    `SELECT  t1.nm_id, t1.nm_title,t1.nm_message,t1.nm_image_url,t1.dateOfcreation,
-    t2.user_id, t2.user_fname,t2.user_lname,t2.user_profilePic,
-    t3.role_name,
-    t4.label_name,
-    t5.nm_id
+  // qry1 =
+  //   `SELECT  t1.nm_id, t1.nm_title,t1.nm_message,t1.nm_image_url,t1.dateOfcreation,
+  //   t2.user_fname,t2.user_lname,t2.user_profilePic,
+  //   t3.role_name,
+  //   t4.label_name,
+  //   t5.nm_id
+  //  FROM cluedin.notification_message t1,   
+  //   user_details t2,    
+  //   role_master t3, 
+  //   label_master t4,
+  //   notification_message_targetlist t5 
+  //  WHERE  t5.nm_id = t1.nm_id 
+  //   and t5.bsd_id = "${bsd_id}" 
+  //   and (t5.nm_gender = ${gender} or t5.nm_gender = 0)
+  //   and t1.sender_id = t2.user_id   
+  //   and t3.role_id = t2.user_role_id 
+  //   and t4.label_id = t1.nm_label_id
+  //  ORDER BY t1.dateOfCreation DESC ;
+  //  Select label_name from label_master;
+  //  Select role_name from role_master`;
+
+  //above qry was to fetch the notifications if given bsd id and gender 
+
+   qry2=
+   
+   `SELECT 
+    t5.nm_id as notification_id,t1.nm_title as notification_title,
+    t1.nm_message as notification_message,
+    t1.nm_image_url as image_url,t1.nm_attachment_url as attachment_url ,
+    t1.dateOfcreation,
+    t2.user_fname as sender_fname,t2.user_lname as sender_lname,
+    t2.user_profilePic as senderProfilePic,
+    t3.role_name as senderRole,
+    t4.label_name as notification_label
    FROM cluedin.notification_message t1,   
     user_details t2,    
     role_master t3, 
     label_master t4,
-    notification_message_targetlist t5 
-   WHERE  t5.nm_id = t1.nm_id 
-    and t5.bsd_id = "${bsd_id}" 
-    and (t5.nm_gender = ${gender} or t5.nm_gender = 0)
-    and t1.sender_id = t2.user_id   
-    and t3.role_id = t2.user_role_id 
-    and t4.label_id = t1.nm_label_id
-   ORDER BY t1.dateOfCreation DESC ;
+    user_notification_status t5 
+   WHERE  
+    t5.nm_id = t1.nm_id
+    and t2.user_id = t1.sender_id
+    and t2.user_role_id = t3.role_id
+    and t1.nm_label_id = t4.label_id 
+    and t5.user_id = (select user_id from user_details  where user_mobno  = ${user_mobno} )
+   ORDER BY t1.dateOfCreation DESC;
    Select label_name from label_master;
-   Select role_name from role_master`;
+   Select role_name from role_master`
+
+   //this qry gives the notifications on the basis of only usermobno
 
 
   // qry2 = `Select label_name from label_master`;
   // qry3 = `Select role_name from role_master`;
 
-  pool.query(qry1, (err, result) => {
+  pool.query(qry2, (err, result) => {
     if (err) console.log(err);
     let Data = JSON.parse(JSON.stringify(result));
     // console.log(Data);
