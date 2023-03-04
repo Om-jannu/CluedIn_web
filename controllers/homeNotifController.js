@@ -8,53 +8,49 @@ const path = require("path");
 module.exports = {
   post: async (req, res) => {
     console.log("--------------------------Inside post method of send notif form(/sendNotif)------------------------------");
-    // fetching details
-    // console.log(req.body);
-    // firebaseAdmin.initializeApp({
-    //   credential: firebaseAdmin.credential.cert(serviceAccount),
-    // });
-    // console.log(req);
+
     var session = req.session;
 
     var notif_title = req.body.notif_title;
-    // console.log(notif_title);
     var notif_desc = req.body.notif_desc;
     var exp_date = req.body.exp_date;
     var scheduled_date = req.body.scheduled_date;
-    var category = req.body.category;
     var label = req.body.label;
-    var target_class = [];
+    var target_class = []; 
     target_class.push(req.body.target_class);
     let targetClass = `(${target_class.join(" ',' ")})`;
     console.log("bsd", targetClass);
     var gender = req.body.user_gender;
-
+    let TARGETCLASS = req.body.target_class;
+    console.log("class",TARGETCLASS);
     let imgurl = null;
-    if (req.file) {
+    if (req.files) {
+      console.log("req.file ",req.files);
       imgurl = path.join(
-        "http://128.199.23.207:5000/images/" + req.file.filename
+        "http://128.199.23.207:5000/images/" + req.files['notif-img'][0].filename
+      );
+      attachment_url = path.join(
+        "http://128.199.23.207:5000/file/" + req.files['notif-attachment'][0].filename
       );
     }
     // TODO send only file name
 
-    console.log("imgUrl:", imgurl);
-    //insert img url into database is on hold as it is an absolute path.
-    // var sql = "INSERT INTO user_message (title,message,expDate,schDate,category) VALUES ?";
-    // console.log("sessionid", session.userid);
+    console.log("imgUrl:", imgurl,"\nattachmentUrl:", attachment_url);
+
     var sql =
       "INSERT INTO notification_message (nm_title,sender_id,nm_message,nm_image_url,nm_label_id, targetClass) VALUES ?";
     var values = [[notif_title, session.senderid, notif_desc, imgurl, label, targetClass]];
+
     pool.query(sql, [values], (err, result) => {
       if (err) throw err;
 
-      // res.send("notif sent");
-      // console.log(result.insertId);
       let nm_id = result.insertId;
-      console.log("data inserted into notification table finally!!!");
+      console.log("data inserted into notification table");
 
 
       //fcm token array 
       var getFcmTokensSql = [];
+
       //logic for getting selected fcm tokens
 
       var target_gender = gender;
@@ -148,7 +144,8 @@ module.exports = {
         }
         // query for notification_message_targetlist
         let bsd_arr
-        if (target_class.length == 1) {
+        // console.log("tarrrrgett ",target_class);
+        if (TARGETCLASS.length == 1) {
           bsd_arr = [req.body.target_class]
         }
         else bsd_arr = req.body.target_class
@@ -158,7 +155,7 @@ module.exports = {
 
         // console.log(bsd_arr);
 
-        // console.log("val:", valuesArray);
+        console.log("val:", valuesArray);
 
         pool.query(qry, [valuesArray], (err, result) => {
           if (err) throw err;
@@ -191,7 +188,7 @@ module.exports = {
 
           var conditions1 = buildConditions1(params);
 
-          let qry1 = `select user_id from Student_branch_standard_div_ay_rollno_sem_mapping where bsd_id in ${targetClass} `
+          // let qry1 = `select user_id from Student_branch_standard_div_ay_rollno_sem_mapping where bsd_id in ${targetClass} `
           let queryy = `select t1.user_id from Student_branch_standard_div_ay_rollno_sem_mapping t1,user_details t2 where  ` + conditions1.where
           console.log("qryyyyy:", queryy);
           pool.query(queryy, conditions1.values, (err, result) => {

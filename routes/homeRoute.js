@@ -175,33 +175,26 @@ router.get("/listuser", deleteuser.delete);
 
 //storage for image url
 var Path = path.join(__dirname, "..", "uploads", "notifImg");
+var attachmentPath = path.join(__dirname,"..","uploads","notifAttachment")
 const storage1 = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, Path);
+  destination: function (req, file, cb) {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, Path)
+    } else if (file.mimetype.startsWith('application/pdf')) {
+      cb(null, attachmentPath)
+    } else {
+      cb(new Error('Invalid file type'));
+    }
   },
   filename: (req, file, cb) => {
     cb(null, "nm" + "-" + Date.now() + "-" + file.originalname);
   },
 });
-const uploadImg = multer({
+const uploadNotif = multer({
   storage: storage1,
 });
 
-//storage for attachment url 
-var attachPath = path.join(__dirname, "..", "uploads", "notifAttachment");
-const storage4 = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, attachPath);
-  },
-  filename: (req, file, cb) => {
-    cb(null, "nm" + "-" + Date.now() + "-" + file.originalname);
-  },
-});
-const uploadAttachment = multer({
-  storage: storage4,
-});
-
-router.post("/sendNotif", uploadImg.single("notif-img"),notifController.post);
+router.post("/sendNotif", uploadNotif.fields([{name:'notif-img',maxCount:1},{name:'notif-attachment',maxCount:1}]),notifController.post);
 
 router.post("/api/signup", cluedinAppSignupController.post);
 router.post("/api/signin", cluedinAppSigninController.post);

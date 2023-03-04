@@ -30,6 +30,12 @@ app.get('/profile/:file', function(req, res) {
   var fileLocation = path.join(__dirname, 'uploads','profilePic', file);
   res.sendFile(fileLocation);
 });
+//route to open pdf file from notifAttachment folder
+app.get('/file/:file', function(req, res) {
+  var file = req.params.file;
+  var fileLocation = path.join(__dirname, 'uploads','notifAttachment', file);
+  res.sendFile(fileLocation);
+});
 //flash
 var flash = require("connect-flash");
 app.use(flash());
@@ -217,36 +223,6 @@ app.post("/import-excel", uploadFile.single("students"), (req, res) => {
   res.redirect("/createUser");
 });
 
-
-
-//date and time
-// function getDateTime() {
-//   var now = new Date();
-//   var year = now.getFullYear();
-//   var month = now.getMonth() + 1;
-//   var day = now.getDate();
-//   var hour = now.getHours();
-//   var minute = now.getMinutes();
-//   var second = now.getSeconds();
-//   if (month.toString().length == 1) {
-//     month = "0" + month;
-//   }
-//   if (day.toString().length == 1) {
-//     day = "0" + day;
-//   }
-//   if (hour.toString().length == 1) {
-//     hour = "0" + hour;
-//   }
-//   if (minute.toString().length == 1) {
-//     minute = "0" + minute;
-//   }
-//   if (second.toString().length == 1) {
-//     second = "0" + second;
-//   }
-//   var dateTime =
-//     day + "/" + month + "/" + year + " " + hour + ":" + minute + ":" + second;
-//   return dateTime;
-// }
 
 var now = new Date().toLocaleString('en-US', {
   timeZone: 'Asia/Calcutta'
