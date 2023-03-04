@@ -147,7 +147,11 @@ module.exports = {
           return valuesArray;
         }
         // query for notification_message_targetlist
-        let bsd_arr = req.body.target_class
+        let bsd_arr
+        if (target_class.length == 1) {
+          bsd_arr = [req.body.target_class]
+        }
+        else bsd_arr = req.body.target_class
         qry = `INSERT INTO notification_message_targetlist (nm_id,bsd_id,nm_gender) values ?`;
         const valuesArray = generateValuesArray(nm_id, bsd_arr, gender);
 
@@ -160,29 +164,61 @@ module.exports = {
           if (err) throw err;
           console.log("inserted into notif target table")
 
+          //querybuilder funtion
+          function buildConditions1(params) {
+            let conditions = [];
+            let values = [];
+            let conditionsStr;
+
+            if (typeof params.target_gender !== "undefined") {
+              conditions.push("t2.user_gender = ?");
+              values.push(parseInt(params.target_gender));
+            }
+
+            if (1) {
+              conditions.push(
+                `bsd_id in ${targetClass} and t1.user_id=t2.user_id and t1.isDisabled=0 and t1.isDelete=0;`
+                // `t2.user_id = t1.user_id and t2.ay_id=2 and t2.bsd_id IN ${targetClass} and t2.isDisabled=0 and t2.isDelete=0;`
+              );
+              // values.push(parseInt(params.target_gender));
+            }
+
+            return {
+              where: conditions.length ? conditions.join(" AND ") : "1",
+              values: values,
+            };
+          }
+
+          var conditions1 = buildConditions1(params);
+
           let qry1 = `select user_id from Student_branch_standard_div_ay_rollno_sem_mapping where bsd_id in ${targetClass} `
-          pool.query(qry1,(err,result)=>{
+          let queryy = `select t1.user_id from Student_branch_standard_div_ay_rollno_sem_mapping t1,user_details t2 where  ` + conditions1.where
+          console.log("qryyyyy:", queryy);
+          pool.query(queryy, conditions1.values, (err, result) => {
             if (err) throw err;
             let data = JSON.parse(JSON.stringify(result))
-            
+
 
             //to append user_id into array 
             let targetUserId = [];
             for (let index = 0; index < data.length; index++) {
-              targetUserId.push(data[index].user_id);              
+              targetUserId.push(data[index].user_id);
             }
-            console.log("target users",targetUserId);
+            console.log("target users", targetUserId);
 
             //logic to insert data into target users table 
             const values = generateValuesArray(nm_id, targetUserId, 0); //0 is for isRead i.e notif is not read by user 
-            console.log("status table:",values);
+            console.log("status table:", values);
             qry2 = `Insert into cluedin.user_notification_status (nm_id,user_id,isRead) values ? ;`
-            pool.query(qry2,[values],(err,result)=>{
-              if (err) throw err;
-              console.log("Data inserted into notification status table");
-            })
+            if (targetUserId.length != 0) {
+              pool.query(qry2, [values], (err, result) => {
+                if (err) throw err;
+                console.log("Data inserted into notification status table");
+              })
+            }
+            else console.log("no users to insert in status table");
           })
-          
+
           // generateValuesArray
         });
         req.flash("message1", "Notification Sent ");
