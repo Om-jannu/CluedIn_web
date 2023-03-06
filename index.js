@@ -84,6 +84,9 @@ app.use(express.json());
 app.use("/", homeRoute);
 app.use("/dashboard", homeRoute);
 app.use("/logout", homeRoute);
+app.use("/signup", homeRoute);
+app.use("/signupotp", homeRoute);
+app.use('/reset-password:/id/:token',homeRoute);
 app.use(express.static(__dirname + "/views"));
 //profile
 app.use('/profile',homeRoute);
@@ -236,4 +239,5 @@ var port = process.env.PORT || 5000;
 app.listen(port, (err) => {
   if (err) throw err;
   console.log(`server running http://cluedin.creast.in:${port}`);
+  console.log(`server running http://localhost:${port}`);
 });

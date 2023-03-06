@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>CluedIn-DBIT | Sign up</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+            background: #23242a;
+        }
+
+        .box {
+            position: relative;
+            width: 580px;
+            height: 520px;
+            background: #1c1c1c;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .box::before {
+            content: "";
+            z-index: 1;
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 380px;
+            height: 420px;
+            transform-origin: bottom right;
+            background: linear-gradient(0deg, transparent, #45f3ff, #45f3ff);
+            animation: animate 6s linear infinite;
+        }
+
+        .box::after {
+            content: "";
+            z-index: 1;
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 380px;
+            height: 420px;
+            transform-origin: bottom right;
+            background: linear-gradient(0deg, transparent, #45f3ff, #45f3ff);
+            animation: animate 6s linear infinite;
+            animation-delay: -3s;
+        }
+
+        @keyframes animate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        form {
+            position: absolute;
+            inset: 2px;
+            background: #28292d;
+            padding: 50px 40px;
+            border-radius: 8px;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .inputBox {
+            position: relative;
+            width: 500px;
+            margin-top: 35px;
+        }
+
+        .otp-field {
+            display: flex;
+            justify-content: center;
+        }
+
+        .otp-field input {
+            width: 3rem;
+            font-size: 32px;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            margin: 2px;
+            border: 2px solid #55525c;
+            background: #21232d;
+            font-weight: bold;
+            color: #fff;
+            outline: none;
+            transition: all 0.1s;
+        }
+
+        .otp-field input:focus {
+            border: 2px solid #a527ff;
+            box-shadow: 0 0 2px 2px #a527ff6a;
+        }
+
+        .disabled {
+            opacity: 0.5;
+        }
+
+        .space {
+            margin-right: 1rem !important;
+        }
+
+        input[type="submit"] {
+            border: none;
+            outline: none;
+            padding: 11px 25px;
+            background: #45f3ff;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        input[type="submit"]:active {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <form autocomplete="off" method="post" action="/signup">
+            <img class="animation__shake" src="dist/img/CluedIn.png" alt="DBIT" width="100%"
+                style="margin-left: auto; margin-right: auto" />
+            <div class="inputBox">
+                <h4 style="margin-bottom: 1.5rem; color: white;">Enter OTP </h4>
+                <div class="otp-field">
+                    <input type="text" maxlength="1" />
+                    <input type="text" maxlength="1" />
+                    <input class="space" type="text" maxlength="1" />
+                    <input type="text" maxlength="1" />
+                    <input type="text" maxlength="1" />
+                    <input type="text" maxlength="1" />
+                </div>
+            </div>
+            <input type="submit" value="Get OTP" />
+        </form>
+    </div>
+
+
+
+    <script>
+        const inputs = document.querySelectorAll(".otp-field input");
+
+        inputs.forEach((input, index) => {
+            input.dataset.index = index;
+            input.addEventListener("keyup", handleOtp);
+            input.addEventListener("paste", handleOnPasteOtp);
+        });
+
+        function handleOtp(e) {
+            /**
+             * <input type="text" 👉 maxlength="1" />
+             * 👉 NOTE: On mobile devices `maxlength` property isn't supported,
+             * So we to write our own logic to make it work. 🙂
+             */
+            const input = e.target;
+            let value = input.value;
+            let isValidInput = value.match(/[0-9a-z]/gi);
+            input.value = "";
+            input.value = isValidInput ? value[0] : "";
+
+            let fieldIndex = input.dataset.index;
+            if (fieldIndex < inputs.length - 1 && isValidInput) {
+                input.nextElementSibling.focus();
+            }
+
+            if (e.key === "Backspace" && fieldIndex > 0) {
+                input.previousElementSibling.focus();
+            }
+
+            // if (fieldIndex == inputs.length - 1 && isValidInput) {
+            //     submit();
+            // }
+        }
+
+        // function handleOnPasteOtp(e) {
+        //     const data = e.clipboardData.getData("text");
+        //     const value = data.split("");
+        //     if (value.length === inputs.length) {
+        //         inputs.forEach((input, index) => (input.value = value[index]));
+        //         submit();
+        //     }
+        // }
+
+        function submit() {
+            console.log("Submitting...");
+            // 👇 Entered OTP
+            let otp = "";
+            inputs.forEach((input) => {
+                otp += input.value;
+                input.disabled = true;
+                input.classList.add("disabled");
+            });
+            console.log(otp);
+            // 👉 Call API below
+        }
+
+    </script>
+</body>
+
+</html>

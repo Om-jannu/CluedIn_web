@@ -13,6 +13,7 @@ const { s3Uploadv2, s3Uploadv3 } = require("../models/s3Service");
 const router = express.Router();
 const firebaseAdmin = require("firebase-admin");
 const dashboard = require("../controllers/dashboardController");
+const signUp = require("../controllers/signUpController");
 
 const dbApiController = require("../controllers/dbApiController");
 
@@ -35,6 +36,7 @@ const deleteuser = require("../controllers/deleteuserController");
 const webUserProfile = require("../controllers/web-profile_edit");
 let authAppUser = require("../controllers/appControllers/authAppUser");
 let event = require("../controllers/eventController");
+const resetPasswordController = require("../controllers/resetPasswordController");
 // firebaseAdmin.initializeApp({
 //   credential: firebaseAdmin.credential.cert(require("../cluedInOfficialAndroid.json")),
 // });
@@ -80,6 +82,11 @@ router.post("/auth", authUser.post);
 
 //dashboard
 router.get("/dashboard", dashboard.get);
+router.get("/signup", signUp.get);
+router.post("/signup", signUp.post);
+// router.get("/signupotp", signUp.otp);
+router.get("/reset-password/:id/:token", resetPasswordController.get);
+router.post("/reset-password/:id/:token", resetPasswordController.post);
 
 //profile page
 router.get("/profile", webUserProfile.get);
