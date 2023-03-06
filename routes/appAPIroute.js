@@ -61,7 +61,8 @@ router.post("/appNotif", (req, res) => {
     t2.user_fname as sender_fname,t2.user_lname as sender_lname,
     t2.user_profilePic as senderProfilePic,
     t3.role_name as senderRole,
-    t4.label_name as notification_label
+    t4.label_name as notification_label,
+    t5.isRead
    FROM cluedin.notification_message t1,   
     user_details t2,    
     role_master t3, 
