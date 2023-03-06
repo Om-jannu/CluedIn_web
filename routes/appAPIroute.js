@@ -51,9 +51,9 @@ router.post("/appNotif", (req, res) => {
 
   //above qry was to fetch the notifications if given bsd id and gender 
 
-   qry2=
-   
-   `SELECT 
+  qry2 =
+
+    `SELECT 
     t5.nm_id as notification_id,t1.nm_title as notification_title,
     t1.nm_message as notification_message,
     t1.nm_image_url as image_url,t1.nm_attachment_url as attachment_url ,
@@ -77,7 +77,7 @@ router.post("/appNotif", (req, res) => {
    Select label_name from label_master;
    Select role_name from role_master`
 
-   //this qry gives the notifications on the basis of only usermobno
+  //this qry gives the notifications on the basis of only usermobno
 
 
   // qry2 = `Select label_name from label_master`;
@@ -201,4 +201,24 @@ router.post('/updateProfile', authenticateToken, uploadStudImg.single('image'), 
   })
   res.json({ img_url: profileUrl })
 }); // http://128.199.23.207:5000/api/app/updateProfile
+
+router.post('/notifReadStatus', (req, res) => {
+  let user_id = req.body.user_id;
+  let isRead = req.body.isRead;
+  let nm_id = req.body.nm_id;
+  console.log(req.body)
+  if (!req.body.user_id || !req.body.isRead || !req.body.nm_id) {
+    return res.status(400).json({ success: false, data: null, msg: 'Missing values in request body' });
+  }
+
+  else {
+    qry = `Update user_notification_status SET isRead = "${isRead}" where user_id = ${user_id} and nm_id=${nm_id}`
+    pool.query(qry, (err, result) => {
+      if (err) throw err;
+      console.log(result);
+      res.status(200).json({ success: true, data: null, msg: "isRead updated" })
+    })
+  }
+
+});  // http://128.199.23.207:5000/api/app/notifReadStatus
 module.exports = router;
