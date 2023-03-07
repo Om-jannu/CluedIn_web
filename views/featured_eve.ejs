@@ -87,24 +87,29 @@
                                     <div class="card-body">
                                         <div class="tab-content" id="custom-tabs-two-tabContent">
                                             <span>
-                                                <% if(feaEventMsg.length>0){ %>
+                                                <% if(success.length>0){ %>
                                                     <div id="successMessage" style="position: absolute;width: 80%;"
                                                         class="alert alert-success">
-                                                        <%= feaEventMsg %>
+                                                        <%= success %>
+                                                    </div>
+                                                    <% } %>
+                                                <% if(error.length>0){ %>
+                                                    <div id="successMessage" style="position: absolute;width: 80%;"
+                                                        class="alert alert-danger">
+                                                        <%= error %>
                                                     </div>
                                                     <% } %>
                                             </span>
                                             <div class="tab-pane fade active show" id="create-featured-eve"
                                                 role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
                                                 <!-- creating form -->
-                                                <form id="quickform" name="event-form" method="post" action="/postFeaturedEve"
-                                                    enctype="multipart/form-data">
+                                                <form id="quickform" name="event-form" method="post" action="/postFeaturedEvent" enctype="multipart/form-data">
                                                     <!--action looks for index.html -->
                                                     <div class="card-body">
                                                         <div class="form-group">
                                                             <label for="eventTitle">Featured Event Name*</label>
                                                             <input type="text" class="form-control" id="eventTitle"
-                                                                placeholder="Enter title" name="event_title"
+                                                                placeholder="Enter title" name="feat_event_title"
                                                                 maxlength="30" required>
                                                         </div>
                                                         <div class="row">
@@ -113,7 +118,7 @@
                                                                     <label>Event Organiser*</label>
                                                                     <select class="form-control " style="width: 15rem;"
                                                                         tabindex="-1" aria-hidden="true"
-                                                                        name="oraganiser"
+                                                                        name="feat_event_oraganiser"
                                                                         placeholder="select label type" id="eventLabel"
                                                                         required>
                                                                         <option value="0">Select organiser</option>
@@ -132,12 +137,10 @@
                                                             <div class="col-lg-4">
                                                                 <div class="form-group">
                                                                     <label>Image URL*:</label>
-                                                                    <div class="input-group " style="width: 100%; ">
-                                                                        <input type="file" name="event_img"
+                                                                    <div class="input-group" style="width: 100%; ">
+                                                                        <input type="file" name="feat_event_img"
                                                                             class="form-control"
-                                                                            accept=".jpep,.png,.jpg" id="notifImgUrl"
-                                                                            onchange="preview_notifImg_handler(event)"
-                                                                            required>
+                                                                            accept=".jpep,.png,.jpg" id="feat_event_Img" required>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -148,7 +151,7 @@
                                                                         <input type="url" class="form-control"
                                                                             id="notifRegistrationUrl"
                                                                             placeholder="registration url"
-                                                                            name="event_reg_url"
+                                                                            name="feat_event_redirectUrl"
                                                                             required>
                                                                     </div>
                                                                 </div>

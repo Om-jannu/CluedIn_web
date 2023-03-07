@@ -1,5 +1,6 @@
 const pool = require("../models/dbConnect");
 const path = require("path");
+const { json } = require("body-parser");
 
 var Path = path.join(__dirname, "..", "views", "featured_eve");
 
@@ -8,14 +9,15 @@ module.exports = {
     console.log("-----------------------Inside featured Events Page(/featuredEve)----------------------");
     var session = req.session;
     if (session.userid != null) {
-      qry = `SELECT sb_name FROM student_bodies_master`
+      qry = `SELECT sb_id,sb_name FROM student_bodies_master`
       pool.query(qry,(err,result)=>{
         if (err) throw err;
         res.render(Path, {
           userName: session.user_name,
           ProfileUrl: session.userProfileUrl,
           event_organiser: JSON.parse(JSON.stringify(result)),
-          feaEventMsg : req.flash('feaEventMsg')    
+          success : req.flash('success'),
+          error: req.flash("error")   
         });
       })
     } else res.redirect("/");
@@ -23,41 +25,45 @@ module.exports = {
   post: (req,res)=>{
     console.log("--------------------------inside post method of /postFeaturedEve route--------------------------")
     var session = req.session;
-    let {event_title,event_img,event_reg_url,event_organiser} = req.body;
-    let qry = `INSERT INTO events 
-    (
-      sender_id,
-      organiser_id,
-      event_label_id,
-      event_title,
-      event_desc,
-      event_notif_desc,
-      event_image_url,
-      event_attachment_url,
-      event_registration_url,
-      event_fees,
-      dateOfSchedule,
-      dateOfExpiration
-    )
-    VALUES ?`
-    let values = [[session.senderid,organiser,event_label,event_title,event_desc,event_notif_desc,event_img,event_attachment,event_reg_url,event_fees,scheduled_date,expiry_date]]
-    pool.query(qry,[values],(err,result)=>{
-      if (err) throw err;
-      console.log("Data inserted into events table");
-      var sql_1 =
-      "select t1.firebase_token from user_details t1, Student_branch_standard_div_ay_rollno_sem_mapping t2 WHERE t2.user_id = t1.user_id and t2.ay_id=2 and t2.isDisabled=0 and t2.isDelete=0;"
-      pool.query(sql_1,(err,result)=>{
-        if (err) throw err ;
+    let {feat_event_title,feat_event_oraganiser,feat_event_redirectUrl} = req.body;
+    let values = [[feat_event_title,imgurl,feat_event_redirectUrl,feat_event_oraganiser,session.userid,todaysDate,1]];
+    console.log(feat_event_title,feat_event_oraganiser,feat_event_redirectUrl);
+    var todaysDate = Date();
+    console.log(now);
+    let imgurl = null;
+    if (req.file) {
+      console.log("reqfile ",req.file);
+      imgurl = path.join("feat_event_images/" + req.file.filename);
+      console.log(imgurl);
+    }
+    let qry1 = `select count(isFeatured) as featured_count from featured_events where isFeatured = 1;`;
+    // pool.query(qry1,(err,result)=>{
+    //   if (err) throw err;
+    //   let data = JSON.parse(JSON.stringify(result));
+    //   console.log("qr1"+data);
+    //   if(data[0].featured_count<5){
+    //     pool.query(qry2,[values],(error,result)=>{
+    //       if(error)throw error;
+    //       req.flash("success","Event successfully added");
+    //       res.redirect('/featuredEvent');
+    //       console.log("qr2"+result);
+    //     })
+    //   }else{
+    //       req.flash("error","Max Capacity reached please remove an entry");
+    //       res.redirect('/featuredEvent');
+    //   }
+    // })
+    // let qry2 = `insert into featured_events (
+    //   feat_event_name,
+    //   feat_event_imgUrl,
+    //   feat_event_redirectUrl,
+    //   feat_event_organizedBy,
+    //   feat_event_sender_id,
+    //   dateOfCreation,
+    //   isFeatured
+    //   ) values ?`;
+      
 
-        var token = JSON.parse(JSON.stringify(result));
-        for (let i = 0; i < token.length; i++) {
-          getFcmTokensSql.push(token[i].firebase_token);
-          // console.log("---------------------\nfbtoken:", getFcmTokensSql);
-        }
-        console.log("FB TOKEN:",getFcmTokensSql);
-      })
-    })
-    req.flash("eventMsg", "Event Created");
-    res.redirect("/event")
+    
   }
 };
