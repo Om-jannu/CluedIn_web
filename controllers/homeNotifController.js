@@ -15,31 +15,29 @@ module.exports = {
     var notif_desc = req.body.notif_desc;
     var exp_date = req.body.exp_date;
     var scheduled_date = req.body.scheduled_date;
+    console.log("scheduled_date", scheduled_date);
     var label = req.body.label;
-    var target_class = []; 
-    target_class.push(req.body.target_class);
-    let targetClass = `(${target_class.join(" ',' ")})`;
-    console.log("bsd", targetClass);
-    var gender = req.body.user_gender;
-    let TARGETCLASS = req.body.target_class;
-    console.log("class",TARGETCLASS);
-    let imgurl = null;
-    if (req.files) {
-      console.log("req.file ",req.files);
-      imgurl = path.join(
-        "http://128.199.23.207:5000/images/" + req.files['notif-img'][0].filename
-      );
-      attachment_url = path.join(
-        "http://128.199.23.207:5000/file/" + req.files['notif-attachment'][0].filename
-      );
-    }
-    // TODO send only file name
 
-    console.log("imgUrl:", imgurl,"\nattachmentUrl:", attachment_url);
+    var target_class = req.body.target_class; //for notif target list
+
+    let targetClass = `(${target_class.join(" , ")})`; //for notif target list
+    console.log("bsd", targetClass,"target_class",target_class);
+
+    var gender = req.body.user_gender;
+    let TARGETCLASS = req.body.target_class; //this is for user status table
+
+    console.log("class", TARGETCLASS);
+    // logic to store img and attachment urls 
+    let imgurl = req.files['notif-img'] ? "images/" + req.files['notif-img'][0].filename : null;
+    let attachment_url = req.files['notif-attachment'] ? "file/" + req.files['notif-attachment'][0].filename : null;
+
+    console.log("req.file ", req.files);
+
+    console.log("imgUrl:", imgurl, "\nattachmentUrl:", attachment_url);
 
     var sql =
-      "INSERT INTO notification_message (nm_title,sender_id,nm_message,nm_image_url,nm_label_id, targetClass) VALUES ?";
-    var values = [[notif_title, session.senderid, notif_desc, imgurl, label, targetClass]];
+      "INSERT INTO notification_message (nm_title,sender_id,nm_message,nm_image_url,nm_attachment_url,nm_label_id, targetClass) VALUES ?";
+    var values = [[notif_title, session.senderid, notif_desc, imgurl,attachment_url, label, targetClass]];
 
     pool.query(sql, [values], (err, result) => {
       if (err) throw err;
@@ -110,8 +108,6 @@ module.exports = {
             title: req.body.notif_title,
             body: req.body.notif_desc,
             sound: "default",
-            imageUrl:
-              "https://techcommunity.microsoft.com/t5/image/serverpage/image-id/366577i4F851B60F8347ED4",
             click_action: "FLUTTER_NOTIFICATION_CLICK",
             screen: "HomePage",
           },
@@ -126,7 +122,7 @@ module.exports = {
         };
 
         //below to be uncommented once the actual fcm tokens are generated and inserted into db
-        // firebaseAdmin.messaging().sendToDevice(getFcmTokensSql, payload, options);
+        firebaseAdmin.messaging().sendToDevice(getFcmTokensSql, payload, options);
         getFcmTokensSql = [];
         // console.log("---------------------\nfbtoken after :",getFcmTokensSql);
 
@@ -143,24 +139,21 @@ module.exports = {
           return valuesArray;
         }
         // query for notification_message_targetlist
-        let bsd_arr
-        // console.log("tarrrrgett ",target_class);
-        if (TARGETCLASS.length == 1) {
-          bsd_arr = [req.body.target_class]
-        }
-        else bsd_arr = req.body.target_class
+        console.log("tarrrrgett len  ",target_class.length);
+        let bsd_arr = target_class;  
+
+        console.log("bsd_arr", bsd_arr);
         qry = `INSERT INTO notification_message_targetlist (nm_id,bsd_id,nm_gender) values ?`;
         const valuesArray = generateValuesArray(nm_id, bsd_arr, gender);
 
 
         // console.log(bsd_arr);
 
-        console.log("val:", valuesArray);
+        console.log("val(for notif target list ):", valuesArray);
 
         pool.query(qry, [valuesArray], (err, result) => {
           if (err) throw err;
           console.log("inserted into notif target table")
-
           //querybuilder funtion
           function buildConditions1(params) {
             let conditions = [];
