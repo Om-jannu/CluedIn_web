@@ -21,7 +21,8 @@ module.exports = {
                     const payload = jwt.verify(token,secret);
                     res.render(Path, { err: req.flash("err"), success: req.flash("success") });
                 } catch (error) {
-                    res.send(error);
+                    req.flash('err', "link expired");
+                    res.redirect(`/signup`);
                 }
             }
         });
@@ -52,7 +53,8 @@ module.exports = {
                         res.redirect('/signup');
                     })
                 } catch (error) {
-                    res.send(error);
+                    req.flash('err', "link expired");
+                    res.redirect(`/signup`);
                 }
             });
         }

@@ -23,6 +23,11 @@ app.get('/images/:file', function(req, res) {
   var fileLocation = path.join(__dirname, 'uploads','notifImg', file);
   res.sendFile(fileLocation);
 });
+app.get('/feat_event_images/:file', function(req, res) {
+  var file = req.params.file;
+  var fileLocation = path.join(__dirname, 'uploads','feat_events', file);
+  res.sendFile(fileLocation);
+});
 
 //routes to generate profile pic img link
 app.get('/profile/:file', function(req, res) {
@@ -105,6 +110,10 @@ app.use("updateuser", homeRoute);
 
 //role master
 app.use("/dbapi", dbApiRoute);
+
+//featured events routes
+app.use('/featuredEvent',homeRoute);
+app.use('/postFeaturedEvent',homeRoute);
 
 // cluedIn app api
 app.use("/api/signup", homeRoute);

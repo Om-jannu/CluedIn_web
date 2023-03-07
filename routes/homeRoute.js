@@ -37,6 +37,7 @@ const webUserProfile = require("../controllers/web-profile_edit");
 let authAppUser = require("../controllers/appControllers/authAppUser");
 let event = require("../controllers/eventController");
 const resetPasswordController = require("../controllers/resetPasswordController");
+const featuredEveController = require("../controllers/featuredEveController");
 // firebaseAdmin.initializeApp({
 //   credential: firebaseAdmin.credential.cert(require("../cluedInOfficialAndroid.json")),
 // });
@@ -131,6 +132,22 @@ const uploadEventImg = multer({
 });
 router.post("/postevent",uploadEventImg.single('event_img'),event.post)
 
+//featured event page route
+router.get("/featuredEvent",featuredEveController.get);
+
+var feat_event_path = path.join(__dirname, "..", "uploads", "feat_events");
+const storage4 = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, feat_event_path);
+  },
+  filename: (req, file, cb) => {
+    cb(null, "feat_events" + "-" + Date.now() + "-" + file.originalname);
+  },
+});
+const uploadFeatEventImg = multer({
+  storage: storage4,
+});
+router.post("/postFeaturedEvent",uploadFeatEventImg.single('feat_event_img'),featuredEveController.post);
 
 //destroying session
 router.get("/logout", logoutController.get);
