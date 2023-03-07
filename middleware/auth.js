@@ -17,10 +17,10 @@ function authenticateToken(req, res, next) {
         }
 
         // Check the user's record in the SQL database
-        const mobno = decoded.id;
-        console.log(mobno);
-        const query = 'SELECT user_token FROM user_details WHERE user_mobno = ?';
-        pool.query(query, [mobno], (error, results, fields) => {
+        const user_id = decoded.id;
+        // console.log(mobno);
+        const query = 'SELECT user_token FROM user_details WHERE user_id = ?';
+        pool.query(query, [user_id], (error, results, fields) => {
             if (error) {
 
                 console.error(error);
@@ -42,7 +42,7 @@ function authenticateToken(req, res, next) {
 
             // Token is valid
             console.log("legit user hai");
-            req.user = { id: mobno };
+            req.user = { id: user_id };
             next();
         });
     });

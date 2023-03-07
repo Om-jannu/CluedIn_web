@@ -20,13 +20,15 @@ app.use(express.json);
 router.post("/authAppUser", authAppUser.post); // http://128.199.23.207:5000/api/app/authAppUser
 
 //store firebase token from app into database
-router.post("/firebaseToken", firebase_token.post); //http://localhost:5000/api/app/firebaseToken
+router.post("/firebaseToken", firebase_token.post); //http://cluedin.creast.in:5000/api/app/firebaseToken
 
 
 router.post("/appNotif", (req, res) => {
-  let user_mobno = req.body.user_mobno
-  var bsd_id = req.body.bsd_id;
-  var gender = req.body.gender;
+  let user_id = req.body.user_id
+  console.log("====================================Inside appNotif api=====================================");
+  console.log(req.body);
+  // var bsd_id = req.body.bsd_id;
+  // var gender = req.body.gender;
   //queries
   // qry1 =
   //   `SELECT  t1.nm_id, t1.nm_title,t1.nm_message,t1.nm_image_url,t1.dateOfcreation,
@@ -57,7 +59,7 @@ router.post("/appNotif", (req, res) => {
     t5.nm_id as notification_id,t1.nm_title as notification_title,
     t1.nm_message as notification_message,
     t1.nm_image_url as image_url,t1.nm_attachment_url as attachment_url ,
-    t1.dateOfcreation,
+    t1.dateOfCreation,
     t2.user_fname as sender_fname,t2.user_lname as sender_lname,
     t2.user_profilePic as senderProfilePic,
     t3.role_name as senderRole,
@@ -73,7 +75,7 @@ router.post("/appNotif", (req, res) => {
     and t2.user_id = t1.sender_id
     and t2.user_role_id = t3.role_id
     and t1.nm_label_id = t4.label_id 
-    and t5.user_id = (select user_id from user_details  where user_mobno  = ${user_mobno} )
+    and t5.user_id = ${user_id}
    ORDER BY t1.dateOfCreation DESC;
    Select label_name from label_master;
    Select role_name from role_master`
@@ -92,6 +94,36 @@ router.post("/appNotif", (req, res) => {
     let labelData = [];
     let roleData = [];
     let notifData = Data[0];
+    let notifData1=[
+      {
+        "notification_id": 51,
+        "sender_fname": "Jasmit",
+        "sender_lname": "Rathod",
+        "senderRole": "Class Teacher",
+        "senderProfilePic": "profile/Userprofile-9076323541.jpg",
+        "notification_title": "IMP NOTICE",
+        "notification_label": "T&P Cell",
+        "notification_message": "Tomorrow we'll be meeting at 11.15 to see what's the progress on the Dbit App.",
+        "image_url": null,
+        "attachment_url": null,
+        "dateOfCreation": "2022-09-14T17:35:51.661Z",
+        "isRead": 0
+      },
+      {
+        "notification_id": 52,
+        "sender_fname": "Jasmit",
+        "sender_lname": "Rathod",
+        "senderRole": "Principal",
+        "senderProfilePic": "profile/Userprofile-9076323541.jpg",
+        "notification_title": "THE EVENT STARTS AT ",
+        "notification_label": "Academics",
+        "notification_message": "Students please make sure that you fill this form inorder to confirm your choice of course.",
+        "image_url": "https://images.unsplash.com/photo-1562788869-4ed32648eb72?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzB8fHRlYWNoZXJ8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60",
+        "attachment_url": "https://drive.google.com/file/d/1ZWAwmTozuTU_Zm3HBZ9jdTse25ryMEIV/view?usp=share_link",
+        "dateOfCreation": "2022-09-14T23:45:27.821Z",
+        "isRead": 0
+      },
+    ]
     for (let index = 0; index < Data[1].length; index++) {
       labelData.push(Data[1][index].label_name);
     }
@@ -107,11 +139,12 @@ router.post("/appNotif", (req, res) => {
       senderRoles: roleData,
       notifications: notifData,
     });
+    console.log("response sent ig");
   });
 });     //http://128.199.23.207:5000/api/app/appNotif
 
 //appEvent api 
-router.post("/appEvent", (req, res) => {
+router.get("/appEvent", (req, res) => {
   // var bsd_id = req.body.bsd_id;  
   // var gender = req.body.gender; 
   //queries

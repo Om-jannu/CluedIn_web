@@ -39,7 +39,8 @@ module.exports = {
       if (user.user_pwd !== password) {
         return res.status(401).json({ data: null, success: "false", msg: 'Invalid username or password.' });
       }
-      const token = jwt.sign({ id: user.user_mobno }, process.env.JWT_SECRET);
+      const token = jwt.sign({ id: user.user_id }, process.env.JWT_SECRET);
+      console.log("jwt token",token);
 
       // Store the token in the server's database for single user login
       const updateTokenQuery = `UPDATE cluedin.user_details SET user_token = "${token}" WHERE user_mobno = "${user.user_mobno}";`;
@@ -51,6 +52,7 @@ module.exports = {
         // console.log(`Token has been stored in the database for user ${usermobno}`);
       });
       //local variables to store profile data 
+      let user_id = user.user_id;
       let user_fname = user.user_fname;
       let user_lname = user.user_lname;
       let user_mobno = user.user_mobno;
@@ -62,6 +64,7 @@ module.exports = {
         {
           data:
           {
+            user_id,
             user_fname,
             user_lname,
             user_mobno,
