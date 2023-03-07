@@ -106,6 +106,10 @@ app.use("updateuser", homeRoute);
 //role master
 app.use("/dbapi", dbApiRoute);
 
+//featured events routes
+app.use('/featuredEve',homeRoute);
+app.use('/postFeaturedEve',homeRoute);
+
 // cluedIn app api
 app.use("/api/signup", homeRoute);
 app.use("/api/signin", homeRoute);

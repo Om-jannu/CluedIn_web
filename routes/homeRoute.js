@@ -37,6 +37,7 @@ const webUserProfile = require("../controllers/web-profile_edit");
 let authAppUser = require("../controllers/appControllers/authAppUser");
 let event = require("../controllers/eventController");
 const resetPasswordController = require("../controllers/resetPasswordController");
+const featuredEveController = require("../controllers/featuredEveController");
 // firebaseAdmin.initializeApp({
 //   credential: firebaseAdmin.credential.cert(require("../cluedInOfficialAndroid.json")),
 // });
@@ -116,6 +117,11 @@ router.post(
 
 //event page route
 router.get("/event",event.get);
+
+
+//featured event page route
+router.get("/featuredEve",featuredEveController.get);
+router.get("/postFeaturedEve",featuredEveController.post);
 
 var PATH = path.join(__dirname, "..", "uploads", "eventImg");
 const storage3 = multer.diskStorage({
