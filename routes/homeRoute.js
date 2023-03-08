@@ -38,6 +38,7 @@ let authAppUser = require("../controllers/appControllers/authAppUser");
 let event = require("../controllers/eventController");
 const resetPasswordController = require("../controllers/resetPasswordController");
 const featuredEveController = require("../controllers/featuredEveController");
+const targetUserCount = require("../controllers/targetStudentCount")
 // firebaseAdmin.initializeApp({
 //   credential: firebaseAdmin.credential.cert(require("../cluedInOfficialAndroid.json")),
 // });
@@ -118,7 +119,8 @@ const uploadFeatEventImg = multer({
   storage: storage4,
 });
 router.post("/postFeaturedEvent",uploadFeatEventImg.single('feat_event_img'),featuredEveController.post);
-router.get('/listfeatured',featuredEveController.list);
+router.post('/listfeatured',featuredEveController.list);
+router.get('/removefeatured',featuredEveController.remove);
 
 //destroying session
 router.get("/logout", logoutController.get);
@@ -159,6 +161,7 @@ router.get("/createuser", function (request, response) {
 });
 
 router.get("/action", notifData.get);
+router.get("/targetCount",targetUserCount.get);
 
 //update user details
 router.get("/updateuser", updateuser.update);

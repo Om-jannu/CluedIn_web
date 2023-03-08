@@ -76,178 +76,166 @@
                                         <div class="tab-content" id="custom-tabs-two-tabContent">
                                             <div class="tab-pane fade active show" id="create-notification"
                                                 role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
+                                                <span id="#success1" >
+                                                    <% if(message1.length>0){ %>
 
-                                                <% if(message1.length>0){ %>
-                                                    <div class="alert alert-success">
-                                                        <%= message1 %>
-                                                    </div>
-                                                    <% } %>
+                                                        <div class="alert alert-success">
+                                                            <%= message1 %>
+                                                        </div>
 
-                                                        <!-- creating form -->
-                                                        <form id="quickform" name="notif-form" method="post"
-                                                            action="/sendNotif" enctype="multipart/form-data"
-                                                            onsubmit="return Notifvalidate()">
-                                                            <!--action looks for index.html -->
-                                                            <div class="card-body">
+                                                        <% } %>
+                                                </span>
+                                                <!-- creating form -->
+                                                <form id="quickform" name="notif-form" method="post" action="/sendNotif"
+                                                    enctype="multipart/form-data" onsubmit="return Notifvalidate()">
+                                                    <!--action looks for index.html -->
+                                                    <div class="card-body">
+                                                        <div class="form-group">
+                                                            <label for="notificationTitle">Notification Title
+                                                                *</label>
+                                                            <input type="text" class="form-control"
+                                                                id="notificationTitle" placeholder="Enter title"
+                                                                name="notif_title" maxlength="30" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Description *</label>
+                                                            <textarea class="form-control" rows="3" name="notif_desc"
+                                                                placeholder="Enter ..." required></textarea>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Schedule:</label>
+                                                            <div class="input-group date" id="reservationdate"
+                                                                data-target-input="nearest" style="width: 40%;">
+                                                                <input type="date"
+                                                                    class="form-control datetimepicker-input"
+                                                                    data-target="#reservationdate" name="scheduled_date"
+                                                                    id="notifMsgScheduleDate"
+                                                                    onclick="notifMsgScheduleHandler();">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Expiry Date:</label>
+                                                            <div class="input-group date" id="reservationdate"
+                                                                data-target-input="nearest" style="width: 40%;">
+                                                                <input type="date"
+                                                                    class="form-control datetimepicker-input"
+                                                                    data-target="#reservationdate" name="scheduled_date"
+                                                                    id="notifMsgExpiryDate"
+                                                                    onclick="notifMsgExpiryHandler();">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-lg-6">
                                                                 <div class="form-group">
-                                                                    <label for="notificationTitle">Notification Title
-                                                                        *</label>
-                                                                    <input type="text" class="form-control"
-                                                                        id="notificationTitle" placeholder="Enter title"
-                                                                        name="notif_title" maxlength="30" required>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label>Description *</label>
-                                                                    <textarea class="form-control" rows="3"
-                                                                        name="notif_desc" placeholder="Enter ..."
-                                                                        required></textarea>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label>Schedule:</label>
-                                                                    <div class="input-group date" id="reservationdate"
-                                                                        data-target-input="nearest" style="width: 40%;">
-                                                                        <input type="date"
-                                                                            class="form-control datetimepicker-input"
-                                                                            data-target="#reservationdate"
-                                                                            name="scheduled_date"
-                                                                            id="notifMsgScheduleDate"
-                                                                            onclick="notifMsgScheduleHandler();">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label>Expiry Date:</label>
-                                                                    <div class="input-group date" id="reservationdate"
-                                                                        data-target-input="nearest" style="width: 40%;">
-                                                                        <input type="date"
-                                                                            class="form-control datetimepicker-input"
-                                                                            data-target="#reservationdate"
-                                                                            name="scheduled_date"
-                                                                            id="notifMsgExpiryDate"
-                                                                            onclick="notifMsgExpiryHandler();">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="col-lg-6">
-                                                                        <div class="form-group">
 
 
-                                                                            <label>Target Class (*press ctrl key to
-                                                                                select
-                                                                                multiple
-                                                                                fields)</label>
-                                                                            <select style="height: 15rem;width:15rem ;"
-                                                                                class="form-control" tabindex="-1"
-                                                                                id="slct1" aria-hidden="true"
-                                                                                name="target_class[]"
-                                                                                placeholder="select category"
-                                                                                onchange="" multiple
-                                                                                required>
+                                                                    <label>Target Class (*press ctrl key to
+                                                                        select
+                                                                        multiple
+                                                                        fields)</label>
+                                                                    <select style="height: 15rem;width:15rem ;"
+                                                                        class="form-control" tabindex="-1" id="slct1"
+                                                                        aria-hidden="true" name="target_class[]"
+                                                                        placeholder="select category" onchange=""
+                                                                        multiple required>
 
-                                                                                <option id="allUsers" value="0">
-                                                                                    ALL
-                                                                                </option>
-                                                                                <% for (let count=0; count <
-                                                                                    bsd_data.length; count++) { %>
-                                                                                    <option
-                                                                                        value="<%= bsd_data[count].bsd_id %>">
-                                                                                        <%= bsd_data[count].bsd_value %>
-                                                                                    </option>
-                                                                                    <%} %>
-                                                                            </select>
-
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-lg-6">
-                                                                        <p>Target Audience:</p>
-                                                                    </div>
-                                                                </div>
-
-
-                                                                <div class="form-group">
-                                                                    <label>Gender</label>
-                                                                    <select class="form-control " style="width: 15rem;"
-                                                                        tabindex="-1" id="slct3" aria-hidden="true"
-                                                                        name="user_gender" placeholder="select Gender"
-                                                                        required>
-                                                                        <option selected="selected" value="0">
-                                                                            All
+                                                                        <option id="allUsers" value="0">
+                                                                            ALL
                                                                         </option>
-                                                                        <option value="1">
-                                                                            Male
-                                                                        </option>
-                                                                        <option value="2">Female</option>
-                                                                        <option value="3">Other</option>
+                                                                        <% for (let count=0; count < bsd_data.length;
+                                                                            count++) { %>
+                                                                            <option
+                                                                                value="<%= bsd_data[count].bsd_id %>">
+                                                                                <%= bsd_data[count].bsd_value %>
+                                                                            </option>
+                                                                            <%} %>
                                                                     </select>
 
                                                                 </div>
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                <h4>Target Audience: <strong><span id="targetAudience">
+                                                                        </span></strong></h4>
+                                                            </div>
+                                                        </div>
 
-                                                                <div class="row">
-                                                                    <div class="col-lg-4">
-                                                                        <div class="form-group">
-                                                                            <label>Label</label>
-                                                                            <select class="form-control "
-                                                                                style="width: 15rem;" tabindex="-1"
-                                                                                aria-hidden="true" name="label"
-                                                                                placeholder="select label type"
-                                                                                id="notifLabel" required>
-                                                                                <% for (let count=0; count <
-                                                                                    label_data.length; count++) { %>
-                                                                                    <option
-                                                                                        value="<%= label_data[count].label_id %>">
-                                                                                        <%= label_data[count].label_name
-                                                                                            %>
-                                                                                    </option>
-                                                                                    <%} %>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
+
+                                                        <div class="form-group">
+                                                            <label>Gender</label>
+                                                            <select class="form-control " style="width: 15rem;"
+                                                                tabindex="-1" id="slct3" aria-hidden="true"
+                                                                name="user_gender" placeholder="select Gender" required>
+                                                                <option selected="selected" value="0">
+                                                                    All
+                                                                </option>
+                                                                <option value="1">
+                                                                    Male
+                                                                </option>
+                                                                <option value="2">Female</option>
+                                                                <option value="3">Other</option>
+                                                            </select>
+
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-lg-4">
+                                                                <div class="form-group">
+                                                                    <label>Label</label>
+                                                                    <select class="form-control " style="width: 15rem;"
+                                                                        tabindex="-1" aria-hidden="true" name="label"
+                                                                        placeholder="select label type" id="notifLabel"
+                                                                        required>
+                                                                        <% for (let count=0; count < label_data.length;
+                                                                            count++) { %>
+                                                                            <option
+                                                                                value="<%= label_data[count].label_id %>">
+                                                                                <%= label_data[count].label_name %>
+                                                                            </option>
+                                                                            <%} %>
+                                                                    </select>
                                                                 </div>
-                                                                <div class="row">
-                                                                    <div class="col-lg-4">
-                                                                        <div class="form-group">
-                                                                            <label>Image URL:</label>
-                                                                            <div class="input-group "
-                                                                                style="width: 100%; ">
-                                                                                <input type="file" name="notif-img"
-                                                                                    class="form-control"
-                                                                                    accept=".jpep,.png,.jpg"
-                                                                                    id="notifImgUrl"
-                                                                                    onchange="preview_notifImg_handler(event)">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-lg-4">
-                                                                        <div class="form-group">
-                                                                            <label>Attachement URL:</label>
-                                                                            <div class="input-group "
-                                                                                style="width: 100%; ">
-                                                                                <input type="file"
-                                                                                    name="notif-attachment"
-                                                                                    class="form-control"
-                                                                                    accept=".doc,.pdf"
-                                                                                    id="notifAttachmentUrl">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-lg-4">
-                                                                        <div class="form-group">
-                                                                            <label>Registration Link:</label>
-                                                                            <div class="input-group "
-                                                                                style="width: 100%; ">
-                                                                                <input type="url" class="form-control"
-                                                                                    id="notifRegistrationUrl"
-                                                                                    placeholder="registration url"
-                                                                                    name="notif_reg_url" required>
-                                                                            </div>
-                                                                        </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-lg-4">
+                                                                <div class="form-group">
+                                                                    <label>Image URL:</label>
+                                                                    <div class="input-group " style="width: 100%; ">
+                                                                        <input type="file" name="notif-img"
+                                                                            class="form-control"
+                                                                            accept=".jpep,.png,.jpg" id="notifImgUrl"
+                                                                            onchange="preview_notifImg_handler(event)">
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="card-footer">
-                                                                <button type="submit"
-                                                                    class="btn btn-primary">SendNotification</button>
+                                                            <div class="col-lg-4">
+                                                                <div class="form-group">
+                                                                    <label>Attachement URL:</label>
+                                                                    <div class="input-group " style="width: 100%; ">
+                                                                        <input type="file" name="notif-attachment"
+                                                                            class="form-control" accept=".doc,.pdf"
+                                                                            id="notifAttachmentUrl">
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                        </form>
+                                                            <div class="col-lg-4">
+                                                                <div class="form-group">
+                                                                    <label>Registration Link:</label>
+                                                                    <div class="input-group " style="width: 100%; ">
+                                                                        <input type="url" class="form-control"
+                                                                            id="notifRegistrationUrl"
+                                                                            placeholder="registration url"
+                                                                            name="notif_reg_url" required>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-footer">
+                                                        <button type="submit"
+                                                            class="btn btn-primary">SendNotification</button>
+                                                    </div>
+                                                </form>
                                             </div>
 
                                             <!--OM YAHA  DAAL FORM  -->
@@ -347,6 +335,8 @@
                         <script src="dist/js/pages/dashboard2.js"></script>
                         <!-- <script src="./plugins/jquery/jquery.min.js"></script> -->
 
+
+
                         <script>
                             var dataTable = $('#notif_table');
                             $(document).ready(function () {
@@ -384,6 +374,105 @@
                                 // }
 
                         </script>
+                        <script>
+                            $(document).ready(function () {
+                                let span = $('#success1')
+                                console.log("spantag",span);
+                                console.log("seccess111");
+                                setTimeout(function () {
+                                    console.log("inside timeout");
+                                    $("#success1").html('');
+                                }, 3000);
+                            });
+                            // $(document).ready(function () {
+                            //     console.log("seccess111");
+                            //     setTimeout(function () {
+                            //         console.log("inside timeout");
+                            //         $("#success1").css('visibility','hidden');
+                            //     }, 3000);
+                            // });
+                        </script>
+                        <script>
+                            const dropdown = document.querySelector('#slct1');
+                            const selectedOptions = [];
+                            const targetAudienceSpan = document.querySelector('#targetAudience');
+
+                            dropdown.addEventListener('change', (event) => {
+
+                                // Update count of students for selected classes
+                                // updateCount(selectedOptions);
+                                const selectedOptions = Array.from(event.target.selectedOptions);
+                                const selectedClasses = selectedOptions.map(option => option.value);
+                                console.log("slctoptions", selectedClasses);
+                                fetch(`/targetCount?classes=${selectedClasses.join(',')}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        // Extract count of students from response and store in counts object
+                                        console.log("fetchdata", data);
+                                        // counts[classCode] = data.count;
+
+                                        // Update count display
+                                        targetAudienceSpan.textContent = data.totalStudents;
+                                    });
+                            });
+                            function updateCount(selectedOptions) {
+                                // Retrieve count of students for each selected class
+                                const counts = {};
+
+                                const bsd_id = selectedOptions;
+                                // Use AJAX or fetch to retrieve count of students for each class
+                                // and store it in the counts object
+                                fetch(`/targetCount??classes=${selectedClasses.join(',')}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        // Extract count of students from response and store in counts object
+                                        console.log("fetchdata", data);
+                                        counts[classCode] = data.count;
+
+                                        // Update count display
+                                        const countDisplay = document.querySelector('#targetAudience');
+                                        countDisplay.innerHTML = '';
+                                        for (let classCode in counts) {
+                                            countDisplay.innerHTML += `${classCode}: ${counts[classCode]}<br>`;
+                                        }
+                                    });
+
+                                console.log("count", selectedOptions);
+
+                                // Update count display
+                                const countDisplay = document.querySelector('#count-display');
+                                countDisplay.innerHTML = '';
+                                for (let classCode in counts) {
+                                    countDisplay.innerHTML += `${classCode}: ${counts[classCode]}<br>`;
+                                }
+                            }
+                            // $(document).ready(function () {
+
+                            //     load_data();
+                            //     function load_data() {
+                            //         console.log("data");
+                            //         $.ajax({
+                            //             url: "/targetCount",
+                            //             method: "POST",
+                            //             data: { action: 'fetch' },
+                            //             dataType: "JSON",
+                            //             success: function (data) {
+                            //                 console.log("dataaaa:", data);
+                            //                 var html = '';
+
+                            //                 if (data.data.length > 0) {
+                            //                     html += `  1000                                       `;
+                            //                 }
+
+
+                            //                 $('targetAudience').html(html);
+                            //                 // console.log(html);
+
+                            //             }
+                            //         });
+                            //     }
+                            // })
+                        </script>
 
                         <!-- function for sub category in notif form  -->
 
@@ -393,7 +482,7 @@
                                 var dropdown = document.getElementById("slct1");
                                 var options = dropdown.options;
                                 var selectedIndex = dropdown.selectedIndex;
-                                
+
 
                                 if (options[0].value == 0) {
                                     for (var i = 1; i < options.length; i++) {
