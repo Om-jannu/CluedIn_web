@@ -5,12 +5,13 @@ const serviceAccount = require("../cluedin-db185-firebase-adminsdk-g30hi-5e023ee
 var flash = require("connect-flash");
 const { patch } = require("./importExcelController");
 const path = require("path");
+
 module.exports = {
   post: async (req, res) => {
     console.log("--------------------------Inside post method of send notif form(/sendNotif)------------------------------");
 
     var session = req.session;
-
+    const date =new Date(new Date().toUTCString());
     var notif_title = req.body.notif_title;
     var notif_desc = req.body.notif_desc;
     var exp_date = req.body.exp_date;
@@ -36,8 +37,8 @@ module.exports = {
     console.log("imgUrl:", imgurl, "\nattachmentUrl:", attachment_url);
 
     var sql =
-      "INSERT INTO notification_message (nm_title,sender_id,nm_message,nm_image_url,nm_attachment_url,nm_label_id, targetClass) VALUES ?";
-    var values = [[notif_title, session.senderid, notif_desc, imgurl,attachment_url, label, targetClass]];
+      "INSERT INTO notification_message (nm_title,sender_id,nm_message,nm_image_url,nm_attachment_url,nm_label_id, targetClass,dateOfCreation) VALUES ?";
+    var values = [[notif_title, session.senderid, notif_desc, imgurl,attachment_url, label, targetClass,date]];
 
     pool.query(sql, [values], (err, result) => {
       if (err) throw err;
@@ -130,10 +131,10 @@ module.exports = {
         //-----------------------------------------logic for inserting into targetlist table ------------------------------------------
 
 
-        function generateValuesArray(value1, value2Array, value3) {
+        function generateValuesArray(value1, value2Array, value3,value4) {
           const valuesArray = [];
           value2Array.forEach(function (value2) {
-            const rowArray = [value1, value2, value3];
+            const rowArray = [value1, value2, value3,value4];
             valuesArray.push(rowArray);
           });
           return valuesArray;
@@ -143,8 +144,8 @@ module.exports = {
         let bsd_arr = target_class;  
 
         console.log("bsd_arr", bsd_arr);
-        qry = `INSERT INTO notification_message_targetlist (nm_id,bsd_id,nm_gender) values ?`;
-        const valuesArray = generateValuesArray(nm_id, bsd_arr, gender);
+        qry = `INSERT INTO notification_message_targetlist (nm_id,bsd_id,nm_gender,dateOfCreation) values ?`;
+        const valuesArray = generateValuesArray(nm_id, bsd_arr, gender,date);
 
 
         // console.log(bsd_arr);
@@ -197,9 +198,9 @@ module.exports = {
             console.log("target users", targetUserId);
 
             //logic to insert data into target users table 
-            const values = generateValuesArray(nm_id, targetUserId, 0); //0 is for isRead i.e notif is not read by user 
+            const values = generateValuesArray(nm_id, targetUserId, 0,date); //0 is for isRead i.e notif is not read by user 
             console.log("status table:", values);
-            qry2 = `Insert into cluedin.user_notification_status (nm_id,user_id,isRead) values ? ;`
+            qry2 = `Insert into cluedin.user_notification_status (nm_id,user_id,isRead,dateOfCreation) values ? ;`
             if (targetUserId.length != 0) {
               pool.query(qry2, [values], (err, result) => {
                 if (err) throw err;
