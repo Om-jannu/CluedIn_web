@@ -12,6 +12,7 @@ module.exports = {
         if (error) {
           throw error;
         }
+        // console.log("userdata",data);
         res.json({
           data: data,
         });

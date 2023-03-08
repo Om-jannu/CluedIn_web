@@ -11,7 +11,7 @@ module.exports= {
             {
                 throw error    
             }
-            console.log("deleted psw");
+            // console.log("deleted psw");
 			res.json({
 				message : 'Data Deleted'
 			});
