@@ -36,13 +36,15 @@ module.exports = {
     };
 
     const now = new Date();
+    // console.log("dateee",now);
     const indianDate = now.toLocaleDateString('en-IN', options);
-
+    
     console.log(indianDate);
-    ;
+    // const date1 =new Date(new Date().toUTCString());
+    // console.log("stack date",date1);
     let imgurl = null;
     if (req.file) {
-      console.log("reqfile ", req.file);
+      // console.log("reqfile ", req.file);
       imgurl = path.join("feat_event_images/" + req.file.filename);
       console.log(imgurl);
     }
@@ -78,6 +80,30 @@ module.exports = {
   },
   list: (req, res) => {
     console.log("------------------inside list feat event------------ ");
+    var qry =
+      "SELECT t1.feat_event_id,t1.feat_event_name,t2.sb_name,t1.dateOfCreation as Published_Date from featured_events t1, student_bodies_master t2 where  isFeatured = 1 and t1.feat_event_organizedBy = t2.sb_id order by t1.dateOfCreation DESC ; ";
+    pool.query(qry, (error, data) => {
+      if (error) {
+        throw error;
+      }
+      // console.log(data);
+      res.json({
+        data: data,
+      });
+    });
+  },
 
+  remove:(req,res)=>{
+    console.log("---------------------------inside remove featured event----------------------");
+    let feat_event_id = req.query.id
+    console.log("feat id",feat_event_id);
+    let qry = `UPDATE featured_events set isFeatured=0 where feat_event_id = ?`
+    pool.query(qry,[feat_event_id],(error,result)=>{
+      if (error) throw error;
+      console.log("event removed from featured section");
+      res.json({
+				message : 'Event Removed from featured Section'
+			});
+    })
   }
 }

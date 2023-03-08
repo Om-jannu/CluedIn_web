@@ -95,14 +95,18 @@ app.use('/reset-password:/id/:token',homeRoute);
 app.use(express.static(__dirname + "/views"));
 //profile
 app.use('/profile',homeRoute);
+
+//routes related to notifications 
 app.use("/sendNotif", homeRoute);
-app.use("/action", homeRoute);
+app.use("/action", homeRoute);     //for datatable od list notif 
+app.use("/targetCount",homeRoute)   //to get count of target users in sendnotif form 
 // app.use("/listNotif", homeRoute);
 
 //events routes 
 app.use("/event",homeRoute);
 app.use("/postevent",homeRoute);
 
+//routes related to user creating user 
 app.use("/createUser", homeRoute);
 app.use("/listuser", homeRoute);
 // app.use("/import-excel", importExcel);
@@ -115,6 +119,7 @@ app.use("/dbapi", dbApiRoute);
 app.use('/featuredEvent',homeRoute);
 app.use('/postFeaturedEvent',homeRoute);
 app.use('/listfeatured',homeRoute);
+app.use("removefeatured",homeRoute);
 
 // cluedIn app api
 app.use("/api/signup", homeRoute);
@@ -241,6 +246,14 @@ var now = new Date().toLocaleString('en-US', {
   timeZone: 'Asia/Calcutta'
 });
 console.log("date:", now);
+
+const now1 = new Date();
+console.log("dateee",now1);
+const date1 =new Date(new Date().toUTCString());
+console.log("stack date",date1);
+// const indianDate = now.toLocaleDateString('en-IN', options);
+
+// console.log(indianDate);
 
 console.log("dirname:",__dirname);
 
