@@ -247,10 +247,8 @@ var now = new Date().toLocaleString('en-US', {
 });
 console.log("date:", now);
 
-const now1 = new Date();
-console.log("dateee",now1);
 const date1 =new Date(new Date().toUTCString());
-console.log("stack date",date1);
+console.log("UTC Format date",date1);
 // const indianDate = now.toLocaleDateString('en-IN', options);
 
 // console.log(indianDate);
