@@ -114,6 +114,7 @@ app.use("/dbapi", dbApiRoute);
 //featured events routes
 app.use('/featuredEvent',homeRoute);
 app.use('/postFeaturedEvent',homeRoute);
+app.use('/listfeatured',homeRoute);
 
 // cluedIn app api
 app.use("/api/signup", homeRoute);

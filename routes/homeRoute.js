@@ -51,36 +51,6 @@ router.get("/", homeController.get);
 //login validation
 router.post("/auth", authUser.post);
 
-// const storage = multer.memoryStorage();
-
-// const fileFilter = (req, file, cb) => {
-//   if (file.mimetype.split("/")[0] === "image") {
-//     cb(null, true);
-//   } else {
-//     cb(new multer.MulterError("LIMIT_UNEXPECTED_FILE"), false);
-//   }
-// };
-
-// const upload = multer({
-//   storage,
-//   fileFilter,
-//   limits: { fileSize: 10000000, files: 1 },
-// });
-// // size limit - 10 mb
-
-// router.post("/upload", upload.single("file"), async (req, res) => {
-//   try {
-//     const result = await s3Uploadv2(req.file);
-//     console.log(
-//       "-------------------------------------------------------upload-------------------------------------------------\n",
-//       result.Location
-//     );
-//     return res.json({ status: "success" });
-//   } catch (err) {
-//     console.log(err);
-//   }
-// });
-
 //dashboard
 router.get("/dashboard", dashboard.get);
 router.get("/signup", signUp.get);
@@ -148,6 +118,7 @@ const uploadFeatEventImg = multer({
   storage: storage4,
 });
 router.post("/postFeaturedEvent",uploadFeatEventImg.single('feat_event_img'),featuredEveController.post);
+router.get('/listfeatured',featuredEveController.list);
 
 //destroying session
 router.get("/logout", logoutController.get);

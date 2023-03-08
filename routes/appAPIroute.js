@@ -94,36 +94,7 @@ router.post("/appNotif", (req, res) => {
     let labelData = [];
     let roleData = [];
     let notifData = Data[0];
-    let notifData1=[
-      {
-        "notification_id": 51,
-        "sender_fname": "Jasmit",
-        "sender_lname": "Rathod",
-        "senderRole": "Class Teacher",
-        "senderProfilePic": "profile/Userprofile-9076323541.jpg",
-        "notification_title": "IMP NOTICE",
-        "notification_label": "T&P Cell",
-        "notification_message": "Tomorrow we'll be meeting at 11.15 to see what's the progress on the Dbit App.",
-        "image_url": null,
-        "attachment_url": null,
-        "dateOfCreation": "2022-09-14T17:35:51.661Z",
-        "isRead": 0
-      },
-      {
-        "notification_id": 52,
-        "sender_fname": "Jasmit",
-        "sender_lname": "Rathod",
-        "senderRole": "Principal",
-        "senderProfilePic": "profile/Userprofile-9076323541.jpg",
-        "notification_title": "THE EVENT STARTS AT ",
-        "notification_label": "Academics",
-        "notification_message": "Students please make sure that you fill this form inorder to confirm your choice of course.",
-        "image_url": "https://images.unsplash.com/photo-1562788869-4ed32648eb72?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzB8fHRlYWNoZXJ8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60",
-        "attachment_url": "https://drive.google.com/file/d/1ZWAwmTozuTU_Zm3HBZ9jdTse25ryMEIV/view?usp=share_link",
-        "dateOfCreation": "2022-09-14T23:45:27.821Z",
-        "isRead": 0
-      },
-    ]
+  
     for (let index = 0; index < Data[1].length; index++) {
       labelData.push(Data[1][index].label_name);
     }
@@ -237,6 +208,7 @@ router.post('/updateProfile', authenticateToken, uploadStudImg.single('image'), 
 }); // http://128.199.23.207:5000/api/app/updateProfile
 
 router.post('/notifReadStatus', (req, res) => {
+  console.log(req.body);
   let user_id = req.body.user_id;
   let isRead = req.body.isRead;
   let nm_id = req.body.nm_id;

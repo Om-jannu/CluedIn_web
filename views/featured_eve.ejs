@@ -166,10 +166,24 @@
                                             </div>
                                             <div class="tab-pane fade" id="listFeaturedEvents" role="tabpanel"
                                                 aria-labelledby="custom-tabs-two-profile-tab">
-                                                <!-- inside list notif div  -->
+                                                <!-- inside list Featured Events div  -->
                                                 <div class="card-body table-responsive p-0 container-fluid"
-                                                    style="height: 100%;">
-                                                    <h1>List Events</h1>
+                                                        style="height: 100%;">
+                                                        <table style="width: 100%;" class="table table-head-fixed"
+                                                            id="featured_event_table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Title</th>
+                                                                    <th>Organiser</th>
+                                                                    <th>Published Date</th>
+                                                                    <th>Action</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="tab-pane fade" id="custom-tabs-two-messages" role="tabpanel"
@@ -226,6 +240,34 @@
                                 setTimeout(function () {
                                     $("#successMessage").css("visibility", "hidden");
                                 }, 5000);
+                            });
+                        </script>
+                        <script>
+                            var dataTable = $('#featured_event_table');
+                            $(document).ready(function () {
+                                console.log('reached featured_datable in ejs');
+                                // var dataTable = $('#notif_table');
+                                dataTable.DataTable({
+                                    'processing': true,
+                                    'serverSide': true,
+                                    'lengthMenu': [
+                                        [7, 10, 25, 50, -1],
+                                        [7, 10, 25, 50],
+                                    ],
+                                    'serverMethod': 'get',
+                                    'ajax': {
+                                        'url': "/listfeatured"
+                                    },
+                                    'aaSorting': [],
+                                    'columns': [
+                                        { data: 'feat_event_name' },
+                                        { data: 'feat_event_organizedBy' },
+                                        // { data : 'dateOfExpiration' },
+                                        // { data : 'scheduled_date' },
+                                        { data: 'dateOfCreation' },
+
+                                    ]
+                                });
                             });
                         </script>
     </body>
