@@ -68,7 +68,7 @@ module.exports = {
       if (err) {
         throw err;
       }
-      else if (result.length == 0) {
+      else if (result.length == 0) {            
         req.flash("err", "Email not found");
         res.redirect('/signup');
       }

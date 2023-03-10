@@ -39,6 +39,7 @@ let event = require("../controllers/eventController");
 const resetPasswordController = require("../controllers/resetPasswordController");
 const featuredEveController = require("../controllers/featuredEveController");
 const targetUserCount = require("../controllers/targetStudentCount")
+const bulkUserCreate = require('../controllers/bulkUserCreation')
 // firebaseAdmin.initializeApp({
 //   credential: firebaseAdmin.credential.cert(require("../cluedInOfficialAndroid.json")),
 // });
@@ -160,7 +161,23 @@ router.get("/createuser", function (request, response) {
   }
 });
 
-router.get("/action", notifData.get);
+//bulk user 
+//import excel
+var BulkUserPath = path.join(__dirname,'..', "uploads","users");
+
+const BulkUserStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null,BulkUserPath);
+  },
+  filename: (req, file, cb) => {
+    cb(null, "stud" + "-" + Date.now() + "-" + file.originalname);
+  },
+});
+const uploadFile = multer({ storage: BulkUserStorage });
+router.post("/import-excel", uploadFile.single("students"),bulkUserCreate.bulk);  //bulkUser Creation
+
+
+router.get("/action", notifData.get);  //List notif datatable 
 router.get("/targetCount",targetUserCount.get);
 
 //update user details

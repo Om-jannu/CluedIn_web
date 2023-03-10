@@ -18,27 +18,27 @@ const path = require("path");
 const pool = require("./models/dbConnect");
 
 //routes to generate notif img link 
-app.get('/images/:file', function(req, res) {
+app.get('/images/:file', function (req, res) {
   var file = req.params.file;
-  var fileLocation = path.join(__dirname, 'uploads','notifImg', file);
+  var fileLocation = path.join(__dirname, 'uploads', 'notifImg', file);
   res.sendFile(fileLocation);
 });
-app.get('/feat_event_images/:file', function(req, res) {
+app.get('/feat_event_images/:file', function (req, res) {
   var file = req.params.file;
-  var fileLocation = path.join(__dirname, 'uploads','feat_events', file);
+  var fileLocation = path.join(__dirname, 'uploads', 'feat_events', file);
   res.sendFile(fileLocation);
 });
 
 //routes to generate profile pic img link
-app.get('/profile/:file', function(req, res) {
+app.get('/profile/:file', function (req, res) {
   var file = req.params.file;
-  var fileLocation = path.join(__dirname, 'uploads','profilePic', file);
+  var fileLocation = path.join(__dirname, 'uploads', 'profilePic', file);
   res.sendFile(fileLocation);
 });
 //route to open pdf file from notifAttachment folder
-app.get('/file/:file', function(req, res) {
+app.get('/file/:file', function (req, res) {
   var file = req.params.file;
-  var fileLocation = path.join(__dirname, 'uploads','notifAttachment', file);
+  var fileLocation = path.join(__dirname, 'uploads', 'notifAttachment', file);
   res.sendFile(fileLocation);
 });
 //flash
@@ -91,20 +91,20 @@ app.use("/dashboard", homeRoute);
 app.use("/logout", homeRoute);
 app.use("/signup", homeRoute);
 app.use("/signupotp", homeRoute);
-app.use('/reset-password:/id/:token',homeRoute);
+app.use('/reset-password:/id/:token', homeRoute);
 app.use(express.static(__dirname + "/views"));
 //profile
-app.use('/profile',homeRoute);
+app.use('/profile', homeRoute);
 
 //routes related to notifications 
 app.use("/sendNotif", homeRoute);
 app.use("/action", homeRoute);     //for datatable od list notif 
-app.use("/targetCount",homeRoute)   //to get count of target users in sendnotif form 
+app.use("/targetCount", homeRoute)   //to get count of target users in sendnotif form 
 // app.use("/listNotif", homeRoute);
 
 //events routes 
-app.use("/event",homeRoute);
-app.use("/postevent",homeRoute);
+app.use("/event", homeRoute);
+app.use("/postevent", homeRoute);
 
 //routes related to user creating user 
 app.use("/createUser", homeRoute);
@@ -116,10 +116,10 @@ app.use("updateuser", homeRoute);
 app.use("/dbapi", dbApiRoute);
 
 //featured events routes
-app.use('/featuredEvent',homeRoute);
-app.use('/postFeaturedEvent',homeRoute);
-app.use('/listfeatured',homeRoute);
-app.use("removefeatured",homeRoute);
+app.use('/featuredEvent', homeRoute);
+app.use('/postFeaturedEvent', homeRoute);
+app.use('/listfeatured', homeRoute);
+app.use("removefeatured", homeRoute);
 
 // cluedIn app api
 app.use("/api/signup", homeRoute);
@@ -154,77 +154,8 @@ app.use((error, req, res, next) => {
   }
 });
 
-//import excel
-var Path = path.join(__dirname, "uploads");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, __dirname + "/uploads/users");
-  },
-  filename: (req, file, cb) => {
-    cb(null, "stud" + "-" + Date.now() + "-" + file.originalname);
-  },
-});
-const uploadFile = multer({ storage: storage });
 
-function importFileToDb(exFile, req) {
-  //get bsd id from dropdown and store it in local variable and use select qry to get b,s&d
-  let bsd_id = req.body.target_class;
-  let acadYear = req.body.ay;
-  let semester = req.body.sem;
-  // console.log("req:", req.file.filename);
-  //using xlsx to extract data from sxcel sheet
-  var dataexcel = "uploads/users/" + req.file.filename;
-  var wb = xlsx.readFile(dataexcel);
-  var sheetname = wb.SheetNames[0];
-  var sheetval = wb.Sheets[sheetname];
-  var exceldata = xlsx.utils.sheet_to_json(sheetval);
-
-  let query_1 = //for loop
-    "INSERT INTO user_details (user_fname,user_lname,user_gender,user_email,user_mobno,user_addr,user_pincode,user_pwd,user_role_id,user_department) VALUES (?)";
-  let query_2 = //for loop
-    "INSERT INTO Student_branch_standard_div_ay_rollno_sem_mapping (user_id,ay_id,bsd_id,roll_id,sem_id) VALUES (?)";
-  var values = [];
-  var studentData = []
-  for (let i = 0; i < exceldata.length; i++) {
-    value = [
-      exceldata[i].user_fname,
-      exceldata[i].user_lname,
-      exceldata[i].user_gender,
-      exceldata[i].user_email,
-      exceldata[i].user_mobno,
-      exceldata[i].user_addr,
-      exceldata[i].user_pincode,
-      exceldata[i].user_pwd,
-      14,
-      exceldata[i].user_department,
-    ];
-    
-    values.push(value);
-    console.log(values);
-    pool.query(query_1, [values[i]], (error, result) => {
-      console.log(error || result);
-      let userId = result.insertId;
-      console.log("userid:", userId);
-      //2nd query
-      data=[];
-      data = [
-        userId,
-        acadYear,
-        bsd_id,
-        exceldata[i].user_rollno,
-        semester
-      ]
-      console.log("data ",data);
-      pool.query(query_2,[data],(err,result)=>{
-        console.log(err||result);
-      })
-    });
-    
-  }
-  values = [];
-  // console.log("val:", values);
-}
 
 /* use any excel read package
 0) Get ay_id, sem_id, bsd_id from the html form and store in local variable.
@@ -234,12 +165,8 @@ function importFileToDb(exFile, req) {
   b. You will get user_id from the resultset (aka result).
   c. insert into table aka student mapping table 
 */
+app.use("/import-excel",homeRoute);
 
-app.post("/import-excel", uploadFile.single("students"), (req, res) => {
-  importFileToDb(__dirname + "/uploads/users" + req.file.filename, req);
-  req.flash("message", `Users were created successfully`);
-  res.redirect("/createUser");
-});
 
 
 var now = new Date().toLocaleString('en-US', {
@@ -247,13 +174,13 @@ var now = new Date().toLocaleString('en-US', {
 });
 console.log("date:", now);
 
-const date1 =new Date(new Date().toUTCString());
-console.log("UTC Format date",date1);
+const date1 = new Date(new Date().toUTCString());
+console.log("UTC Format date", date1);
 // const indianDate = now.toLocaleDateString('en-IN', options);
 
 // console.log(indianDate);
 
-console.log("dirname:",__dirname);
+console.log("dirname:", __dirname);
 
 //creating server
 var port = process.env.PORT || 5000;

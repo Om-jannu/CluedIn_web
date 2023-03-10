@@ -45,10 +45,4 @@ module.exports = {
       res.redirect("/createuser");
     });
   },
-  // get: (req, res) => {
-  //     // fetching details
-  //     res.send("Reached here");
-  //     var Path = Path.join(__dirname,"..","views","createUser");
-  //     response.render(Path);
-  // },
 };
