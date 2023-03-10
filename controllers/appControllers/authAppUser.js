@@ -16,7 +16,7 @@ module.exports = {
     // Check if username and password are provided
     if (!usermobno || !password) {
       console.log("idhar");
-      return res.status(400).json({ data: null, success: "false", message: 'Username and password are required.' });
+      return res.status(400).json({ data: null, success: "false", msg: 'Username and password are required.' });
     }
 
 
@@ -26,10 +26,10 @@ module.exports = {
       // console.log(qry);
       if (err) {
         console.log(err);
-        return res.status(500).json({ data: null, success: false, message: 'Internal server error.' });
+        return res.status(500).json({ data: null, success: false, msg: 'Internal server error.' });
       }
       if (result.length < 1) {
-        return res.status(401).json({ data: null, success: false, message: "The user doesn't exist. Please Signup to continue" });
+        return res.status(401).json({ data: null, success: false, msg: "The user doesn't exist. Please Signup to continue" });
       }
 
       // Check if the password is correct
@@ -47,7 +47,7 @@ module.exports = {
       pool.query(updateTokenQuery, (err, result) => {
         if (err) {
           console.log(err);
-          return res.status(500).json({ data: null, success: false, message: 'Internal server error.' });
+          return res.status(500).json({ data: null, success: false, msg: 'Internal server error.' });
         }
         // console.log(`Token has been stored in the database for user ${usermobno}`);
       });

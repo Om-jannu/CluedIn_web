@@ -23,7 +23,7 @@ router.post("/authAppUser", authAppUser.post); // http://128.199.23.207:5000/api
 router.post("/firebaseToken", firebase_token.post); //http://cluedin.creast.in:5000/api/app/firebaseToken
 
 
-router.post("/appNotif", (req, res) => {
+router.post("/appNotif", authenticateToken, (req, res) => {
   let user_id = req.body.user_id
   console.log("====================================Inside appNotif api=====================================");
   console.log(req.body);
@@ -94,7 +94,7 @@ router.post("/appNotif", (req, res) => {
     let labelData = [];
     let roleData = [];
     let notifData = Data[0];
-  
+
     for (let index = 0; index < Data[1].length; index++) {
       labelData.push(Data[1][index].label_name);
     }

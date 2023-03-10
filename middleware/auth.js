@@ -7,13 +7,13 @@ function authenticateToken(req, res, next) {
     const token = authHeader && authHeader.split(' ')[1];
     if (!token) {
         console.log("idhar aaya 1");
-        return res.status(401).json({ error: 'Unauthorized' });
+        return res.status(401).json({ success: "false", data: null, msg: 'Unauthorized' });
     }
 
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
             console.log("idhar aaya 2");
-            return res.status(403).json({ error: 'Invalid token' });
+            return res.status(403).json({ success: "false", data: null, msg: 'Invalid token' });
         }
 
         // Check the user's record in the SQL database
@@ -24,12 +24,12 @@ function authenticateToken(req, res, next) {
             if (error) {
 
                 console.error(error);
-                return res.status(500).json({ error: 'Internal server error' });
+                return res.status(500).json({ success: "false", data: null, msg: 'Internal server error' });
             }
 
             if (!results || results.length === 0) {
                 console.log("idhar aaya 3");
-                return res.status(401).json({ error: 'Unauthorized' });
+                return res.status(401).json({ success: "false", data: null, msg: 'Unauthorized' });
             }
 
             const storedToken = results[0].user_token;
@@ -37,7 +37,7 @@ function authenticateToken(req, res, next) {
             console.log(storedToken);
             if (token !== storedToken) {
                 console.log("idhar aaya 5");
-                return res.status(403).json({ error: 'Session Expired. Please login again' });
+                return res.status(403).json({ success: "false", data: null, msg: 'Session Expired. Please login again' });
             }
 
             // Token is valid
