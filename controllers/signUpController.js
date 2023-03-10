@@ -17,8 +17,9 @@ module.exports = {
 
   post: async (req, res) => {
     let email = req.body.userEmail;
-    let get_user_details_from_email_qry = `SELECT * FROM cluedin.user_details where user_email='${email}';`
-
+    // let get_user_details_from_email_qry = `SELECT * FROM cluedin.user_details where user_email='${email}';`
+    let get_user_details_from_email_qry = `SELECT * FROM cluedin.user_details where user_email = ?;`
+    
     const oauth2Client = new OAuth2(
       client_secret.web.client_id,
       client_secret.web.client_secret,
@@ -63,7 +64,7 @@ module.exports = {
       );
       console.log(`mail send to ${email}`);
     }
-    pool.query(get_user_details_from_email_qry, (err, result) => {
+    pool.query(get_user_details_from_email_qry, [email] ,(err, result) => {
       if (err) {
         throw err;
       }
