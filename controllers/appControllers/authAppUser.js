@@ -28,7 +28,7 @@ module.exports = {
         console.log(err);
         return res.status(500).json({ data: null, success: false, message: 'Internal server error.' });
       }
-      if (result.length === 0) {
+      if (result.length < 1) {
         return res.status(401).json({ data: null, success: false, message: "The user doesn't exist. Please Signup to continue" });
       }
 
@@ -40,7 +40,7 @@ module.exports = {
         return res.status(401).json({ data: null, success: "false", msg: 'Invalid username or password.' });
       }
       const token = jwt.sign({ id: user.user_id }, process.env.JWT_SECRET);
-      console.log("jwt token",token);
+      console.log("jwt token", token);
 
       // Store the token in the server's database for single user login
       const updateTokenQuery = `UPDATE cluedin.user_details SET user_token = "${token}" WHERE user_mobno = "${user.user_mobno}";`;
