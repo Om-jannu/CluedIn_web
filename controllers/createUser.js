@@ -1,7 +1,7 @@
 const pool = require("../models/dbConnect");
 var flash = require("connect-flash");
 const session = require("express-session");
-
+const bcrypt = require('bcrypt');
 module.exports = {
   get:function (request, response) {
     // console.log('create user')
@@ -36,7 +36,7 @@ module.exports = {
       response.redirect("/");
     }
   },
-  post: (req, res) => {
+  post: async (req, res) => {
     // fetching details
     // res.render("views/createUser");
     console.log(req.body);
@@ -52,30 +52,53 @@ module.exports = {
     var user_addr = req.body.user_addr;
     var user_pincode = req.body.user_pincode;
 
-    // var sql = "INSERT INTO user_message (title,message,expDate,schDate,category) VALUES ?";
-    var sql =
+    //hashing password
+    // const saltRounds = 10;
+    // bcrypt.hash(user_pwd, saltRounds, function(err, hash) {
+    //   if (err) {
+    //     console.error(err);
+    //   } else {
+    //     user_pwd = hash
+    //     console.log(user_pwd); // this is the hashed password that you can store in your database
+    //   }
+    // });
+    //try 
+    try {
+      // Generate salt
+      const salt = await bcrypt.genSalt(10);
+  
+      // Hash password with salt
+      const hashedPassword = await bcrypt.hash(user_pwd, salt);
+  
+      // Store username and hashed password in database
+      // const query = `INSERT INTO users (username, password) VALUES (?, ?)`;
+      var sql =
       "INSERT INTO user_details (user_fname,user_lname,user_gender,user_email,user_mobno,user_addr,user_pincode,user_pwd,user_role_id,user_department) VALUES ?";
-    var values = [
-      [
-        user_fname,
-        user_lname,
-        user_gender,
-        user_email,
-        user_mobno,
-        user_addr,
-        user_pincode,
-        user_pwd,
-        user_role,
-        user_dept,
-      ],
-    ];
-    pool.query(sql, [values], (err, result) => {
-      if (err) return res.send(err);
-      // res.send("notif sent");
-      // res.sendfile("createUser.html");
-      console.log("data inserted into user_details finally!!!");
-      req.flash("message", "User created Successfully");
-      res.redirect("/createuser");
-    });
+      // const values = [username, hashedPassword];
+      var values = [
+        [
+          user_fname,
+          user_lname,
+          user_gender,
+          user_email,
+          user_mobno,
+          user_addr,
+          user_pincode,
+          hashedPassword,
+          user_role,
+          user_dept,
+        ],
+      ];
+  
+      pool.query(sql, [values], (err, result) => {
+        if (err) console.log(err);
+        console.log("data inserted into user_details finally!!!");
+        req.flash("message", "User created Successfully");
+        res.redirect("/createuser");
+      });
+    } catch (error) {
+      console.error('Error occurred during sign up:', error);
+      throw new Error('Could not sign up');
+    }
   },
 };
