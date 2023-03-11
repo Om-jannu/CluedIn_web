@@ -76,11 +76,17 @@
                                         <div class="tab-content" id="custom-tabs-two-tabContent">
                                             <div class="tab-pane fade active show" id="create-notification"
                                                 role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
-                                                <span id="#success1" >
+                                                <span id="#success1">
                                                     <% if(message1.length>0){ %>
 
-                                                        <div class="alert alert-success">
+
+                                                        <div class="alert alert-success alert-dismissible fade show"
+                                                            role="alert">
                                                             <%= message1 %>
+                                                                <button type="button" class="close" data-dismiss="alert"
+                                                                    aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
                                                         </div>
 
                                                         <% } %>
@@ -225,7 +231,7 @@
                                                                         <input type="url" class="form-control"
                                                                             id="notifRegistrationUrl"
                                                                             placeholder="registration url"
-                                                                            name="notif_reg_url" required>
+                                                                            name="notif_reg_url">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -377,7 +383,7 @@
                         <script>
                             $(document).ready(function () {
                                 let span = $('#success1')
-                                console.log("spantag",span);
+                                console.log("spantag", span);
                                 console.log("seccess111");
                                 setTimeout(function () {
                                     console.log("inside timeout");
