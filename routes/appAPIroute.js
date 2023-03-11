@@ -115,7 +115,8 @@ router.post("/appNotif", authenticateToken, (req, res) => {
 });     //http://128.199.23.207:5000/api/app/appNotif
 
 //appEvent api 
-router.get("/appEvent", (req, res) => {
+router.get("/appEvent", authenticateToken, (req, res) => {
+  console.log("============Events API======================");
   // var bsd_id = req.body.bsd_id;  
   // var gender = req.body.gender; 
   //queries
@@ -145,7 +146,7 @@ router.get("/appEvent", (req, res) => {
   pool.query(qry1, (err, result) => {
     if (err) console.log(err);
     let Data = JSON.parse(JSON.stringify(result));
-    console.log(Data);
+    // console.log(Data);
 
     let labelData = [];
     let organiserData = [];
@@ -156,8 +157,8 @@ router.get("/appEvent", (req, res) => {
     for (let j = 0; j < Data[1].length; j++) {
       organiserData.push(Data[1][j].sb_name);
     }
-    console.log("labels\n", labelData);
-    console.log("organisers data\n", organiserData);
+    // console.log("labels\n", labelData);
+    // console.log("organisers data\n", organiserData);
     // let roleData = JSON.parse(JSON.stringify(result[2]))
     // console.log("result\n",notifData,labelData,roleData);
     res.json({
@@ -228,7 +229,7 @@ router.post('/notifReadStatus', (req, res) => {
 
 });  // http://128.199.23.207:5000/api/app/notifReadStatus
 
-router.get('/homeapi', (request, response) => {
+router.get('/homeapi', authenticateToken, (request, response) => {
   let get_featured_events_qry = `
   SELECT feat_event_name as event_name,
   feat_event_imgUrl as photo_link,
@@ -236,49 +237,49 @@ router.get('/homeapi', (request, response) => {
   FROM cluedin.featured_events where isFeatured=1;`
 
   let student_chap_json = [
-      {
-        "title": "Computer Society of India (CSI)",
-        "Established_in": 2006,
-        "desc": "CSI, well known for Computer Society of India is another reputed student chapter under the Department of Information Technology. \n\nThe Computer Society of India is a non-profit professional organisation that meets to discuss ideas, study, and share information. \n\nCSI also promotes and supports professionals in maintaining the profession's integrity and competence, and it creates a feeling of cooperation among members. \n\nTwo of the major flagships events of CSI at Don Bosco Institute of Technology are: Game of codes & Coding premier league, where students across the engineering departments come together and innovate solutions over various problem statements!",
-        "logo": "https://csidbit.netlify.app/assets/img/csi_mumbai_logo.webp",
-        "cover_pic": "https://csidbit.netlify.app/assets/img/csi_mumbai_logo.webp",
-        "website": "https://csi.dbit.in/"
-      }, 
-      {
-        "title": "Association for Computing Machinery (ACM)",
-        "Established_in": 2003,
-        "desc": "ACM, well known for Association for Computing Machinery is a reputed student chapter under the Department of Computer Engineering. Through strong leadership, advocacy of the highest standards, and acknowledgment of technological accomplishment, ACM enhances the computer profession's collective voice. \n\nACM encourages its members' professional development by offering opportunities for lifelong learning, career advancement, and professional networking. \n\n‘Teknack’ is the flagship event of ACM wherein all students interested in game development come together to produce games using their creativity, technical skills and vivid frameworks and publish them over Google Playstore platform.",
-        "logo": "https://media-exp1.licdn.com/dms/image/C4E0BAQExp-uh_QVXNQ/company-logo_200_200/0/1556640719574?e=2159024400&v=beta&t=PQu5REaOFTN5Ql5wNGWcg2koWuc_X3Qqe148ucJVxHo",
-        "cover_pic": "https://media-exp1.licdn.com/dms/image/C4E0BAQExp-uh_QVXNQ/company-logo_200_200/0/1556640719574?e=2159024400&v=beta&t=PQu5REaOFTN5Ql5wNGWcg2koWuc_X3Qqe148ucJVxHo",
-        "website": "https://dbit.acm.org/"
-      },
-      {
-        "title": "Institute of Electrical and Electronics Engineers (IEEE)",
-        "Established_in": 2006,
-        "desc": "The IEEE society at Don Bosco Institute of Technology is a professional organisation that creates, defines, and evaluates standards in electronics and computer science. \n\nIts goal statement is to promote technical innovation and excellence for the benefit of humanity. \n\nIEEE and its members inspire a community through its highly cited publications, conferences, technology standards, and professional and various educational activities which will make the students ready for the corporate world!",
-        "logo": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fieee.dbit.in%2Fres%2Fimg%2Flogo.png&f=1&nofb=1&ipt=ac9e01209e0cbdcb5871f26c64fb5bff07594871f31fb6fa8a55f4c12697c0a7&ipo=images",
-        "cover_pic": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fieee.dbit.in%2Fres%2Fimg%2Flogo.png&f=1&nofb=1&ipt=ac9e01209e0cbdcb5871f26c64fb5bff07594871f31fb6fa8a55f4c12697c0a7&ipo=images",
-        "website": "https://ieee.dbit.in/"
-      },
-      {
-        "title": "Social Innovation for Environment Club (SIE)",
-        "Established_in": 2003,
-        "desc": "Amidst the thickly populated concrete jungles of the suburban Kurla, of Mumbai district, DBIT is an oasis of greenery. With a huge football ground and abundant lush green trees it's full of serenity and is a home for a variety of birds. \n\nWith our Don Bosco values the students, faculty of SIE Club pledge to make the campus carbon neutral, create environmental awareness and promote sustainability with sustainable lifestyle using innovative engineering.",
-        "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Ethereum-icon-purple.svg/768px-Ethereum-icon-purple.svg.png",
-        "cover_pic": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Ethereum-icon-purple.svg/768px-Ethereum-icon-purple.svg.png",
-        "website": "https://acm.dbit.org/"
-      }
-    ];
+    {
+      "title": "Computer Society of India (CSI)",
+      "Established_in": 2006,
+      "desc": "CSI, well known for Computer Society of India is another reputed student chapter under the Department of Information Technology. \n\nThe Computer Society of India is a non-profit professional organisation that meets to discuss ideas, study, and share information. \n\nCSI also promotes and supports professionals in maintaining the profession's integrity and competence, and it creates a feeling of cooperation among members. \n\nTwo of the major flagships events of CSI at Don Bosco Institute of Technology are: Game of codes & Coding premier league, where students across the engineering departments come together and innovate solutions over various problem statements!",
+      "logo": "https://csidbit.netlify.app/assets/img/csi_mumbai_logo.webp",
+      "cover_pic": "https://csidbit.netlify.app/assets/img/csi_mumbai_logo.webp",
+      "website": "https://csi.dbit.in/"
+    },
+    {
+      "title": "Association for Computing Machinery (ACM)",
+      "Established_in": 2003,
+      "desc": "ACM, well known for Association for Computing Machinery is a reputed student chapter under the Department of Computer Engineering. Through strong leadership, advocacy of the highest standards, and acknowledgment of technological accomplishment, ACM enhances the computer profession's collective voice. \n\nACM encourages its members' professional development by offering opportunities for lifelong learning, career advancement, and professional networking. \n\n‘Teknack’ is the flagship event of ACM wherein all students interested in game development come together to produce games using their creativity, technical skills and vivid frameworks and publish them over Google Playstore platform.",
+      "logo": "https://media-exp1.licdn.com/dms/image/C4E0BAQExp-uh_QVXNQ/company-logo_200_200/0/1556640719574?e=2159024400&v=beta&t=PQu5REaOFTN5Ql5wNGWcg2koWuc_X3Qqe148ucJVxHo",
+      "cover_pic": "https://media-exp1.licdn.com/dms/image/C4E0BAQExp-uh_QVXNQ/company-logo_200_200/0/1556640719574?e=2159024400&v=beta&t=PQu5REaOFTN5Ql5wNGWcg2koWuc_X3Qqe148ucJVxHo",
+      "website": "https://dbit.acm.org/"
+    },
+    {
+      "title": "Institute of Electrical and Electronics Engineers (IEEE)",
+      "Established_in": 2006,
+      "desc": "The IEEE society at Don Bosco Institute of Technology is a professional organisation that creates, defines, and evaluates standards in electronics and computer science. \n\nIts goal statement is to promote technical innovation and excellence for the benefit of humanity. \n\nIEEE and its members inspire a community through its highly cited publications, conferences, technology standards, and professional and various educational activities which will make the students ready for the corporate world!",
+      "logo": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fieee.dbit.in%2Fres%2Fimg%2Flogo.png&f=1&nofb=1&ipt=ac9e01209e0cbdcb5871f26c64fb5bff07594871f31fb6fa8a55f4c12697c0a7&ipo=images",
+      "cover_pic": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fieee.dbit.in%2Fres%2Fimg%2Flogo.png&f=1&nofb=1&ipt=ac9e01209e0cbdcb5871f26c64fb5bff07594871f31fb6fa8a55f4c12697c0a7&ipo=images",
+      "website": "https://ieee.dbit.in/"
+    },
+    {
+      "title": "Social Innovation for Environment Club (SIE)",
+      "Established_in": 2003,
+      "desc": "Amidst the thickly populated concrete jungles of the suburban Kurla, of Mumbai district, DBIT is an oasis of greenery. With a huge football ground and abundant lush green trees it's full of serenity and is a home for a variety of birds. \n\nWith our Don Bosco values the students, faculty of SIE Club pledge to make the campus carbon neutral, create environmental awareness and promote sustainability with sustainable lifestyle using innovative engineering.",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Ethereum-icon-purple.svg/768px-Ethereum-icon-purple.svg.png",
+      "cover_pic": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Ethereum-icon-purple.svg/768px-Ethereum-icon-purple.svg.png",
+      "website": "https://acm.dbit.org/"
+    }
+  ];
 
   try {
-    pool.query(get_featured_events_qry,(error,result) =>{
-      if(error) throw error;
+    pool.query(get_featured_events_qry, (error, result) => {
+      if (error) throw error;
       let Data = JSON.parse(JSON.stringify(result));
       // response.send(Data);
       response.json(
         {
           featured_carousel: Data,
-          student_chapters : student_chap_json,
+          student_chapters: student_chap_json,
         }
       )
     })

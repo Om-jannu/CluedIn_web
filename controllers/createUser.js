@@ -39,7 +39,7 @@ module.exports = {
   post: async (req, res) => {
     // fetching details
     // res.render("views/createUser");
-    console.log(req.body);
+    // console.log(req.body);
 
     var user_fname = req.body.user_fname;
     var user_lname = req.body.user_lname;
