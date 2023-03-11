@@ -1,7 +1,7 @@
 #ignore env variables
 **/.env
 uploads/
-node_modules/
+node_modules/*
 package.json
 //ignore this line
 latest_cluedin-e47b2-46a230e63bad.json
