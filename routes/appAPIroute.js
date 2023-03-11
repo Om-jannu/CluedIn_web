@@ -187,7 +187,7 @@ const storage2 = multer.diskStorage({
     cb(null, Path);
   },
   filename: (req, file, cb) => {
-    cb(null, "studProfile" + "-" + Date.now() + "-" + file.originalname);
+    cb(null, "studProfile" + "-" + req.body.mobno + ".png");
   },
 });
 const uploadStudImg = multer({

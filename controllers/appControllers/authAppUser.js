@@ -5,14 +5,21 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json);
 const jwt = require('jsonwebtoken');
 const { use } = require("../importExcelController");
+const bcrypt = require('bcrypt');
 
 module.exports = {
-  post: (req, res) => {
+  post: async (req, res) => {
     console.log("================= Login route from app =======================");
     // console.log(req.body);
     var usermobno = req.body.usermobno;
     var password = req.body.password;
 
+    // Generate salt
+    const salt = await bcrypt.genSalt(10);
+
+    // Hash password with salt
+    const hashedPassword = await bcrypt.hash(password, salt);
+    // console.log(hashedPassword);
     // Check if username and password are provided
     if (!usermobno || !password) {
       console.log("idhar");
@@ -35,49 +42,54 @@ module.exports = {
       // Check if the password is correct
 
       const user = result[0];
-      // console.log(user);
-      if (user.user_pwd !== password) {
-        return res.status(401).json({ data: null, success: "false", msg: 'Invalid username or password.' });
-      }
-      const token = jwt.sign({ id: user.user_id }, process.env.JWT_SECRET);
-      console.log("jwt token", token);
-
-      // Store the token in the server's database for single user login
-      const updateTokenQuery = `UPDATE cluedin.user_details SET user_token = "${token}" WHERE user_mobno = "${user.user_mobno}";`;
-      pool.query(updateTokenQuery, (err, result) => {
+      // console.log(user.user_pwd);
+      //try
+      bcrypt.compare(password, user.user_pwd, function (err, isMatch) {
         if (err) {
-          console.log(err);
-          return res.status(500).json({ data: null, success: false, msg: 'Internal server error.' });
-        }
-        // console.log(`Token has been stored in the database for user ${usermobno}`);
-      });
-      //local variables to store profile data 
-      let user_id = user.user_id;
-      let user_fname = user.user_fname;
-      let user_lname = user.user_lname;
-      let user_mobno = user.user_mobno;
-      let user_email = user.user_email;
-      let user_branch = user.branch_name;
-      let user_profilePic = user.user_profilePic;
-      // console.log(user_email);
-      return res.status(200).json(
-        {
-          data:
-          {
-            user_id,
-            user_fname,
-            user_lname,
-            user_mobno,
-            user_email,
-            user_branch,
-            user_profilePic,
-            token
-          },
-          success: "true",
-          msg: 'User has been authenticated successfully.'
-        });
+          console.error(err);
+          res.json({ success: false, message: 'Error occurred while comparing passwords' });
+        } else if (!isMatch) {
+          return res.status(401).json({ data: null, success: "false", msg: 'Invalid username or password.' });
+        } else {
+          const token = jwt.sign({ id: user.user_id }, process.env.JWT_SECRET);
+          console.log("jwt token", token);
 
+          // Store the token in the server's database for single user login
+          const updateTokenQuery = `UPDATE cluedin.user_details SET user_token = "${token}" WHERE user_mobno = "${user.user_mobno}";`;
+          pool.query(updateTokenQuery, (err, result) => {
+            if (err) {
+              console.log(err);
+              return res.status(500).json({ data: null, success: false, msg: 'Internal server error.' });
+            }
+            // console.log(`Token has been stored in the database for user ${usermobno}`);
+          });
+          //local variables to store profile data 
+          let user_id = user.user_id;
+          let user_fname = user.user_fname;
+          let user_lname = user.user_lname;
+          let user_mobno = user.user_mobno;
+          let user_email = user.user_email;
+          let user_branch = user.branch_name;
+          let user_profilePic = user.user_profilePic;
+          // console.log(user_email);
+          return res.status(200).json(
+            {
+              data:
+              {
+                user_id,
+                user_fname,
+                user_lname,
+                user_mobno,
+                user_email,
+                user_branch,
+                user_profilePic,
+                token
+              },
+              success: "true",
+              msg: 'User has been authenticated successfully.'
+            });
+        }
+      });
     });
   },
-
 };
