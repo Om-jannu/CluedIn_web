@@ -14,7 +14,8 @@ module.exports = {
       // res.render(Path,{message1 : req.flash('message1')});
 
       //dynamic data for dropdown in create notif form 
-      qry = `SELECT label_id,label_name FROM label_master;SELECT bsd_id,bsd_value FROM BranchStd_Div_Mapping Where bsd_id not in (6,7,8,9,10,14,15,16,17,18,22,23,24,25,26,30,31,32,33,34,35);`
+      qry = `SELECT label_id,label_name FROM label_master where isDisabled = 0 and isDelete = 0;
+              SELECT bsd_id,bsd_value FROM BranchStd_Div_Mapping where isDisabled = 0 and isDelete = 0;`
       pool.query(qry, (err, result) => {
         if (err) {
           throw err;

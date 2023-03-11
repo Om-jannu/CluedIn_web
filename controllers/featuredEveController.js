@@ -7,7 +7,7 @@ var Path = path.join(__dirname, "..", "views", "featured_eve");
 module.exports = {
   get: (req, res) => {
     console.log("-----------------------Inside featured Events Page(/featuredEve)----------------------");
-    var session = req.session;
+    const session = req.session;
     if (session.userid != null) {
       qry = `SELECT sb_id,sb_name FROM student_bodies_master`
       pool.query(qry, (err, result) => {
@@ -24,7 +24,7 @@ module.exports = {
   },
   post: (req, res) => {
     console.log("--------------------------inside post method of /postFeaturedEve route--------------------------")
-    var session = req.session;
+    let session = req.session;
     let { feat_event_title, feat_event_oraganiser, feat_event_redirectUrl } = req.body;
     // let values = [[feat_event_title,imgurl,feat_event_redirectUrl,feat_event_oraganiser,session.userid,todaysDate,1]];
     console.log(feat_event_title, feat_event_oraganiser, feat_event_redirectUrl);
@@ -38,43 +38,54 @@ module.exports = {
     const now = new Date();
     // console.log("dateee",now);
     const indianDate = now.toLocaleDateString('en-IN', options);
-    
+
     console.log(indianDate);
     // const date1 =new Date(new Date().toUTCString());
     // console.log("stack date",date1);
     let imgurl = null;
-    if (req.file) {
+    if (req.file && req.file.filename) {
       // console.log("reqfile ", req.file);
       imgurl = path.join("feat_event_images/" + req.file.filename);
       console.log(imgurl);
     }
     let qry1 = `select count(isFeatured) as featured_count from featured_events where isFeatured = 1;`;
-    pool.query(qry1, (err, result) => {
-      if (err) throw err;
-      let data = JSON.parse(JSON.stringify(result));
-      console.log("qr1" + data);
-      let qry2 = `insert into featured_events (
-        feat_event_name,
-        feat_event_imgUrl,
-        feat_event_redirectUrl,
-        feat_event_organizedBy,
-        feat_event_sender_id,
-        dateOfCreation,
-        isFeatured
-        ) values ?`;
-      values = [feat_event_title, imgurl, feat_event_redirectUrl, feat_event_oraganiser, session.senderid, indianDate, 1]
-      if (data[0].featured_count < 5) {
-        pool.query(qry2, [[values]], (error, result) => {
-          if (error) throw error;
-          req.flash("success", "Event successfully added");
+    try {
+      pool.query(qry1, (err, result) => {
+        if (err) throw err;
+        let data = JSON.parse(JSON.stringify(result));
+        console.log("qr1" + data);
+        let qry2 = `insert into featured_events (
+          feat_event_name,
+          feat_event_imgUrl,
+          feat_event_redirectUrl,
+          feat_event_organizedBy,
+          feat_event_sender_id,
+          dateOfCreation,
+          isFeatured
+          ) values ?`;
+        values = [feat_event_title, imgurl, feat_event_redirectUrl, feat_event_oraganiser, session.senderid, indianDate, 1]
+        if (data[0].featured_count < 5) {
+          try {
+            pool.query(qry2, [[values]], (error, result) => {
+              if (error) throw error;
+              req.flash("success", "Event successfully added");
+              res.redirect('/featuredEvent');
+              console.log("qr2" + result);
+            })
+          } catch (error) {
+            console.log(error);
+          }
+        } else {
+          req.flash("error", "Max Capacity reached please remove an entry");
           res.redirect('/featuredEvent');
-          console.log("qr2" + result);
-        })
-      } else {
-        req.flash("error", "Max Capacity reached please remove an entry");
-        res.redirect('/featuredEvent');
-      }
-    })
+        }
+      })
+    } catch (error) {
+      console.log(error);
+      req.flash("error", "An error occurred while processing your request");
+      res.redirect('/featuredEvent');
+      return;
+    }
 
 
   },
@@ -93,17 +104,17 @@ module.exports = {
     });
   },
 
-  remove:(req,res)=>{
+  remove: (req, res) => {
     console.log("---------------------------inside remove featured event----------------------");
     let feat_event_id = req.query.id
-    console.log("feat id",feat_event_id);
+    console.log("feat id", feat_event_id);
     let qry = `UPDATE featured_events set isFeatured=0 where feat_event_id = ?`
-    pool.query(qry,[feat_event_id],(error,result)=>{
+    pool.query(qry, [feat_event_id], (error, result) => {
       if (error) throw error;
       console.log("event removed from featured section");
       res.json({
-				message : 'Event Removed from featured Section'
-			});
+        message: 'Event Removed from featured Section'
+      });
     })
   }
 }

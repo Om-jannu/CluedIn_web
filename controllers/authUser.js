@@ -8,7 +8,7 @@ module.exports = {
     var usermobno = req.body.userName;
     var pwd = req.body.user_pwd;
     let notAllowedRole = 14;
-    var sq0 = `Select * from user_details where user_mobno = ?`;
+    var sq0 = `Select * from user_details where user_mobno = ? and isDelete = 0 and  isDisabled =0`;
     var sql1 = `Select * from user_details where user_mobno = ? and user_pwd = ? and user_role_id not in (?)`;
     var sql2 = `select role_name from role_master where role_id = ?`;
     pool.query(sq0, [usermobno], (err, result) => {

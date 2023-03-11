@@ -23,14 +23,19 @@ module.exports = {
                 var bsd = data[1];
                 // console.log(ay);
                 //rendering createuser page
-                res.render(BulkUserPath, {
-                    Bulk_errMsg: req.flash("err_message"),
-                    Bulk_successMsg: req.flash("success_message"),
-                    ay: ay,
-                    bsd_data: bsd,
-                    userName: session.user_name,
-                    ProfileUrl: session.userProfileUrl,
-                });
+                try {
+                    res.render(BulkUserPath, {
+                        Bulk_errMsg: req.flash("err_message"),
+                        Bulk_successMsg: req.flash("success_message"),
+                        ay: ay,
+                        bsd_data: bsd,
+                        userName: session.user_name,
+                        ProfileUrl: session.userProfileUrl,
+                    });
+                } catch (error) {
+                    console.error('Error occurred while rendering bulk user create page:', error);
+                    throw new Error('Could not render bulk user create page');
+                }
             });
         } else {
             // console.log("path to createuser:",Path);
@@ -61,7 +66,7 @@ module.exports = {
             // Initialize empty array for duplicate rows
             const duplicateRows = [];
             var values = [];
-            // var studentData = []
+            var faultyData = []
 
             async function runQueries() {
                 for (let i = 0; i < exceldata.length; i++) {
@@ -107,6 +112,19 @@ module.exports = {
                         default:
                             branchvalue = null;
                             break;
+                    }
+                    const email_regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+                    if (!email_regex.test(exceldata[i].user_email)) {
+                        faultyData.push(exceldata[i])
+                        console.log(`Invalid email: ${exceldata[i].user_email}`);
+                        return;
+                    }
+                    // Validate phone number
+                    const phone_regex = /^\d{10}$/;
+                    if (!phone_regex.test(exceldata[i].user_mobno)) {
+                        faultyData.push(exceldata[i])
+                        console.log(`Invalid phone number: ${row.phone}`);
+                        return;
                     }
                     value = [
                         exceldata[i].user_fname,
@@ -195,6 +213,7 @@ module.exports = {
             }
             await runQueries();
             console.log("Duplicate entries found:\n", duplicateRows);
+            console.log("Faulty entries found:\n", faultyData);
             // console.log(duplicateRows);
 
             if (duplicateRows.length > 0) {
@@ -208,6 +227,19 @@ module.exports = {
                 req.flash("err_message", `Can not create user acc for the student/s - ${duplicatenamesString} `);
                 console.log('Duplicate entries found:');
                 console.log(duplicateRows);
+                res.redirect("/bulkUserCreate");
+            }
+            if (faultyData.length > 0) {
+                // Return error message and duplicate rows array
+                let faultyUserName = []
+                for (let j = 0; j < faultyData.length; j++) {
+                    faultyUserName.push(faultyData[j].user_fname);
+                }
+                const faultynamesString = faultyUserName.join(', ');
+                console.log("names of faulty users :", faultynamesString);
+                req.flash("err_message", `Can not create user acc for the student/s - ${faultynamesString} . Please check the format of the mobile number and email `);
+                console.log('Faulty entries found:');
+                console.log(faultyData);
                 res.redirect("/bulkUserCreate");
             }
             else {
@@ -227,4 +259,3 @@ module.exports = {
     }
 }
 
-// TODO validate the excel sheet fields 

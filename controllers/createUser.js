@@ -3,37 +3,41 @@ var flash = require("connect-flash");
 const session = require("express-session");
 const bcrypt = require('bcrypt');
 module.exports = {
-  get:function (request, response) {
+  get: function (request, response) {
     // console.log('create user')
-    console.log("================Create user page========================");
-    let session = request.session;
-  
-    if (session.userid) {
-      //for dropdown options of bulk creation
-      qry = `SELECT ay_id,ay_name FROM academicyear_master;SELECT bsd_id,bsd_value FROM BranchStd_Div_Mapping Where bsd_id not in (6,7,8,9,10,14,15,16,17,18,22,23,24,25,26,30,31,32,33,34,35);`;
-      pool.query(qry, (err, result) => {
-        if (err) {
-          throw err;
-        }
-        var data = JSON.parse(JSON.stringify(result));
-        var ay = data[0];
-        var bsd = data[1];
-        // console.log(ay);
-        //rendering createuser page
-        response.render("createUser", {
-          message: request.flash("message"),
-          Bulk_errMsg: request.flash("err_message"),
-          Bulk_successMsg:request.flash("success_message"),
-          ay: ay,
-          bsd_data: bsd,
-          userName: session.user_name,
-          ProfileUrl: session.userProfileUrl,
+    try {
+      console.log("================Create user page========================");
+      let session = request.session;
+
+      if (session.userid) {
+        //for dropdown options of bulk creation
+        qry = `SELECT ay_id,ay_name FROM academicyear_master;SELECT bsd_id,bsd_value FROM BranchStd_Div_Mapping;`;
+        pool.query(qry, (err, result) => {
+          if (err) {
+            throw err;
+          }
+          var data = JSON.parse(JSON.stringify(result));
+          var ay = data[0];
+          var bsd = data[1];
+          // console.log(ay);
+          //rendering createuser page
+          response.render("createUser", {
+            message: request.flash("message"),
+            Bulk_errMsg: request.flash("err_message"),
+            Bulk_successMsg: request.flash("success_message"),
+            ay: ay,
+            bsd_data: bsd,
+            userName: session.user_name,
+            ProfileUrl: session.userProfileUrl,
+          });
         });
-      });
-    } else {
-      var Path = path.join(__dirname, "..", "views", "login");
-      // console.log("path to createuser:",Path);
-      response.redirect("/");
+      } else {
+        var Path = path.join(__dirname, "..", "views", "login");
+        // console.log("path to createuser:",Path);
+        response.redirect("/");
+      }
+    } catch (error) {
+      console.log(error);
     }
   },
   post: async (req, res) => {
@@ -52,28 +56,17 @@ module.exports = {
     var user_addr = req.body.user_addr;
     var user_pincode = req.body.user_pincode;
 
-    //hashing password
-    // const saltRounds = 10;
-    // bcrypt.hash(user_pwd, saltRounds, function(err, hash) {
-    //   if (err) {
-    //     console.error(err);
-    //   } else {
-    //     user_pwd = hash
-    //     console.log(user_pwd); // this is the hashed password that you can store in your database
-    //   }
-    // });
-    //try 
     try {
       // Generate salt
       const salt = await bcrypt.genSalt(10);
-  
+
       // Hash password with salt
       const hashedPassword = await bcrypt.hash(user_pwd, salt);
-  
+
       // Store username and hashed password in database
       // const query = `INSERT INTO users (username, password) VALUES (?, ?)`;
       var sql =
-      "INSERT INTO user_details (user_fname,user_lname,user_gender,user_email,user_mobno,user_addr,user_pincode,user_pwd,user_role_id,user_department) VALUES ?";
+        "INSERT INTO user_details (user_fname,user_lname,user_gender,user_email,user_mobno,user_addr,user_pincode,user_pwd,user_role_id,user_department) VALUES ?";
       // const values = [username, hashedPassword];
       var values = [
         [
@@ -89,7 +82,7 @@ module.exports = {
           user_dept,
         ],
       ];
-  
+
       pool.query(sql, [values], (err, result) => {
         if (err) console.log(err);
         console.log("data inserted into user_details finally!!!");
