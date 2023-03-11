@@ -122,9 +122,9 @@ router.get("/appEvent", (req, res) => {
   qry1 =
     `SELECT el_name FROM events_label_master;
   SELECT sb_name FROM student_bodies_master;
-  SELECT  t1.event_id,t2.user_fname,t2.user_lname,t5.role_name,t3.sb_name, t2.user_profilePic,
-          t1.event_title,t4.el_name,t1.event_desc,t1.event_image_url,t1.event_attachment_url,
-          t1.event_registration_url,t1.event_fees,t1.dateOfCreation,t1.dateOfExpiration   
+  SELECT  t1.event_id,t2.user_fname as sender_fname,t2.user_lname as sender_lname,t5.role_name as senderRole,t3.sb_name as organizedBy, t2.user_profilePic as senderProfilePic,
+          t1.event_title,t4.el_name as event_label,t1.event_desc,t1.event_image_url,t1.event_attachment_url,
+          t1.event_registration_url as registration_link,t1.event_fees as registration_fee,t1.dateOfCreation,t1.dateOfExpiration as   dateOfExpiration
   FROM
           events t1,   
           user_details t2,    
