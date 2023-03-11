@@ -110,7 +110,9 @@ app.use("/postevent", homeRoute);
 app.use("/createUser", homeRoute);
 app.use("/listuser", homeRoute);
 // app.use("/import-excel", importExcel);
-app.use("updateuser", homeRoute);
+app.use("/updateuser", homeRoute);
+//bulk user Creation
+app.use("/bulkUserCreate", homeRoute);
 
 //role master
 app.use("/dbapi", dbApiRoute);
@@ -155,16 +157,6 @@ app.use((error, req, res, next) => {
 });
 
 
-
-
-/* use any excel read package
-0) Get ay_id, sem_id, bsd_id from the html form and store in local variable.
-1) Check no. of rows in the excel file
-2) for each row 
-  a. insert into user_details
-  b. You will get user_id from the resultset (aka result).
-  c. insert into table aka student mapping table 
-*/
 app.use("/import-excel",homeRoute);
 
 

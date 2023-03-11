@@ -128,6 +128,7 @@ router.post("/submitUser", createUser.post);
 router.get("/createuser", createUser.get);
 
 //bulk user 
+router.get('/bulkUserCreate',bulkUserCreate.get);
 //import excel
 var BulkUserPath = path.join(__dirname,'..', "uploads","users");
 

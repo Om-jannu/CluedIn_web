@@ -18,6 +18,26 @@ module.exports = {
         });
       });
     }
+    //for listing students in bulkuser page 
+    if (action == "fetch_student") {
+      // console.log("hiii action = fetch");
+      var qry =
+       ` SELECT t2.user_id,t1.user_fname,t1.user_lname,t1.user_mobno,t1.user_email,t1.user_gender,
+        t3.bsd_value as user_class,t1.user_addr,t1.user_pincode
+         FROM user_details t1, Student_branch_standard_div_ay_rollno_sem_mapping t2 , BranchStd_Div_Mapping t3
+         WHERE  t2.user_id = t1.user_id and t1.user_role_id = 14 and t2.bsd_id = t3.bsd_id 
+         and t1.isDisabled = 0 and t1.isDelete=0`;
+      pool.query(qry, function (error, data) {
+        if (error) {
+          throw error;
+        }
+        // console.log("userdata",data);
+        res.json({
+          data: data,
+        });
+      });
+    }
+
     if (action == "fetch_single") {
       console.log("hiii fetch_single");
       var id = req.body.id;
