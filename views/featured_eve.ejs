@@ -94,10 +94,12 @@
                                                     </div>
                                                     <% } %>
                                                         <% if(error.length>0){ %>
-                                                            <span id="successMessage"><div class="alert alert-danger">
-                                                                <%= error %>
-                                                            </div></span> 
-                                                        <% } %>
+                                                            <span id="successMessage">
+                                                                <div class="alert alert-danger">
+                                                                    <%= error %>
+                                                                </div>
+                                                            </span>
+                                                            <% } %>
                                             </span>
                                             <div class="tab-pane fade active show" id="create-featured-eve"
                                                 role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
@@ -141,7 +143,7 @@
                                                                         <input type="file" name="feat_event_img"
                                                                             class="form-control"
                                                                             accept=".jpep,.png,.jpg" id="feat_event_Img"
-                                                                            required>
+                                                                            onchange="validateImage(this)" required>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -210,6 +212,29 @@
                                     </div>
                                 </div>
                             </div>
+                    </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="error-modal" tabindex="-1" role="dialog"
+                        aria-labelledby="error-modal-label" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="error-modal-label">Validation Error</h5>
+                                    <button type="button" class="Close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="alert alert-warning">
+                                        <p id="error-message"></p>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary Close"
+                                        data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <!-- Main Footer -->
                     <footer class="main-footer">
@@ -296,7 +321,7 @@
                 $(document).on('click', '.remove', function () {
 
                     var id = $(this).data('id');
-                    console.log("id",id);
+                    console.log("id", id);
 
                     if (confirm("Are you sure you want to remove this event from featured section?")) {
                         console.log("inside if");
@@ -318,6 +343,40 @@
                 });
             })
 
+        </script>
+        <script>
+            function validateImage(input) {
+                // Get the file object
+                var file = input.files[0];
+
+                // Create a new image element
+                var img = new Image();
+
+                // Set the src attribute to the file URL
+                img.src = URL.createObjectURL(file);
+
+                // Wait for the image to load
+                img.onload = function () {
+                    // Check the aspect ratio
+                    console.log("inside image validation");
+                    var aspectRatio = img.width / img.height;
+                    if (aspectRatio !== 2.0) {
+                        // If the aspect ratio is not 2.0, display an error message
+                        // alert("Please upload an image with an aspect ratio of 2:1.");
+                        var errorMessage = "Please upload an image with an aspect ratio of 2:1";
+                        document.getElementById("error-message").innerHTML = errorMessage;
+                        $('#error-modal').modal('show');
+                        // input.value = null;
+                        // Clear the file input field
+                        input.value = null;
+                    }
+                };
+            }
+        </script>
+        <script>
+            $('.Close').on('click', function () {
+                $('#error-modal').modal('hide');
+            });
         </script>
 
     </body>
