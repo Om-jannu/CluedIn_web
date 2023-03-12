@@ -225,12 +225,12 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <div class="alert alert-warning">
+                                    <div class="alert alert-danger">
                                         <p id="error-message"></p>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary Close"
+                                    <button type="button" class="btn btn-primary Close"
                                         data-dismiss="modal">Close</button>
                                 </div>
                             </div>
@@ -360,7 +360,8 @@
                     // Check the aspect ratio
                     console.log("inside image validation");
                     var aspectRatio = img.width / img.height;
-                    if (aspectRatio !== 2.0) {
+                    console.log("ratio",aspectRatio);
+                    if (aspectRatio<1.7 || aspectRatio>2.1) {
                         // If the aspect ratio is not 2.0, display an error message
                         // alert("Please upload an image with an aspect ratio of 2:1.");
                         var errorMessage = "Please upload an image with an aspect ratio of 2:1";
