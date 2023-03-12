@@ -187,7 +187,7 @@ const storage2 = multer.diskStorage({
     cb(null, Path);
   },
   filename: (req, file, cb) => {
-    cb(null, "studProfile" + "-" +Date.now() + file.originalname);
+    cb(null, "studProfile" + "-" + Date.now() + file.originalname);
   },
 });
 const uploadStudImg = multer({
@@ -267,7 +267,7 @@ router.get('/homeapi', authenticateToken, (request, response) => {
       "desc": "Amidst the thickly populated concrete jungles of the suburban Kurla, of Mumbai district, DBIT is an oasis of greenery. With a huge football ground and abundant lush green trees it's full of serenity and is a home for a variety of birds. \n\nWith our Don Bosco values the students, faculty of SIE Club pledge to make the campus carbon neutral, create environmental awareness and promote sustainability with sustainable lifestyle using innovative engineering.",
       "logo": "https://drive.google.com/uc?id=1BRFcckx15r6ZeKFj-MqTs_-YWdHH29Ix",
       "cover_pic": "https://drive.google.com/uc?id=1BRFcckx15r6ZeKFj-MqTs_-YWdHH29Ix",
-      "website": "https://acm.dbit.org/"
+      "website": "https://sie.dbit.in/"
     },
     {
       "title": "Institution of Electronics and Telecommunication Engineers (IETE)",
@@ -275,7 +275,7 @@ router.get('/homeapi', authenticateToken, (request, response) => {
       "desc": "The IETE society at Don Bosco Institute of Technology is a professional organisation that creates, defines, and evaluates standards in electronics and computer science. \n\nIts goal statement is to promote technical innovation and excellence for the benefit of humanity. \n\nIETE and its members inspire a community through its highly cited publications, conferences, technology standards, and professional and various educational activities which will make the students ready for the corporate world!",
       "logo": "https://drive.google.com/uc?id=1KKO1zUOJLtl8mEYon58tmYpAVyfL2Jch",
       "cover_pic": "https://drive.google.com/uc?id=1KKO1zUOJLtl8mEYon58tmYpAVyfL2Jch",
-      "website": "https://ieee.dbit.in/"
+      "website": "https://iete.dbit.in/"
     }
   ];
 
