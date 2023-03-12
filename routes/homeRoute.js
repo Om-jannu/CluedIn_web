@@ -40,6 +40,8 @@ const resetPasswordController = require("../controllers/resetPasswordController"
 const featuredEveController = require("../controllers/featuredEveController");
 const targetUserCount = require("../controllers/targetStudentCount")
 const bulkUserCreate = require('../controllers/bulkUserCreation')
+
+const tryCode = require('../controllers/try')
 // firebaseAdmin.initializeApp({
 //   credential: firebaseAdmin.credential.cert(require("../cluedInOfficialAndroid.json")),
 // });
@@ -177,6 +179,8 @@ const uploadNotif = multer({
 });
 
 router.post("/sendNotif", uploadNotif.fields([{name:'notif-img',maxCount:1},{name:'notif-attachment',maxCount:1}]),notifController.post);
+  
+
 
 router.post("/api/signup", cluedinAppSignupController.post);
 router.post("/api/signin", cluedinAppSigninController.post);

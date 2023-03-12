@@ -90,10 +90,23 @@
                                                         </div>
 
                                                         <% } %>
+                                                            <% if(err_message1.length>0){ %>
+
+
+                                                                <div class="alert alert-danger alert-dismissible fade show"
+                                                                    role="alert">
+                                                                    <%= err_message1 %>
+                                                                        <button type="button" class="close"
+                                                                            data-dismiss="alert" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                </div>
+
+                                                                <% } %>
                                                 </span>
                                                 <!-- creating form -->
                                                 <form id="quickform" name="notif-form" method="post" action="/sendNotif"
-                                                    enctype="multipart/form-data" onsubmit="return Notifvalidate()">
+                                                    enctype="multipart/form-data">
                                                     <!--action looks for index.html -->
                                                     <div class="card-body">
                                                         <div class="form-group">
@@ -170,8 +183,7 @@
                                                             <label>Gender</label>
                                                             <select class="form-control " style="width: 15rem;"
                                                                 tabindex="-1" id="slct2" aria-hidden="true"
-                                                                name="user_gender" 
-                                                                placeholder="select Gender" required>
+                                                                name="user_gender" placeholder="select Gender" required>
                                                                 <option selected="selected" value="0">
                                                                     All
                                                                 </option>
@@ -296,7 +308,28 @@
                                     </div>
 
                                 </div>
-
+                                <!-- Modal-->
+                                <div class="modal" id="exampleModal" tabindex="-1" role="dialog"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Class has 0 count</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Please select a class with a non-zero count.
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
 
                                 <!-- Main Footer -->
@@ -399,7 +432,7 @@
                             //     }, 3000);
                             // });
                         </script>
-                        //
+
                         <script>
                         //     const dropdown = document.querySelector('#slct1');
                         //     const genderDropdown = document.querySelector('#slct2')
@@ -481,12 +514,12 @@
                         //     //         });
                         //     //     }
                         //     // })
-                        // </script>
+                        </script>
 
                         <script>
                             const classDropdown = document.querySelector('#slct1');
                             const genderDropdown = document.querySelector('#slct2');
-                            
+
                             const targetAudienceSpan = document.querySelector('#targetAudience');
 
                             classDropdown.addEventListener('change', updateCount);
@@ -494,11 +527,11 @@
 
                             function updateCount() {
                                 // Retrieve selected classes and gender
-                                console.log("genderdrop",genderDropdown);
+                                console.log("genderdrop", genderDropdown);
                                 const selectedClasses = Array.from(classDropdown.selectedOptions).map(option => option.value);
-                                console.log("logg",selectedClasses);
+                                console.log("logg", selectedClasses);
                                 const selectedGender = genderDropdown.value;
-                                console.log("gender",selectedGender);
+                                console.log("gender", selectedGender);
 
                                 // Use fetch to retrieve count of students for selected classes and gender
                                 if (selectedClasses.length > 0 && selectedGender.length > 0) {
@@ -508,7 +541,32 @@
                                             // Update count display
                                             targetAudienceSpan.textContent = data.totalStudents;
                                         });
+                                } else {
+                                    // If no options are selected, display a count of 0
+                                    targetAudienceSpan.textContent = '0';
                                 }
+                            }
+
+                            const form = document.querySelector('#quickform');
+                            // const targetAudienceSpan = document.querySelector('#targetAudience');
+
+                            form.addEventListener('submit', (event) => {
+                                const targetAudienceCount = parseInt(targetAudienceSpan.textContent);
+                                if (targetAudienceCount === 0) {
+                                    event.preventDefault();
+                                    showModal('Class has 0 count');
+                                }
+                            });
+
+                            function showModal(message) {
+                                const modalBody = document.querySelector('.modal-body');
+                                modalBody.textContent = message;
+
+                                const modal = new bootstrap.Modal(document.querySelector('#exampleModal'), {
+                                    keyboard: false,
+                                    backdrop: 'static'
+                                });
+                                modal.show();
                             }
 
                         </script>
