@@ -33,17 +33,19 @@ module.exports = {
         var dateOfCreation;
         let getUserDOCQry = `SELECT * FROM cluedin.user_details where user_id=?;`;
 
-        // Generate salt
-        const salt = await bcrypt.genSalt(10);
 
-        // Hash password with salt
-        const hashedPassword = await bcrypt.hash(password, salt);
+
+
 
         if (password != confirmPassword) {
             req.flash('err', "Paswords don't match");
-            res.redirect(`/reset-password/${id}/${token}`);
+            return res.redirect(`/reset-password/${id}/${token}`);
         }
         else {
+            // Generate salt
+            const salt = await bcrypt.genSalt(10);
+            // Hash password with salt
+            const hashedPassword = await bcrypt.hash(password, salt);
             pool.query(getUserDOCQry, [id], (err, result) => {
                 if (err) throw err;
                 let data = JSON.parse(JSON.stringify(result));
