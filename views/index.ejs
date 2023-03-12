@@ -169,8 +169,9 @@
                                                         <div class="form-group">
                                                             <label>Gender</label>
                                                             <select class="form-control " style="width: 15rem;"
-                                                                tabindex="-1" id="slct3" aria-hidden="true"
-                                                                name="user_gender" placeholder="select Gender" required>
+                                                                tabindex="-1" id="slct2" aria-hidden="true"
+                                                                name="user_gender" 
+                                                                placeholder="select Gender" required>
                                                                 <option selected="selected" value="0">
                                                                     All
                                                                 </option>
@@ -398,86 +399,118 @@
                             //     }, 3000);
                             // });
                         </script>
+                        //
                         <script>
-                            const dropdown = document.querySelector('#slct1');
-                            const selectedOptions = [];
+                        //     const dropdown = document.querySelector('#slct1');
+                        //     const genderDropdown = document.querySelector('#slct2')
+                        //     const selectedOptions = [];
+                        //     const targetAudienceSpan = document.querySelector('#targetAudience');
+
+                        //     dropdown.addEventListener('change', (event) => {
+
+                        //         // Update count of students for selected classes
+                        //         // updateCount(selectedOptions);
+                        //         const selectedOptions = Array.from(event.target.selectedOptions);
+                        //         const selectedClasses = selectedOptions.map(option => option.value);
+                        //         console.log("slctoptions", selectedClasses);
+                        //         fetch(`/targetCount?classes=${selectedClasses.join(',')}`)
+                        //             .then(response => response.json())
+                        //             .then(data => {
+                        //                 // Extract count of students from response and store in counts object
+                        //                 console.log("fetchdata", data);
+                        //                 // counts[classCode] = data.count;
+
+                        //                 // Update count display
+                        //                 targetAudienceSpan.textContent = data.totalStudents;
+                        //             });
+                        //     });
+                        //     function updateCount(selectedOptions) {
+                        //         // Retrieve count of students for each selected class
+                        //         const counts = {};
+
+                        //         const bsd_id = selectedOptions;
+                        //         // Use AJAX or fetch to retrieve count of students for each class
+                        //         // and store it in the counts object
+                        //         fetch(`/targetCount??classes=${selectedClasses.join(',')}`)
+                        //             .then(response => response.json())
+                        //             .then(data => {
+                        //                 // Extract count of students from response and store in counts object
+                        //                 console.log("fetchdata", data);
+                        //                 counts[classCode] = data.count;
+
+                        //                 // Update count display
+                        //                 const countDisplay = document.querySelector('#targetAudience');
+                        //                 countDisplay.innerHTML = '';
+                        //                 for (let classCode in counts) {
+                        //                     countDisplay.innerHTML += `${classCode}: ${counts[classCode]}<br>`;
+                        //                 }
+                        //             });
+
+                        //         console.log("count", selectedOptions);
+
+                        //         // Update count display
+                        //         const countDisplay = document.querySelector('#count-display');
+                        //         countDisplay.innerHTML = '';
+                        //         for (let classCode in counts) {
+                        //             countDisplay.innerHTML += `${classCode}: ${counts[classCode]}<br>`;
+                        //         }
+                        //     }
+                        //     // $(document).ready(function () {
+
+                        //     //     load_data();
+                        //     //     function load_data() {
+                        //     //         console.log("data");
+                        //     //         $.ajax({
+                        //     //             url: "/targetCount",
+                        //     //             method: "POST",
+                        //     //             data: { action: 'fetch' },
+                        //     //             dataType: "JSON",
+                        //     //             success: function (data) {
+                        //     //                 console.log("dataaaa:", data);
+                        //     //                 var html = '';
+
+                        //     //                 if (data.data.length > 0) {
+                        //     //                     html += `  1000                                       `;
+                        //     //                 }
+
+
+                        //     //                 $('targetAudience').html(html);
+                        //     //                 // console.log(html);
+
+                        //     //             }
+                        //     //         });
+                        //     //     }
+                        //     // })
+                        // </script>
+
+                        <script>
+                            const classDropdown = document.querySelector('#slct1');
+                            const genderDropdown = document.querySelector('#slct2');
+                            
                             const targetAudienceSpan = document.querySelector('#targetAudience');
 
-                            dropdown.addEventListener('change', (event) => {
+                            classDropdown.addEventListener('change', updateCount);
+                            genderDropdown.addEventListener('change', updateCount);
 
-                                // Update count of students for selected classes
-                                // updateCount(selectedOptions);
-                                const selectedOptions = Array.from(event.target.selectedOptions);
-                                const selectedClasses = selectedOptions.map(option => option.value);
-                                console.log("slctoptions", selectedClasses);
-                                fetch(`/targetCount?classes=${selectedClasses.join(',')}`)
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        // Extract count of students from response and store in counts object
-                                        console.log("fetchdata", data);
-                                        // counts[classCode] = data.count;
+                            function updateCount() {
+                                // Retrieve selected classes and gender
+                                console.log("genderdrop",genderDropdown);
+                                const selectedClasses = Array.from(classDropdown.selectedOptions).map(option => option.value);
+                                console.log("logg",selectedClasses);
+                                const selectedGender = genderDropdown.value;
+                                console.log("gender",selectedGender);
 
-                                        // Update count display
-                                        targetAudienceSpan.textContent = data.totalStudents;
-                                    });
-                            });
-                            function updateCount(selectedOptions) {
-                                // Retrieve count of students for each selected class
-                                const counts = {};
-
-                                const bsd_id = selectedOptions;
-                                // Use AJAX or fetch to retrieve count of students for each class
-                                // and store it in the counts object
-                                fetch(`/targetCount??classes=${selectedClasses.join(',')}`)
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        // Extract count of students from response and store in counts object
-                                        console.log("fetchdata", data);
-                                        counts[classCode] = data.count;
-
-                                        // Update count display
-                                        const countDisplay = document.querySelector('#targetAudience');
-                                        countDisplay.innerHTML = '';
-                                        for (let classCode in counts) {
-                                            countDisplay.innerHTML += `${classCode}: ${counts[classCode]}<br>`;
-                                        }
-                                    });
-
-                                console.log("count", selectedOptions);
-
-                                // Update count display
-                                const countDisplay = document.querySelector('#count-display');
-                                countDisplay.innerHTML = '';
-                                for (let classCode in counts) {
-                                    countDisplay.innerHTML += `${classCode}: ${counts[classCode]}<br>`;
+                                // Use fetch to retrieve count of students for selected classes and gender
+                                if (selectedClasses.length > 0 && selectedGender.length > 0) {
+                                    fetch(`/targetCount?classes=${selectedClasses.join(',')}&genderCode=${selectedGender}`)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            // Update count display
+                                            targetAudienceSpan.textContent = data.totalStudents;
+                                        });
                                 }
                             }
-                            // $(document).ready(function () {
 
-                            //     load_data();
-                            //     function load_data() {
-                            //         console.log("data");
-                            //         $.ajax({
-                            //             url: "/targetCount",
-                            //             method: "POST",
-                            //             data: { action: 'fetch' },
-                            //             dataType: "JSON",
-                            //             success: function (data) {
-                            //                 console.log("dataaaa:", data);
-                            //                 var html = '';
-
-                            //                 if (data.data.length > 0) {
-                            //                     html += `  1000                                       `;
-                            //                 }
-
-
-                            //                 $('targetAudience').html(html);
-                            //                 // console.log(html);
-
-                            //             }
-                            //         });
-                            //     }
-                            // })
                         </script>
 
                         <!-- function for sub category in notif form  -->

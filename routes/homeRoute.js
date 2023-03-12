@@ -13,7 +13,7 @@ const { s3Uploadv2, s3Uploadv3 } = require("../models/s3Service");
 const router = express.Router();
 const firebaseAdmin = require("firebase-admin");
 const dashboard = require("../controllers/dashboardController");
-const signUp = require("../controllers/signUpController");
+const signUp = require("../controllers/signUpController"); 
 
 const dbApiController = require("../controllers/dbApiController");
 
