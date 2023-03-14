@@ -26,6 +26,7 @@ module.exports = {
                 try {
                     res.render(BulkUserPath, {
                         Bulk_errMsg: req.flash("err_message"),
+                        Bulk_errMsg1: req.flash("err_message1"),
                         Bulk_successMsg: req.flash("success_message"),
                         ay: ay,
                         bsd_data: bsd,
@@ -224,10 +225,10 @@ module.exports = {
                 }
                 const duplicatenamesString = duplicateUserName.join(', ');
                 console.log("names of duplicate users :", duplicatenamesString);
-                req.flash("err_message", `Can not create user acc for the student/s - ${duplicatenamesString} `);
+                req.flash("err_message", `Can not create user acc for the student/s - ${duplicatenamesString} as the user already exists in the system`);
                 console.log('Duplicate entries found:');
                 console.log(duplicateRows);
-                res.redirect("/bulkUserCreate");
+                // res.redirect("/bulkUserCreate");
             }
             if (faultyData.length > 0) {
                 // Return error message and duplicate rows array
@@ -237,19 +238,23 @@ module.exports = {
                 }
                 const faultynamesString = faultyUserName.join(', ');
                 console.log("names of faulty users :", faultynamesString);
-                req.flash("err_message", `Can not create user acc for the student/s - ${faultynamesString} . Please check the format of the mobile number and email `);
+                req.flash("err_message1", `Can not create user acc for the student/s - ${faultynamesString} . Please check the format of the mobile number and email `);
                 console.log('Faulty entries found:');
                 console.log(faultyData);
-                res.redirect("/bulkUserCreate");
+                // res.redirect("/bulkUserCreate");
             }
             else {
                 // Return success message
                 console.log('Data inserted successfully.');
                 console.log(req.file.filename);
                 req.flash("success_message", `Users were created successfully`);
-                res.redirect("/bulkUserCreate");
             }
+            // if (duplicateRows.length == 0 && faultyData.length == 0) {
+                
+            // }
             values = [];
+            res.redirect("/bulkUserCreate");
+            
             // console.log("val:", values);
         } catch (error) {
             console.log(error);
@@ -258,4 +263,3 @@ module.exports = {
         }
     }
 }
-

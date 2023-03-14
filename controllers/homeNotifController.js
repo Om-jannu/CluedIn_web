@@ -30,7 +30,7 @@ module.exports = {
         var gender = req.body.user_gender;
         let TARGETCLASS = req.body.target_class; //this is for user status table
 
-        console.log("class", TARGETCLASS);
+        // console.log("class", TARGETCLASS);
         // logic to store img and attachment urls 
         let imgurl = req.files['notif-img'] ? "images/" + req.files['notif-img'][0].filename : null;
         let attachment_url = req.files['notif-attachment'] ? "file/" + req.files['notif-attachment'][0].filename : null;
@@ -109,11 +109,9 @@ module.exports = {
               body: req.body.notif_desc,
               sound: "default",
               click_action: "FLUTTER_NOTIFICATION_CLICK",
-              screen: "HomePage",
             },
             data: {
-              data1: "data1",
-              data2: "data2",
+              screen: "notification",
             },
           };
           const options = {
@@ -152,6 +150,9 @@ module.exports = {
             let bsd_arr = target_class;
 
             console.log("bsd_arr", bsd_arr);
+            if (bsd_arr[0]===0) {
+              console.log("this notification is for all users");
+            }
             qry = `INSERT INTO notification_message_targetlist (nm_id,bsd_id,nm_gender,dateOfCreation) values ?`;
             const valuesArray = generateValuesArray(nm_id, bsd_arr, gender, date);
 
