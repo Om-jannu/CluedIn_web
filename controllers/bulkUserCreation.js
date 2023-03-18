@@ -32,6 +32,7 @@ module.exports = {
                         bsd_data: bsd,
                         userName: session.user_name,
                         ProfileUrl: session.userProfileUrl,
+                        userRole: session.userRoleId
                     });
                 } catch (error) {
                     console.error('Error occurred while rendering bulk user create page:', error);
@@ -250,11 +251,11 @@ module.exports = {
                 req.flash("success_message", `Users were created successfully`);
             }
             // if (duplicateRows.length == 0 && faultyData.length == 0) {
-                
+
             // }
             values = [];
             res.redirect("/bulkUserCreate");
-            
+
             // console.log("val:", values);
         } catch (error) {
             console.log(error);

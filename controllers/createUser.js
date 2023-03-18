@@ -29,6 +29,7 @@ module.exports = {
             bsd_data: bsd,
             userName: session.user_name,
             ProfileUrl: session.userProfileUrl,
+            userRole:session.userRoleId
           });
         });
       } else {

@@ -57,6 +57,7 @@ router.post("/auth", authUser.post);
 
 //dashboard
 router.get("/dashboard", dashboard.get);
+router.get("/notification",notifController.get)
 router.get("/signup", signUp.get);
 router.post("/signup", signUp.post);
 // router.get("/signupotp", signUp.otp);

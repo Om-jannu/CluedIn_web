@@ -31,7 +31,8 @@ module.exports = {
             ProfileUrl: session.userProfileUrl,
             event_organiser: organiser,
             event_label: label,
-            eventMsg: req.flash('eventMsg')
+            eventMsg: req.flash('eventMsg'),
+            userRole:session.userRoleId
           });
         })
       } catch (error) {

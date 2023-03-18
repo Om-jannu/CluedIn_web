@@ -17,7 +17,8 @@ module.exports = {
           ProfileUrl: session.userProfileUrl,
           event_organiser: JSON.parse(JSON.stringify(result)),
           success: req.flash('success'),
-          error: req.flash("error")
+          error: req.flash("error"),
+          userRole: session.userRoleId
         });
       })
     } else res.redirect("/");
