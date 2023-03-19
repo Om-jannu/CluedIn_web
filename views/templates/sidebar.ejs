@@ -11,18 +11,20 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <a href="/profile"><img src="http://cluedin.creast.in:5000/<%= ProfileUrl %>" class="img-circle elevation-2" alt="User Image"></a>
+                <a href="/profile"><img src="http://cluedin.creast.in:5000/<%= ProfileUrl %>"
+                        class="img-circle elevation-2" alt="User Image"></a>
             </div>
             <div class="info">
-                <a href="/profile" class="d-block"><%= userName %></a>
+                <a href="/profile" class="d-block">
+                    <%= userName %>
+                </a>
             </div>
         </div>
 
         <!-- SidebarSearch Form -->
         <div class="form-inline">
             <div class="input-group" data-widget="sidebar-search">
-                <input class="form-control form-control-sidebar" type="search" placeholder="Search"
-                    aria-label="Search">
+                <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
                 <div class="input-group-append">
                     <button class="btn btn-sidebar">
                         <i class="fas fa-search fa-fw"></i>
@@ -33,132 +35,147 @@
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
-                data-accordion="false">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
                 with font-awesome or any other icon font library -->
 
-                <li class="nav-item">
-                    <a href="/notification" class="nav-link">
-                        <i class="nav-icon fas fa-solid fa-bell"></i>
-                        <p>
-                            Notification Manager
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/event" class="nav-link">
-                        <i class="nav-icon fas fa-solid fa-calendar"></i>
-                        <p>
-                            Events
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/featuredEvent" class="nav-link">
-                        <i class="nav-icon fas fa-solid fa-calendar"></i>
-                        <p>
-                            Featured Events
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/createUser" class="nav-link">
-                        <i class="nav-icon fas fa-user-plus"></i>
-                        <p>
-                            Create User
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/bulkUserCreate" class="nav-link">
-                        <i class="nav-icon fas fa-solid fa-calendar"></i>
-                        <p>
-                            Bulk User Create
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>
-                            Chapters
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>CSI</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>ACM</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>IETE</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>IEEE</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>MadGears</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Domain Maths Club</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Physics Club</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>E-Cell</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>SIE Club</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="" class="nav-link">
-                        <i class="nav-icon fas fa-user-check"></i>
-                        <p>
-                            Roles
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/logout" class="nav-link">
-                        <i class="nav-icon fas fa-regular fa-arrow-right"></i>
-                        <p>
-                            Logout
-                        </p>
-                    </a>
-                </li>
+                <% if (userRole !=11 && userRole !=14 ) { %>
+                    <li class="nav-item">
+                        <a href="/notification" class="nav-link">
+                            <i class="nav-icon fas fa-solid fa-bell"></i>
+                            <p>
+                                Notification Manager
+                            </p>
+                        </a>
+                    </li>
+                    <% } %>
+
+                        <% if (userRole===4 || userRole===3 || userRole===13 || userRole===10 || userRole===11 ) { %>
+                            <li class="nav-item">
+                                <a href="/event" class="nav-link">
+                                    <i class="nav-icon fas fa-solid fa-calendar"></i>
+                                    <p>
+                                        Events
+                                    </p>
+                                </a>
+                            </li>
+                            <% } %>
+
+
+                                <% if (userRole===1) { %>
+                                    <li class="nav-item">
+                                        <a href="/featuredEvent" class="nav-link">
+                                            <i class="nav-icon fas fa-solid fa-calendar"></i>
+                                            <p>
+                                                Featured Events
+                                            </p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/createUser" class="nav-link">
+                                            <i class="nav-icon fas fa-user-plus"></i>
+                                            <p>
+                                                Create User
+                                            </p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link">
+                                            <i class="nav-icon fas fa-user-check"></i>
+                                            <p>
+                                                Roles
+                                            </p>
+                                        </a>
+                                    </li>
+                                    <% } %>
+
+                                        <% if (userRole===1 || userRole===3) { %>
+                                            <li class="nav-item">
+                                                <a href="/bulkUserCreate" class="nav-link">
+                                                    <i class="nav-icon fas fa-solid fa-calendar"></i>
+                                                    <p>
+                                                        Bulk User Create
+                                                    </p>
+                                                </a>
+                                            </li>
+                                            <% } %>
+
+
+                                                <!-- <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                                        <p>
+                                            Chapters
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a href="" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>CSI</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>ACM</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>IETE</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>IEEE</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>MadGears</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Domain Maths Club</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Physics Club</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>E-Cell</p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>SIE Club</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li> -->
+
+
+                                                <li class="nav-item">
+                                                    <a href="/logout" class="nav-link">
+                                                        <i class="nav-icon fas fa-regular fa-arrow-right"></i>
+                                                        <p>
+                                                            Logout
+                                                        </p>
+                                                    </a>
+                                                </li>
 
             </ul>
         </nav>

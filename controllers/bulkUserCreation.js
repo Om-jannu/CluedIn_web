@@ -6,12 +6,15 @@ const path = require("path");
 
 module.exports = {
     get: (req, res) => {
-        console.log("================Bulk User Create Page========================");
-        let session = req.session;
-        var BulkUserPath = path.join(__dirname, "..", "views", "bulkUserCreate");
+        // console.log("================Bulk User Create Page========================");
+        // let session = req.session;
+        // var BulkUserPath = path.join(__dirname, "..", "views", "bulkUserCreate");
         // console.log(BulkUserPath);
 
-        if (session.userid) {
+        if (session.userid != null && (session.userRoleId === 1 || session.userRoleId === 3)) {
+            console.log("================Bulk User Create Page========================");
+            let session = req.session;
+            var BulkUserPath = path.join(__dirname, "..", "views", "bulkUserCreate");
             //for dropdown options of bulk creation
             qry = `SELECT ay_id,ay_name FROM academicyear_master;SELECT bsd_id,bsd_value FROM BranchStd_Div_Mapping;`;
             pool.query(qry, (err, result) => {
@@ -41,7 +44,7 @@ module.exports = {
             });
         } else {
             // console.log("path to createuser:",Path);
-            response.redirect("/");
+            res.redirect("/");
         }
     },
 

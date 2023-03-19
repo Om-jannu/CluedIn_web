@@ -16,7 +16,7 @@ module.exports = {
   get: (req, res) => {
     console.log("-----------------------Inside Events Page(/event)----------------------");
     const session = req.session;
-    if (session.userid != null) {
+    if (session.userid != null && (session.userRoleId === 1 || session.userRoleId === 4 || session.userRoleId === 3 || session.userRoleId === 13 || session.userRoleId === 10 || session.userRoleId === 11))  {
       qry = `SELECT el_id,el_name FROM events_label_master;SELECT sb_id,sb_name FROM student_bodies_master`
       try {
         pool.query(qry, (err, result) => {

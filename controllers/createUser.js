@@ -9,7 +9,7 @@ module.exports = {
       console.log("================Create user page========================");
       let session = request.session;
 
-      if (session.userid) {
+      if (session.userid != null && session.userRoleId === 1 ) {
         //for dropdown options of bulk creation
         qry = `SELECT ay_id,ay_name FROM academicyear_master;SELECT bsd_id,bsd_value FROM BranchStd_Div_Mapping;`;
         pool.query(qry, (err, result) => {
@@ -23,6 +23,7 @@ module.exports = {
           //rendering createuser page
           response.render("createUser", {
             message: request.flash("message"),
+            err_createuserMsg: request.flash("err_createuserMsg"),
             Bulk_errMsg: request.flash("err_message"),
             Bulk_successMsg: request.flash("success_message"),
             ay: ay,
@@ -33,7 +34,7 @@ module.exports = {
           });
         });
       } else {
-        var Path = path.join(__dirname, "..", "views", "login");
+        // var Path = path.join(__dirname, "..", "views", "login");
         // console.log("path to createuser:",Path);
         response.redirect("/");
       }
@@ -85,7 +86,12 @@ module.exports = {
       ];
 
       pool.query(sql, [values], (err, result) => {
-        if (err) console.log(err);
+        if (err)
+        {
+           console.log(err)
+           req.flash("err_createuserMsg","User not created. Please try again")
+           return res.redirect("/createuser");
+        };
         console.log("data inserted into user_details finally!!!");
         req.flash("message", "User created Successfully");
         res.redirect("/createuser");

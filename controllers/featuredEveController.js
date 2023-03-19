@@ -8,7 +8,7 @@ module.exports = {
   get: (req, res) => {
     console.log("-----------------------Inside featured Events Page(/featuredEve)----------------------");
     const session = req.session;
-    if (session.userid != null) {
+    if (session.userid != null && session.userRoleId === 1) {
       qry = `SELECT sb_id,sb_name FROM student_bodies_master`
       pool.query(qry, (err, result) => {
         if (err) throw err;

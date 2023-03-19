@@ -12,7 +12,7 @@ module.exports = {
     const session = req.session;
 
 
-    if (session.userid != null) {
+    if (session.userid != null && session.userRoleId !=11 && session.userRoleId !=14  ) {   //available to all except sbc and student 
       // var Path = path.join(__dirname, "..", "views", "index");
       // res.render(Path,{message1 : req.flash('message1')});
 
