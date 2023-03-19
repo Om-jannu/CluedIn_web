@@ -17,8 +17,14 @@ module.exports = {
       // res.render(Path,{message1 : req.flash('message1')});
 
       //dynamic data for dropdown in create notif form 
-      qry = `SELECT label_id,label_name FROM label_master where isDisabled = 0 and isDelete = 0;
-              SELECT bsd_id,bsd_value FROM BranchStd_Div_Mapping where isDisabled = 0 and isDelete = 0;`
+      if (session.userRoleId === 1 || session.userRoleId === 2 || session.userRoleId === 4 || session.userRoleId === 13 || session.userRoleId === 10  || session.userRoleId === 8 || session.userRoleId === 9) {
+         qry = `SELECT label_id,label_name FROM label_master where isDisabled = 0 and isDelete = 0;
+                SELECT bsd_id,bsd_value FROM BranchStd_Div_Mapping where isDisabled = 0 and isDelete = 0;`
+      }
+      else if (session.userRoleId === 3) {
+        qry = `SELECT label_id,label_name FROM label_master where isDisabled = 0 and isDelete = 0;
+        SELECT bsd_id,bsd_value FROM BranchStd_Div_Mapping where isDisabled = 0 and isDelete = 0;`
+      }
       pool.query(qry, (err, result) => {
         if (err) {
           throw err;
