@@ -79,10 +79,31 @@
                                             <div class="tab-pane fade active show" id="createUser" role="tabpanel"
                                                 aria-labelledby="custom-tabs-two-home-tab">
                                                 <% if(message.length>0){ %>
-                                                    <div class="alert alert-success">
+
+
+                                                    <div class="alert alert-success alert-dismissible fade show"
+                                                        role="alert">
                                                         <%= message %>
+                                                            <button type="button" class="close" data-dismiss="alert"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
                                                     </div>
+
                                                     <% } %>
+                                                        <% if(err_createuserMsg.length>0){ %>
+
+
+                                                            <div class="alert alert-danger alert-dismissible fade show"
+                                                                role="alert">
+                                                                <%= err_createuserMsg %>
+                                                                    <button type="button" class="close"
+                                                                        data-dismiss="alert" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                            </div>
+
+                                                            <% } %>
                                                         <!-- creating form -->
                                                         <form id="quickform" method="post" action="/submitUser">
                                                             <!--action looks for index.html -->
@@ -294,7 +315,7 @@
                                         var optionArray = ["|", "Head|Head", "PR|PR"];
                                     }
                                     else if (s1.value == 11 || s1.value == 12) {
-                                        var optionArray = ["|", "CSI|CSI", "ACM|ACM", "IETE|IETE", "Madgear|Madgear", "IEEE|IEEE", "E-Cell|E-Cell", "SIE|SIE", "NSS|NSS", "Domain Maths|Domain Maths", "Physics|Physics"];
+                                        var optionArray = ["|", "2|CSI", "3|ACM", "4|IETE", "5|Madgear", "4|IEEE", "0|E-Cell", "0|SIE", "0|NSS", "0|Domain Maths", "0|Physics"];
                                     }
                                     for (var option in optionArray) {
                                         var pair = optionArray[option].split("|");

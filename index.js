@@ -88,6 +88,7 @@ app.use(express.json());
 //using Routes for web
 app.use("/", homeRoute);
 app.use("/dashboard", homeRoute);
+app.use("/notification", homeRoute);
 app.use("/logout", homeRoute);
 app.use("/signup", homeRoute);
 app.use("/signupotp", homeRoute);
