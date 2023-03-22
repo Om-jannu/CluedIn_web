@@ -36,6 +36,7 @@ module.exports = {
             session.senderid = result[0].user_id; //this is for senderId of the user who sends the notification
             var userRoleId = result[0].user_role_id;
             session.userRoleId = userRoleId;
+            session.userDept = result[0].user_department,
             session.user_name = result[0].user_fname + "" + result[0].user_lname  //updating the session stored values after the changes made in profile page 
             session.userProfileUrl = result[0].user_profilePic;//updating the session stored values after the changes made in profile page
             console.log("===================Session===========================\n", req.session);

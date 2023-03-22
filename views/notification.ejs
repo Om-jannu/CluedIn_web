@@ -152,22 +152,24 @@
                                                                         select
                                                                         multiple
                                                                         fields)</label>
-                                                                    <select style="height: 15rem;width:15rem ;"
+                                                                    <select style="width:15rem ;overflow: hidden;"
                                                                         class="form-control" tabindex="-1" id="slct1"
                                                                         aria-hidden="true" name="target_class[]"
                                                                         placeholder="select category" onchange=""
                                                                         multiple required>
-
-                                                                        <option id="allUsers" value="0">
-                                                                            ALL
-                                                                        </option>
-                                                                        <% for (let count=0; count < bsd_data.length;
-                                                                            count++) { %>
-                                                                            <option
-                                                                                value="<%= bsd_data[count].bsd_id %>">
-                                                                                <%= bsd_data[count].bsd_value %>
+                                                                        <% if (userRole!=3 && userRole!=5) { %>
+                                                                            <option id="allUsers" value="0">
+                                                                                ALL
                                                                             </option>
-                                                                            <%} %>
+                                                                            <% } %>
+
+                                                                                <% for (let count=0; count <
+                                                                                    bsd_data.length; count++) { %>
+                                                                                    <option
+                                                                                        value="<%= bsd_data[count].bsd_id %>">
+                                                                                        <%= bsd_data[count].bsd_value %>
+                                                                                    </option>
+                                                                                    <%} %>
                                                                     </select>
 
                                                                 </div>
@@ -517,6 +519,9 @@
                         </script>
 
                         <script>
+                            
+
+
                             const classDropdown = document.querySelector('#slct1');
                             const genderDropdown = document.querySelector('#slct2');
 
@@ -527,6 +532,7 @@
 
                             function updateCount() {
                                 // Retrieve selected classes and gender
+                                classDropdown.style.height = `${classDropdown.scrollHeight}px`;
                                 console.log("genderdrop", genderDropdown);
                                 const selectedClasses = Array.from(classDropdown.selectedOptions).map(option => option.value);
                                 console.log("logg", selectedClasses);
@@ -568,6 +574,7 @@
                                 });
                                 modal.show();
                             }
+
 
                         </script>
 
