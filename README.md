@@ -70,7 +70,7 @@ If you have any feedback, please reach out to us.
 
 **Server:** Node, Express, 
 
-**Database / CloudStorage:** S3 Bucket, MySql {Amazon RDS}
+**Database / CloudStorage:** MySql 
 
 
 
