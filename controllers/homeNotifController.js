@@ -35,7 +35,7 @@ module.exports = {
         // console.log(label);
         var bsd = data[1];
         // res.render(Path,{branch_data:data});
-        res.render(NotifPath, { message1: req.flash('message1'), err_message1: req.flash('err_message1'), label_data: label, bsd_data: bsd, userName: session.user_name, ProfileUrl: session.userProfileUrl, userRole: session.userRoleId });
+        res.render(NotifPath, { message1: req.flash('message1'), err_message1: req.flash('err_message1'), label_data: label, bsd_data: bsd, userName: session.user_name, ProfileUrl: session.userProfileUrl, userRole: session.userRoleId ,roleName:session.userRole});
       })
 
       // res.render();
@@ -188,7 +188,7 @@ module.exports = {
             return res.redirect('/notification')
           }
           else {
-
+            console.log("Token before sending",getFcmTokensSql);
             firebaseAdmin.messaging().sendToDevice(getFcmTokensSql, payload, options);
             getFcmTokensSql = [];
             // console.log("---------------------\nfbtoken after :",getFcmTokensSql);

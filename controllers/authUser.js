@@ -8,13 +8,13 @@ module.exports = {
     var usermobno = req.body.userName;
     var pwd = req.body.user_pwd;
     let notAllowedRole = 14;
-    var sq0 = `Select * from user_details where user_mobno = ? and isDelete = 0 and  isDisabled =0`;
+    var sq0 = `Select t1.* ,t2.role_name from user_details t1 , role_master t2 where user_mobno = ? and t1.user_role_id=t2.role_id and t1.isDelete = 0 and  t1.isDisabled =0`;
     var sql1 = `Select * from user_details where user_mobno = ? and user_pwd = ? and user_role_id not in (?)`;
     var sql2 = `select role_name from role_master where role_id = ?`;
     pool.query(sq0, [usermobno], (err, result) => {
       // console.log(result);
       if (err) console.log(err);
-    
+    // console.log("dashresult",result);
       if (result.length >= 1) {
         if (result[0].user_role_id === 14) {
           req.flash("Emsg", "Unauthorized Access");
@@ -36,6 +36,7 @@ module.exports = {
             session.senderid = result[0].user_id; //this is for senderId of the user who sends the notification
             var userRoleId = result[0].user_role_id;
             session.userRoleId = userRoleId;
+            session.userRole = result[0].role_name;
             session.userDept = result[0].user_department,
             session.user_name = result[0].user_fname + "" + result[0].user_lname  //updating the session stored values after the changes made in profile page 
             session.userProfileUrl = result[0].user_profilePic;//updating the session stored values after the changes made in profile page

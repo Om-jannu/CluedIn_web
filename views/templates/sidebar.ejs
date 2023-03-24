@@ -16,7 +16,8 @@
             </div>
             <div class="info">
                 <a href="/profile" class="d-block">
-                    <%= userName %>
+                    <%= userName %><br>
+                    <%= roleName %>
                 </a>
             </div>
         </div>
@@ -50,7 +51,7 @@
                     </li>
                     <% } %>
 
-                        <% if (userRole===1 || userRole===4 || userRole===3 || userRole===13 || userRole===10 || userRole===11 ) { %>
+                        <% if (userRole===1 || userRole===4 || userRole===13 || userRole===10 || userRole===11 ) { %>
                             <li class="nav-item">
                                 <a href="/event" class="nav-link">
                                     <i class="nav-icon fas fa-solid fa-calendar"></i>

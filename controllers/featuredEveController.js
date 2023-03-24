@@ -18,7 +18,8 @@ module.exports = {
           event_organiser: JSON.parse(JSON.stringify(result)),
           success: req.flash('success'),
           error: req.flash("error"),
-          userRole: session.userRoleId
+          userRole: session.userRoleId,
+          roleName:session.userRole
         });
       })
     } else res.redirect("/");
