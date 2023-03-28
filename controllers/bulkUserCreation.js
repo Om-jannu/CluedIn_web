@@ -13,7 +13,7 @@ module.exports = {
 
             var BulkUserPath = path.join(__dirname, "..", "views", "bulkUserCreate");
             //for dropdown options of bulk creation
-            qry = `SELECT ay_id,ay_name FROM academicyear_master;SELECT bsd_id,bsd_value FROM BranchStd_Div_Mapping;`;
+            qry = `SELECT ay_id,ay_name FROM academicyear_master;SELECT t1.bsd_id, t2.bsd_value FROM Role_BSD_Mapping t1,BranchStd_Div_Mapping t2 where t1.role_id = ${session.userRoleId} and t1.branch_id= ${session.userDept} and t1.bsd_id=t2.bsd_id and t1.isDelete=0;`;
             pool.query(qry, (err, result) => {
                 if (err) {
                     throw err;
@@ -21,7 +21,7 @@ module.exports = {
                 var data = JSON.parse(JSON.stringify(result));
                 var ay = data[0];
                 var bsd = data[1];
-                // console.log(ay);
+                console.log(bsd);
                 //rendering createuser page
                 try {
                     res.render(BulkUserPath, {

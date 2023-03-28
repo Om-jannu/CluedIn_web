@@ -23,7 +23,8 @@ module.exports = {
           profileData: profileData[0],
           userName: session.user_name,
           ProfileUrl: session.userProfileUrl,
-          userRole:session.userRoleId
+          userRole:session.userRoleId,
+          roleName:session.userRole
         });
       });
     } else res.redirect("/");
