@@ -6,9 +6,25 @@
 This is one of the two parts of our project: CluedIn which essentially serves as a central medium from where students can recieve all college related updates.
 
 CluedIn web in particular is the portal through which teachers, management and others can send these updates and notifications which will be delievered to students through the mobile app.
-
-
-
+   <div>
+   </p>
+   <h3>Built With</h3>
+   <p align="center">
+   <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white"/>
+   <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white"/>
+   <img src="https://img.shields.io/badge/EJS-005C84?style=for-the-badge&logo=ejs&logoColor=white"/><br>
+   <img src="https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E"/>
+   <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white"/>
+   <img src="https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white"/>
+   <img src="https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white"/><br>
+   <img src="https://img.shields.io/badge/Express.js-404D59?style=for-the-badge"/>
+   <img src="https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white"/>
+   <h3>Hosted on</h3>
+   <p align="center">
+   <img src="https://img.shields.io/badge/Digital_Ocean-0080FF?style=for-the-badge&logo=DigitalOcean&logoColor=white" />
+   </p>
+   </p>
+   </div>
 
 
 ## Features
